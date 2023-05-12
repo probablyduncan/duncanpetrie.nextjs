@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import style from './section.module.css';
 import Head from "next/head";
-import Img, { getSrc } from "./Img";
+import Img from "./Img";
+import { getSrc } from "@/lib/imageHelper";
 
 export default function Magnifier( props ) {
 

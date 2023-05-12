@@ -10,21 +10,24 @@ import { ArticleContext } from "@/pages/a/[a]";
  * @param {boolean} first styles image as cover 
  * @returns 
  */
-export default function ArticleImage({ imgKey, first }) {
+export default function ArticleImage({ imgKey, first, type }) {
     const {textCentered} = useContext(ArticleContext);
     const {mobile} = useContext(ViewportContext);
     const ref = useRef();
 
     const inView = useInView(ref, {once: true, margin: '0px 0px -100px 0px'});
-    // opacity: isInView ? 1 : 0, transition: 'opacity 0.5s',
 
     return (imgKey in imgData && (
-        <div ref={ref} style={{opacity: inView ? 1 : 0, transition: 'opacity 0.5s'}}>
+        <div ref={ref} style={{
+            opacity: inView ? 1 : 0, 
+            transition: 'opacity 0.5s',
+            display: !first && 'flex', justifyContent: !first && 'center'
+        }}>
             {mobile ? 
                 <MobileImage first={first} imgKey={imgKey} />
             :
                 (textCentered && !first ? 
-                    <InlineImage />
+                    <InlineImage imgKey={imgKey} type={type} />
                 : 
                     <SideImage first={first} imgKey={imgKey} />
                 )
@@ -60,15 +63,14 @@ function SideImage({ imgKey, first }) {
         first ? [-200, -100] : [0, 100]
     );
 
-
     return (
         <motion.div ref={ref} style={{
             display: 'block',
             position: 'absolute',
-            width: 'calc(50% - 60px)',
+            width: '580px',
             height: '0',
             zIndex: '50',
-            x: -640,
+            x: 0,
             y,
         }}>
             <LightboxLinkedImg imgKey={imgKey} />
@@ -76,9 +78,20 @@ function SideImage({ imgKey, first }) {
     );
 }
 
-function InlineImage({ imgKey }) {
+function InlineImage({ imgKey, type }) {
 
-    return (<div></div>);
+    return (
+        <motion.div style={{
+            display: 'block',
+            width: '85%',
+            // borderTop: '4px solid #242626',
+            zIndex: '50',
+            margin: '80px 0 80px 15%',
+        }}>
+            
+            <LightboxLinkedImg imgKey={imgKey} />
+        </motion.div>
+    );
     // what types do we want?
     
     // wide (single across 1280px)
@@ -86,4 +99,15 @@ function InlineImage({ imgKey }) {
     // single
     // something that hijacks the scroll for a sec and scrolls sideways to show a filmstrip
     // or parallax images behind the text
+}
+
+function InlineImageTypes({ type }) {
+    switch (type) {
+        case "equalWidths":
+            return <></>
+        case "equalHeights":
+            return <></>
+        default:    // full width single
+            return <LightboxLinkedImg imgKey={imgKey} />
+    }
 }

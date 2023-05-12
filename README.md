@@ -1,3 +1,3 @@
 This is the repository for [duncanpetrie.com](duncanpetrie.com).
 
-It was created using `next.js` and `mdx`.
+Created in early 2023 using `next.js` and `mdx`.

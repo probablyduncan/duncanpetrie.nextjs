@@ -4,11 +4,12 @@ import { getMDXComponent } from "mdx-bundler/client"
 import { ViewportContext } from "@/components/Viewport";
 import Layout from "@/components/Layout";
 import { Paragraph, Title, Dept, Caption, UnderLonk, Subtitle } from "@/components/TextStyles";
-import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { motion, useInView, useScroll, useSpring, useTransform } from "framer-motion";
 import { getColors } from "@/lib/articleHelper";
 import ArticleImage from "@/components/ArticleImage";
 import Lightbox, { LightboxLink } from "@/components/Lightbox";
 import useLightbox from "@/lib/useLightbox";
+import { ArticleCaption, ArticleDept, ArticleSubtitle, ArticleText, ArticleTitle } from "@/components/ArticleText";
 
 export async function getStaticPaths() {
     const paths = await getArticleIDs();
@@ -66,14 +67,7 @@ export default function ArticleLayout({ article }) {
     const topOffset = article.frontmatter.text?.top ?? 300;
     const textWidth = article.frontmatter.text?.width ?? 500;
     const textCentered = !mobile && (article.frontmatter.text?.centered ?? true);
-
-    const { scrollY } = useScroll();
-    const springScroll = useSpring(scrollY, { stiffness: 400, damping: 50 });
-    const x = useTransform(
-        scrollY,
-        [500, 700],
-        [0, -160]
-    );
+    const slideIn = !mobile && (article.frontmatter.text?.slideIn ?? true);
 
     const galleryAction = article.frontmatter.lightbox?.link ? () => toggleLightbox(0) : null;
 
@@ -87,33 +81,26 @@ export default function ArticleLayout({ article }) {
             galleryColor={colors[0]} 
             galleryName={article.frontmatter.lightbox?.link}
         >
-            <ArticleContext.Provider value={{lightboxKeys, toggleLightbox, topOffset, textCentered, textWidth}}>
+            <ArticleContext.Provider value={{lightboxKeys, toggleLightbox, topOffset, textCentered, textWidth, slideIn}}>
                 <Lightbox index={lightbox} />
-                <motion.div id="articleWrapper" style={{ 
-                    display: 'flex', justifyContent: 'flex-end',
-                    margin: mobile ? '0 20px ' : `0 calc(50% - ${textWidth}px) 0 0`, 
-                    paddingTop: mobile ? '25px' : 'inherit',
-                    x
+                <motion.div style={{ 
+                    margin: mobile ? '0 20px' : `${topOffset}px 0 20vh 0%`,
+                    paddingTop: mobile ? '20px' : 'inherit',
                 }}>
-                    <div id="articleContainer" style={{ 
-                        width: `${textWidth}px`,
-                        margin: mobile ? '0' : `${topOffset}px 0 20vh 0`,
-                    }}>
-                        <ArticleImage imgKey={article.frontmatter.cover ?? lightboxKeys[0]} first />
-                        <Dept color={colors[0]}>
-                            {article.frontmatter.dept.toUpperCase()}
-                        </Dept>
-                        <Title>
-                            {article.frontmatter.title}
-                        </Title>
-                        <article>
-                            <Content components={{h1: Title, h2: Subtitle, h3: Dept, h4: Caption, p: Paragraph, a: UnderLonk}} />
-                        </article>
-                        <Caption>
-                            {'location' in article.frontmatter && <><br />{article.frontmatter.location}.</>}
-                            {'date' in article.frontmatter && <><br />{article.frontmatter.date}.</>}
-                        </Caption>
-                    </div>
+                    <ArticleImage imgKey={article.frontmatter.cover ?? lightboxKeys[0]} first />
+                    <ArticleDept color={colors[0]}>
+                        {article.frontmatter.dept.toUpperCase()}
+                    </ArticleDept>
+                    <ArticleTitle>
+                        {article.frontmatter.title}
+                    </ArticleTitle>
+                    <article>
+                        <Content components={{h1: ArticleTitle, h2: ArticleSubtitle, h3: ArticleDept, h4: ArticleCaption, p: ArticleText, a: UnderLonk}} />
+                    </article>
+                    <ArticleCaption>
+                        {'location' in article.frontmatter && <><br />{article.frontmatter.location}.</>}
+                        {'date' in article.frontmatter && <><br />{article.frontmatter.date}.</>}
+                    </ArticleCaption>
                 </motion.div>
             </ArticleContext.Provider>
         </Layout>

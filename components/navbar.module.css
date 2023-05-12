@@ -71,7 +71,7 @@ nav.mobileNav {
     width: calc(480px - 48px);
     max-width: calc(100vw - 48px);
 
-    padding: 12px 24px;
+    padding: 12px 24px 14px;
     background-color: #fff;
     border-top: 2px solid black;
 
