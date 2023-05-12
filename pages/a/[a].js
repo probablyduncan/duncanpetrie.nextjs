@@ -112,7 +112,6 @@ export default function ArticleLayout({ article }) {
                         <Caption>
                             {'location' in article.frontmatter && <><br />{article.frontmatter.location}.</>}
                             {'date' in article.frontmatter && <><br />{article.frontmatter.date}.</>}
-                            
                         </Caption>
                     </div>
                 </motion.div>
