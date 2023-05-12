@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+
+    <title>About - Duncan Petrie Photography</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Abstract/Impressionist Photography | On the hunt for plants and birds and rocks and things">
+    <meta name="keywords" content="Duncan, Petrie, Photography, Abstract, Impressionist, Impressionism, Wildlife, Wisconsin, Milwaukee, Falmouth, Lake Michigan, water, blur, icm, intentional, camera, movement, probablyduncan">
+    <meta name="author" content="Duncan Petrie">
+
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" type="text/css" href="about.css">
+
+</head>
+<body onload="loadAnimate()">
+
+
+    <div id="about-container">
+        <div id="about">
+            
+            <div class="navbar">
+                <a id="about-back" href="index.html">gallery</a>
+                <a id="about-email" href="mailto:duncanpetrie1@gmail.com" style="text-align: right;">email me</a>
+            </div>
+
+            <div id="about-img">
+                <img src="cov.jpg" style="width: 100%;">
+            </div>
+
+            <div id="about-body">
+
+                <div id="about-cv-container" onclick="cvHide()">
+                    <div id="about-cv-text">
+                        <div id="about-cv-x"><p>x</p></div>
+                        <p><i>FalWriting</i> photographer, collaborator 2021;</p>
+                        <p><i>Intro Collective</i> featured artist, writer, & website design 2021;</p>
+                        <p><i>Bof Magazine</i> featured artist & cover story <i>A La Cart</i> 2021;</p>
+                        <p><i>Ecelectic Magazine</i> 3 time featured artist 2020;</p>
+                        <p><i>Life Magazine</i> contriburing photographer 2020;</p>
+                        <p><i>NatureWatch</i> nature documentary camera operator 2020;</p>
+                        <p><i>Washington Island Observer</i> published photo essay <i>Vulpes Vulpes</i> 2020;</p>
+                        <p><i>British Conference of Undergraduate Research</i> accepted thesis 2020;</p>
+                        <p><i>Scholastic Art & Writing Awards</i> 2 gold & 5 silver keys, 6 hon. mentions 2019, 2018;</p>
+                        <p><i>Washington Island Observer</i> annual photo contest award winner 2020, 2019, 2018;</p>
+                        <p><i>Falmouth University</i> student representitive, lead student mentor 2020;</p>
+                        <p><i>University School of Milwaukee</i> suma cum laude, english department senior award, scholar athlete award 2019;</p>
+                        <p><i>University School of Milwaukee</i> summer camp photographer 2019;</p>
+                        <p><i>I won this really cool wooden spoon in a photo contest</i> it isn't anything I should put on a  cv but it's definitely the best thing I've won for a photo 2019;</p>
+                    </div>
+                    
+                </div>
+                
+                <div id="about-desktop-hello" style="display: grid; grid-template-columns: auto 1fr auto; margin-top: 1em; margin-bottom: 1em;">
+                    <p style="border-top: 2px solid black; padding-right: 1em;">Hello!</p>
+                    <div></div>
+                    <p id="about-cv-link" onclick="cvShow()">CV</p>
+                </div>
+                
+                <p id="about-desktop-paragraphs" style="margin-bottom: 1em;">Duncan Petrie (b. 2001) is an American photographer, writer, and designer studying Marine & Natural History Photography at Falmouth University in the United Kingdom. Using abstraction, spare and striking compositions, and only the best natural light, he simplifies landscapes. He creates photographs which emphasize subjective feeling over objective truth, capturing not what the camera sees, but what we see.
+                <br><br>
+                In 2020, he learned HTML, CSS, and JavaScript, to design and build this website from scratch. He spends his time between Falmouth, Cornwall, and Milwaukee, Wisconsin, where he grew up. 
+                </p>
+                <div id="about-mobile-paragraphs" style="display: none;"><p style="margin-bottom: 1em;">Duncan Petrie (b. 2001) is an American photographer, writer, and designer studying Marine & Natural History Photography at Falmouth University in the United Kingdom.</p>
+                <p style="margin-bottom: 1em;">Using abstraction, spare and striking compositions, and only the best natural light, he simplifies landscapes. He creates photographs which emphasize subjective feeling over objective truth, capturing not what the camera sees, but what we see.</p>
+                <p style="margin-bottom: 1em;">In 2020, he learned HTML, CSS, and JavaScript, to design and build this website from scratch. He spends his time between Falmouth, Cornwall, and Milwaukee, Wisconsin, where he grew up.</p></div>
+
+                <p style="margin-bottom: 1em;">For prints or business inqueries, or if you're one capable dude short of an adventure, email him at <a href="mailto:duncanpetrie1@gmail.com" target="blank">duncanpetrie1@gmail.com</a>, or message him on Instagram <a href="https://www.instagram.com/probablyduncan/" target="blank">@probablyduncan</a>.</p>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        function cvShow(){
+            document.getElementById('about-cv-container').style.display = 'block';
+            document.getElementById('about-cv-link').style.display = 'none';
+        }
+        function cvHide(){
+            document.getElementById('about-cv-container').style.display = 'none';
+            document.getElementById('about-cv-link').style.display = 'block';
+        }
+
+        function loadAnimate(){
+            document.body.className = 'fadeIn';
+            var time = Date.getTime;
+            while(Date.getTime < time + 100){}
+            document.body.style.opacity = '1';
+        }
+
+        var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if(isMobile){
+
+            //bigger text
+            document.getElementById('about-body').style.textAlign = 'left';
+            document.getElementById('about-body').style.fontSize = '1.4em';
+            //paragraph spacing
+            document.getElementById('about-desktop-paragraphs').style.display = 'none';
+            document.getElementById('about-mobile-paragraphs').style.display = 'block';
+            //navbar bigger text
+            document.getElementById('about-back').style.fontSize = '1.4em';
+            document.getElementById('about-email').style.fontSize = '1.4em';
+
+
+
+        }
+
+    </script>
+
+
+</body>
+</html>

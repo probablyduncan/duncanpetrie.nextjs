@@ -1,0 +1,270 @@
+import { getArticle, getArticleIDs } from "@/lib/dataParser";
+import { createContext, createRef, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { getMDXComponent } from "mdx-bundler/client"
+import { imgData } from "@/data/images";
+import { ViewportContext } from "@/components/Viewport";
+import Layout from "@/components/Layout";
+import { Lato } from "@next/font/google";
+import { Paragraph, Title, Dept, Caption, UnderLonk, Subtitle, LightboxButton, LightboxText } from "@/components/TextStyles";
+import { backOut, motion, useInView, useScroll, useSpring, useTransform } from "framer-motion";
+import Img, { getAllImages, getCaption } from "@/components/Img";
+
+const lato = Lato({ subsets: ['latin'], display: 'swap', weight: '700', variable: true});
+
+export async function getStaticPaths() {
+    const paths = await getArticleIDs();
+    return {
+        paths,
+        fallback: false
+    };
+}
+
+export async function getStaticProps( {params} ) {
+    const article = await getArticle(params.a);
+    const otherArticles = [];
+    return {
+        props: {
+            article,
+            otherArticles
+        }
+    };
+}
+
+
+// WHAT IF WHAT IF WHAT IF
+// what if we have a cover image like currently
+// and as we scroll past it the text shifts to the center (almost to the center, offset a bit on the right)
+// and then the rest of the images are static in between the text
+// and then, because of that, we can have other components besides images in the text
+// like something that hijacks the scroll for a sec and scrolls sideways to show a filmstrip
+// or parallax images behind the text
+// etc etc
+
+const ArticleContext = createContext();
+
+export default function ArticleLayout({ article }) {
+    
+    const Content = useMemo(() => getMDXComponent(article.code, {ArticleImage: ArticleImage, LightboxLink: LightboxLink}), [article.code]);
+    const {mobile} = useContext(ViewportContext);
+
+    const noLightbox = article.frontmatter.noLightbox;
+
+    const [lightbox, setLightbox] = useState(null);
+    const toggleLightbox = (i) => setLightbox(lightbox != i && !noLightbox ? i : null);
+
+    // concat explicitly defined images with images from tag
+    // and store images in memo to preserve shuffle
+    const [imagesState, setImagesState] = useState([]);
+    useEffect(() => setImagesState(getAllImages(article.frontmatter.images, article.frontmatter.imageTag, article.frontmatter.shuffle ?? true)), [article.frontmatter]);
+    const imageKeys = useMemo(() => imagesState, [imagesState]);
+
+    // process article colors
+    const colors = article.frontmatter.colors ? [article.frontmatter.colors[0], article.frontmatter.colors[1] ?? article.frontmatter.colors[0]] : [imgData[imageKeys[0]]?.color ?? 'cornflowerblue', imgData[imageKeys[1]]?.color ?? 'cornflowerblue'];
+    
+    // this is the distance between the top of the window and the start of the article
+    const topOffset = 360;
+    const textWidth = article.frontmatter.textWidth ?? 500;
+
+    return (<>
+        <Layout color={colors[1]} pageName={article.a} menuName={'all projects'} menuLink={'/i/all'} >
+            <ArticleContext.Provider value={{imageKeys, topOffset, textWidth, toggleLightbox, noLightbox}}>
+                <Lightbox index={lightbox} />
+                {!mobile && <Gallery displaySettings={article.frontmatter.imageDisplay} definedImageKeyList={article.frontmatter.images} />}
+                <div style={{ 
+                    display: 'flex', justifyContent: 'flex-start',
+                    margin: mobile ? '0 20px ' : `0`, 
+                    paddingTop: mobile ? '25px' : 'inherit' 
+                }}>
+                    <div style={{ 
+                        width: `${textWidth}px`,
+                        margin: mobile ? '0' : `${topOffset}px 0 20vh 50%`
+                    }}>
+                        <ArticleImage imgKey={imageKeys[0]} first />
+                        <Dept color={colors[0]}>
+                            {article.frontmatter.dept.toUpperCase()}
+                        </Dept>
+                        <Title>
+                            {article.frontmatter.title}
+                        </Title>
+                        <article>
+                            <Content components={{h1: Title, h2: Subtitle, h3: Dept, h4: Caption, p: Paragraph, a: UnderLonk}} />
+                        </article>
+                        <Caption>
+                            {'location' in article.frontmatter && <><br />{article.frontmatter.location}.</>}
+                            {'date' in article.frontmatter && <><br />{article.frontmatter.date}.</>}
+                            
+                        </Caption>
+                    </div>
+                </div>
+            </ArticleContext.Provider>
+        </Layout>
+    </>);
+}
+
+// gets passed an image key and creates an image
+function ArticleImage({ imgKey, first }) {
+    const {imageKeys, toggleLightbox} = useContext(ArticleContext);
+    const {mobile} = useContext(ViewportContext);
+
+    return mobile && imgKey in imgData && <div style={{
+        padding: first ? '0' : '50px 0'
+    }}>
+        <Img img={imgData[imgKey]} style={{cursor: 'zoom-in'}} onClick={() => toggleLightbox(imageKeys.indexOf(imgKey))} />
+        <Caption>{getCaption(imgData[imgKey])}</Caption>
+    </div>
+}
+
+//#region gallery
+
+function Gallery({ displaySettings, definedImageKeyList }) {
+    const {imageKeys, topOffset} = useContext(ArticleContext);
+    let imagesRendered = 0;
+
+    return (
+        <div style={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'flex-start'
+        }}>
+            {imageKeys.map((key, index) => {
+                if (
+                    displaySettings?.show == 'all' || 
+                    (definedImageKeyList.includes(key) && (!displaySettings?.show || displaySettings.show == 'defined' || displaySettings.show > imagesRendered))
+                ) {
+                    imagesRendered ++;
+                    return <GalleryImage key={key} index={index} imgKey={key} />
+                }
+                    
+            })}
+        </div>
+    );
+}
+
+// what if I put gallery images in the mdx itself
+// and because they're absolute or whatever I can put them wherever I want but they'll know what height they are?
+// and then I can do groups again and have more interesting compositions
+
+function GalleryImage({ index, imgKey }) {
+    const {imageKeys, toggleLightbox, noLightbox} = useContext(ArticleContext);
+    const ref = useRef();
+
+    // create a random number and store it in memo
+    const [randState, setRandState] = useState(0.5);
+    useEffect(() => setRandState(Math.random()), []);
+    const rand = useMemo(() => randState, [randState]);
+
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        offset: ["start end", "end start"]
+    });
+
+    const springScrollProgress = useSpring(scrollYProgress, { stiffness: 400, damping: 50 });
+
+    const x = useTransform(
+        springScrollProgress,
+        prog => (backOut(prog)) * 400 - 430 + rand * (585 - (index == 0 ? 585 : 385 + 100 * rand * imgData[imgKey].ratio))
+    )
+
+    const y = useTransform(
+        springScrollProgress,
+        [0, 0.4],
+        [100, 0],
+    )
+
+    const isInView = useInView(ref, {once: true});
+    
+
+    return (
+        <motion.div ref={ref} style={{
+            position: 'absolute',
+            top: `${(index) * (585) + (index == 0 ? 240 : 320)}px`, 
+            width: `${index == 0 ? 585 : 385 + 100 * rand * imgData[imgKey].ratio}px`,
+            zIndex: '90',
+            cursor: noLightbox ? 'auto' : 'zoom-in',
+            opacity: isInView ? 1 : 0, transition: 'opacity 0.5s',
+            left: 0,
+            x,y,
+        }} whileHover={!noLightbox && {boxShadow: '4px 4px #242626'}} whileTap={!noLightbox && {boxShadow: '6px 6px #242626'}} onClick={() => toggleLightbox(imageKeys.indexOf(imgKey) )}>
+            <Img img={imgData[imgKey]} style={{boxShadow: 'none', width: '100%'}}/>
+        </motion.div>
+    );
+}
+
+//#endregion
+
+//#region lightbox
+
+function LightboxLink({ index = 0, children }) {
+    const {toggleLightbox} = useContext(ArticleContext);
+
+    return <UnderLonk title="Gallery" action={() => toggleLightbox(index)}>{children}</UnderLonk>
+}
+
+function Lightbox({ index }) {
+    const {imageKeys, toggleLightbox} = useContext(ArticleContext);
+    const {mobile} = useContext(ViewportContext);
+
+    // next() to go forward, next(false) to go back
+    const next = useCallback((prev = false) => {if (index != null) toggleLightbox((index + imageKeys.length + (prev ? -1 : 1)) % imageKeys.length);}, [imageKeys.length, index, toggleLightbox])
+
+    // set up keypress events
+    useEffect(() => {
+        const keyDownHandler = (e) => {
+            if (e.code === "ArrowLeft") next(true);
+            if (e.code === "ArrowRight") next();
+            if (e.code === "Escape") toggleLightbox(false);
+        };
+
+        window.addEventListener("keydown", keyDownHandler);
+        return () => window.removeEventListener("keydown", keyDownHandler);
+    }, [index, next, toggleLightbox]);
+
+
+    return ( imageKeys[index] != null &&
+        <motion.div layout initial={{
+            width: 'calc(100vw - 80px)', height: 'calc(100vh - 80px)',
+            padding: '40px',
+            top: 0, left: 0,
+            display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
+            backgroundColor: '#fafaff',
+            position: 'fixed',
+            zIndex: '100',
+            opacity: 0
+        }} animate={{
+            opacity: 1
+        }}>
+            {/* image container */}
+            <div style={{
+                width: 'calc(100% - 250px)', 
+                maxWidth: `calc((100vh - 80px) * ${imgData[imageKeys[index]].ratio})`, 
+                display: 'flex', 
+                alignItems: 'flex-end'
+            }}>
+                <Img img={imgData[imageKeys[index]]} onClick={() => toggleLightbox(null)} style={{cursor: 'zoom-out', boxShadow: 'none', width: '100%', }} />
+            </div>
+            {/* text container */}
+            <div style={{
+                height: '100%', width: '200px',
+                display: 'flex', flexFlow: 'column nowrap',
+                justifyContent: 'space-between'
+            }}>
+                <div>
+                    <LightboxText noSelect color={imgData[imageKeys[index]].color} >{index + 1}&nbsp;/&nbsp;{imageKeys.length}</LightboxText>
+                    <br />
+                    <LightboxText noSelect>
+                        <LightboxButton action={() => next(true)}>prev</LightboxButton>
+                        &nbsp;&nbsp;|&nbsp;&nbsp;
+                        <LightboxButton action={() => next()}>next</LightboxButton>
+                    </LightboxText>
+                    <br />
+                    <LightboxText noSelect><LightboxButton action={() => toggleLightbox(null)}>exit.</LightboxButton></LightboxText>
+                </div>
+                <div>
+                    <LightboxText select>{getCaption(imgData[imageKeys[index]])}</LightboxText>
+                </div>
+            </div>
+        </motion.div>
+    );
+}
+
+//#endregion

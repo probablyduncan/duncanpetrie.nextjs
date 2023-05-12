@@ -1,0 +1,251 @@
+section.section {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: stretch;
+
+    padding-bottom: 20px;
+    border-bottom: 2px solid #cdcdcd;
+    margin-bottom: 20px;
+}
+
+section.section:nth-last-of-type(1) {
+    border: none;
+    padding-bottom: 0;
+}
+
+div.story {
+    padding-bottom: 20px;
+}
+
+div.mobileStory {
+    border-top: 2px solid black;
+    padding: 25px 20px;
+    /* margin-bottom: 50px; */
+}
+
+div.mobileStory div {
+    width: calc(100% - 8px);
+    margin-left: 4px;
+}
+
+div.story img {
+    margin-bottom: 20px;
+}
+
+div.story h3.dept {
+    /* margin-bottom: 2px; */
+    font-weight: 700;
+    font-size: 13px;
+}
+
+div.story h2.title {
+    margin-bottom: 6px;
+    font-size: 23px;
+    line-height: 32px;
+}
+
+div.mobileStory h2.title {
+    font-size: 32px;
+    line-height: 38px;
+    margin-bottom: 16px;
+}
+
+div.story p.text {
+    margin-bottom: 15px;
+    margin-right: 10px;
+    font-size: 16px;
+    color: darkslategrey;
+    line-height: 30px;
+    text-align: justify;
+}
+
+div.mobileStory p.text {
+    font-size: 18px;
+    margin-right: 20px;
+    text-align: left;
+    -webkit-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+}
+
+section.section div.story:last-child p.text {
+    margin-right: 0;
+}
+
+div.story h3.link {
+    margin-bottom: 20px;
+    font-weight: 700;
+    font-size: 13px;
+    font-style: italic;
+}
+
+div.mobileStory h3.dept, div.mobileStory h3.link {
+    font-size: 14px;
+    font-style: normal;
+}
+
+/* --------- */
+/* slideshow */
+/* --------- */
+
+section.slideshow {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+}
+
+section.slideshow div.slideshowStory {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    width: calc(100% - 20px);
+    padding-right: 20px;
+}
+
+section.slideshow div.story:last-of-type {
+    margin-left: 30px;
+}
+
+section.slideshow div.slideshowArrows {
+    display: flex;
+    justify-content: flex-end;
+    user-select: none;
+}
+
+section.slideshow div.slideshowArrows button {
+    font-family: inherit;
+    font-size: 16px;
+    color: #898989;
+    margin: 2px;
+    padding: 0px 6px 2px 6px;
+    border-radius: 20%;
+    transition: background-color 0.2s;
+}
+section.slideshow div.slideshowArrows button:hover, section.slideshow div.slideshowArrows button.press {
+    background-color: #efefef;
+}
+
+section.slideshow div.slideshowArrows span {
+    font-size: 12px;
+    margin-top: 5px;
+    margin: 5px 5px 0 5px;
+    color: cornflowerblue;
+}
+
+/* ------- */
+/* map row */
+/* ------- */
+
+section.map {
+    display: grid;
+    grid-template-columns: 1.8fr 1.2fr 1fr;
+    align-items: flex-start;
+    padding-bottom: 40px;
+}
+
+section.map div.story {
+    margin: 4px 40px 0 20px;
+}
+
+section.map div.story:last-child {
+    border-left: 2px solid #cdcdcd;
+    padding-left: 20px;
+    margin-right: 0;
+    padding-bottom: 40px;
+}
+
+section.map div.story img {
+    margin-top: -4px;
+}
+
+/* -------- */
+/* diss row */
+/* -------- */
+
+section.feature {
+    display: grid;
+    grid-template-columns: 2fr 5fr;
+}
+
+section.feature div.story {
+    margin-right: 40px;
+}
+
+/* ------------ */
+/* three across */
+/* ------------ */
+
+section.three {
+    align-items: flex-start;
+}
+
+section.three div.story {
+    width: calc(100% / 3);
+    padding-right: 20px;
+    border-right: 2px solid #cdcdcd;
+    margin-right: 20px;
+}
+section.three div.story:last-child {
+    padding-right: 0;
+    border-right: none;
+    margin-right: 0;
+}
+
+/* ----------- */
+/* four across */
+/* ----------- */
+
+section.four div.story {
+    width: calc(25%);
+    padding-right: 20px;
+    border-right: 2px solid #cdcdcd;
+    margin-right: 20px;
+}
+section.four div.story:last-child {
+    padding-right: 0;
+    border-right: none;
+    margin-right: 0;
+}
+
+section.four div.story h2.title {
+    margin-bottom: 10px;
+    font-size: 18px;
+    line-height: 28px;
+}
+
+/* ----------- */
+/* cmyk footer */
+/* ----------- */
+
+footer.footer {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+
+    margin: 120px 0 60px 0;
+}
+
+div.cmykWrapper {
+    display: flex;
+    flex-flow: row nowrap;
+    width: 80px;
+    justify-content: space-between;
+}
+
+span.cmyk {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+}
+
+span.c {background-color: cyan;}
+span.m {background-color: magenta;}
+span.y {background-color: yellow;}
+span.k {background-color: black;}
+
+button.pagenum {
+    border: unset;
+    background-color: unset;
+    cursor: pointer;
+    user-select: none;
+}

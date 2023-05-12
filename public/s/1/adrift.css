@@ -1,0 +1,181 @@
+html{
+    overflow: hidden;
+}
+body{
+    margin: 5vh 0 0 2vw;
+    width: 96vw;
+    height: 90vh;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 135vh 10px 1fr;
+
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 500;
+    color: rgb(33, 39, 41);
+}
+
+/* IMG CONTAINER */
+#img-container img{
+    width: 100%;
+    /* background-color: rgb(126, 149, 157); */
+}
+
+/* CAPTION CONTAINER */
+
+#adrift-text-container{
+    width: 100%;
+    max-width: 140px;
+}
+
+.adrift-text{
+    margin: 0;
+    padding: 0;
+    font-size: 0.9em;
+    margin-bottom: 24px;
+}
+
+#caption-container{
+    margin: 0;
+    margin-bottom: 24px;
+    width: 100%;
+    height: 80px;
+    border-top: 1px solid rgb(33, 39, 41);
+    grid-column: 2;
+    display: grid;
+    grid-template-columns: auto 1fr;
+}
+#caption-container p{
+    margin: 0;
+    margin-top: 4px;
+    padding: 0;
+    padding-right: 12px;
+    width: auto;
+}
+
+.adrift-link{
+    text-decoration: none;
+    color: unset;
+    margin-bottom: 24px;
+    font-size: 0.9em;
+    display: block;
+    cursor: pointer;
+    max-width: 140px;
+
+    -webkit-user-select: none;
+    -moz-user-select: none; 
+    -ms-user-select: none;
+    user-select: none;
+
+    touch-action: manipulation;
+}
+.adrift-link:hover{
+    background-color: rgb(185, 203, 218);
+    color: white;
+}
+.adrift-link:visited{
+    background: none;
+    color: unset;
+}
+
+
+/* STATEMENT */
+
+#statement-container{
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: black;
+    display: none;
+}
+#statement-text{
+    margin: 10vh 0vw 10vh 5vw;
+    padding-right: 5vw;
+    width: 90vw;
+    height: 80vh;
+    color: white;
+    text-align: left;
+    overflow-y: scroll;
+    font-weight: 400;
+    font-size: 1.2em;
+    line-height: 1.8em;
+}
+#statement-text p{
+    margin-bottom: 1em;
+}
+
+
+/* so if the aspect ratio is wider than 16/9 then
+img width is dictated by height
+and if the aspect ratio is narrower than 16/9 then
+img width is dictated by width */
+
+@media (max-aspect-ratio : 16/10){
+    body{
+        grid-template-columns: 120vh 10px 1fr;
+    }
+}
+
+@media (max-aspect-ratio : 3/2){
+    body{
+        grid-template-columns: 105vh 10px 1fr;
+    }
+}
+
+@media (max-aspect-ratio : 4/3){
+    body{
+        grid-template-columns: 90vh 10px 1fr;
+    }
+}
+
+@media (max-aspect-ratio : 8/7){
+    body{
+        grid-template-columns: 81vh 10px 1fr;
+    }
+}
+
+@media (max-aspect-ratio : 1/1){
+    body{
+        display: block;
+    }
+    #adrift-text-container{
+        max-width: unset;
+        display: grid;
+        grid-template-columns: 140px 1fr 90px;
+    }
+    #caption-container{
+        height: 90px;
+        max-width: 140px;
+        grid-column: 1;
+        border-top: none;
+    }
+    #caption-container p{
+        margin-top: 0;
+    }
+    #imgCount{
+        grid-column: 2;
+        text-align: center;
+    }
+    #adrift-prev, #adrift-next, #adrift-back, #adrift-statement{
+        grid-column: 3;
+        text-align: right;
+        height: 16.5px;
+        margin: 0;
+    }
+    #adrift-prev{
+        margin-top: -78px;
+    }
+    #adrift-back{
+        margin-top: -4px;
+    }
+    #adrift-statement{
+        margin-top: -40px;
+    }
+}
+
+@media(max-height: 390px){
+    #caption-container{
+        margin-bottom: 0;
+    }
+}

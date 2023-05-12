@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+
+
+<!-- — Hello! - -->
+<!--  -->
+<!-- - Welcome to duncanpetrie.com - -->
+<!--  -->
+<!-- - In 2019, I needed an online portfolio. - -->
+<!--  -->
+<!-- - So, I taught myself HTML, CSS, and Javascript in my free time. - -->
+<!-- - The first iteration worked, but it was crude. - -->
+<!-- - In mid 2020, I redesigned it and learned a lot more. - -->
+<!-- - This is the third incarnation of the site, made in 2021. - -->
+<!-- - I'm still learning (aren't we all) but I'm happy with the progress I've made. - -->
+<!-- - Check back in a few months, and maybe you'll find something completely different! Who knows. - -->
+<!--  -->
+<!-- - Want to work with me? - -->
+<!--  -->
+<!-- - duncanpetrie1@gmail.com - -->
+<!--  -->
+<!-- - Get in touch! - -->
+
+
+<html>
+    <head>
+
+        <title>Duncan Petrie Photography</title>
+        <meta charset="UTF-8"/>
+
+        <meta name="description" content="Abstract/Impressionist Photography | On the hunt for plants and birds and rocks and things">
+
+        <meta name="keywords" content="Duncan, Petrie, Photography, Abstract, Impressionist, Impressionism, Wildlife, Wisconsin, Milwaukee, Falmouth, Lake Michigan, water, blur, icm, intentional, camera, movement, probablyduncan">
+
+        <meta name="author" content="Duncan Petrie">
+
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
+
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" type="text/css" href="style-smalldesktop.css">
+        <link rel="stylesheet" type="text/css" href="animations.css">
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Shippori+Mincho+B1">
+
+
+    </head>
+    <body onload="fadeInBody()">
+
+        <audio id="waves-foley" loop>
+            <source src="wave foley.mp3" type="audio/mpeg">
+        </audio>
+
+        <div id="lightbox" onclick="lightboxOff()">
+            <img src="">
+            <div id="lightbox-caption">
+                <h4></h4>
+                <h4 style="margin-left: 30px;"></h4>
+            </div>
+        </div>
+
+        
+
+        <div id="top-link-container">
+            <a id="top-link-insta" onmouseover="htmlSwap(this,'< - instagram')" onmouseout="htmlSwap(this,'duncan/petrie')" href="https://www.instagram.com/probablyduncan/" target="blank">duncan/petrie</a>
+            <a id="top-link-about" onmouseover="htmlSwap(this,'bio/cv - >')" onmouseout="htmlSwap(this,'bio/cv')" href="about.html">bio/cv</a>
+        </div>
+
+        <div id="top-img-container"></div>
+
+        <div id="main-container">
+            <div id="main-container-left">
+                <h3 id="who" class="w">who</h3>
+                <h1 id="hello-and-welcome">Hello! I'm Duncan<br>Petrie, photographer,<br>writer, designer, and...</h1>
+                <h3 id="hello-menu">
+                    <a href="about.html">bio</a> / <a href="https://www.instagram.com/probablyduncan/" target="blank">instagram</a> / <a id="audio-controls" onclick="toggleAudio()">audio</a>
+                </h3>
+            </div>
+            <div id="main-container-right">
+                <div id="skills-list">
+                    <a id="simp-link" onmouseover="skillOpacity(0)" onmouseout="skillOpacity(currentContent)" onclick="selectSkill(this,0)">simplifier</a>
+                    <a id="horiz-link" onmouseover="skillOpacity(1)" onmouseout="skillOpacity(currentContent)" onclick="selectSkill(this,1)">horizon chaser</a>
+                    <a id="cloud-link" onmouseover="skillOpacity(2)" onmouseout="skillOpacity(currentContent)" onclick="selectSkill(this,2)">cloud admirer</a>
+                    <a id="drift-link" onmouseover="skillOpacity(3)" onmouseout="skillOpacity(currentContent)" onclick="selectSkill(this,3)">snow man</a>
+                    <a id="pizza-link" onmouseover="skillOpacity(4)" onmouseout="skillOpacity(currentContent)" onclick="selectSkill(this,4)">pizza chef</a>
+                    <a id="wiki-link" onmouseover="skillOpacity(5)" onmouseout="skillOpacity(currentContent)" onclick="selectSkill(this,5)">commoner</a>
+                    <a id="cliff-link" onmouseover="skillOpacity(6)" onmouseout="skillOpacity(currentContent)" onclick="selectSkill(this,6)">cliff walker</a>
+                    <a id="wisco-link" onmouseover="skillOpacity(7)" onmouseout="skillOpacity(currentContent)" onclick="selectSkill(this,7)">wisconsinite</a>
+                    <a id="cart-link" onmouseover="skillOpacity(8)" onmouseout="skillOpacity(currentContent)" onclick="selectSkill(this,8)">cart advocate</a>
+                    <a id="birds-link" onmouseover="skillOpacity(9)" onmouseout="skillOpacity(currentContent)" onclick="selectSkill(this,9)">bird brain</a>
+                </div>
+                <div id="main-line"></div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+        <!-- THIS IS WHERE THE PAGES BEGIN -->
+
+
+
+
+
+            <!-- 
+                image template:
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="" src="" page="" name="" year="">
+
+             -->
+
+
+        
+        <div id="content-container">
+
+            <div id="simp" class="content">
+                <div id="simp-row1" class="row row1" onLoad="fadeIn(this)">
+                    <div id="simp-row1-left" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img img-column-img-skinny" src="simp/homeward.jpg" page="simp" name="Homeward" year="2020">
+                    </div>
+                    <div id="simp-row1-right" class="text-column">
+                        <h3 id="simp-what" class="w">what</h3>
+                        <h1 id="simp-title" class="title">I distill the<br>natural world.</h1>
+                        <p id="simp-text1" class="text">
+                            For several years, I only took photos of birds. I loved the simplicity of the long lens: zoomed in, birds that could fit in the palm of your hand loom, removed of context and scale, before a background so blurred you wouldn't know Canada from Costa Rica.
+                            <br><br>
+                            And I made plenty of <a onclick="linkToContent('birds')">photographs</a> of which I'm still proud. But, in that intense singlemindedness, I was missing something.
+                        </p>
+                    </div>
+                </div>
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-right" src="simp/meadowbird2.jpg" page="simp" name="Meadowbird II" year="2018">
+                <div id="simp-row2" class="row" onLoad="fadeIn(this)">
+                    <div id="simp-row2-left" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="simp/susurrus2.jpg" page="simp" name="Susurrus II" year="2020">
+                    </div>
+                    <div id="simp-row2-right" class="text-column">
+                        <p id="simp-text2" class="text">
+                            I became obsessed with finding new birds, spent full days hyper-focused, head on a swivel, ears ajar. My attitude towards nature changed; a walk in the woods without looking for birds was a walk wasted.
+                            <br><br>
+                            I had inadvertently linked the success of a day outside to the number of birds I had photographed. I could no longer enjoy the outdoors independent of the birds I saw or whether the day's images were sharp and well-lit. I stayed inside on plenty of beautiful days, solely because the sun was too bright or the wind prevented the birds from perching. 
+                            <br><br>
+                            My bird fixation was distracting me, preventing me from appreciating what was under my nose. I was contradicting the reason I picked up a camera all those years ago: I wanted to slow down, to learn to more clearly see and feel in the natural world.
+                        </p>
+                    </div>
+                </div>
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-right" src="simp/blue.jpg" page="simp" name="Blue I" year="2019">
+                <div id="simp-row3" class="row" onLoad="fadeIn(this)">
+                    <div id="simp-row3-left" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="simp/kalaloch2.jpg" page="simp" name="Kalaloch II" year="2018">
+                    </div>
+                    <div id="simp-row3-right" class="text-column">
+                        <p id="simp-text3" class="text">
+                            That's not to say I hate birds, or even that I never include them in my images. They're still a vital part of my environment.
+                            <br><br>
+                            However, my focus has changed. Rather than capture objectively, I seek out the feelings that compel me outside before dawn and keep me there long after dark.
+                            <br><br>
+                            Looking down a long lens at a little bird, the world is small. Only one tiny slice is visible, and most of it is blurred and compressed. By taking a step back, I see more, feel more.
+                            <br><br>
+                            In my newer work, birds are, like everything else, a vessel for feeling. They may draw the eye, but they are rarely the subject, only an extra dash of pepper flakes in an already spicy world.
+                        </p>
+                    </div>
+                </div>
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-right" src="simp/waterline2.jpg" page="simp" name="Waterline II" year="2020">
+                <div id="simp-row4" class="row" onLoad="fadeIn(this)">
+                    <div id="simp-row4-left" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="simp/moonshadow.jpg" page="simp" name="Moonshadow" year="2020">
+                    </div>
+                    <div id="simp-row4-right" class="text-column">
+                        <p id="simp-text4" class="text">
+                            In wildlife photography, the subject is obvious. It's even in the name. The subjects of these images, however, are more ambiguous. The sky? The dusk?
+                            <br><br>
+                            Even a simple photograph of the moon isn't <i>really</i> about the moon. Its purpose is not to remind the viewer of the shape of the moon or that yes, they think they've seen that buttery orb before. It's a tone-moment, a vignette of feeling, a distillation of the aggregate natural world.
+                        </p>
+                    </div>
+                </div>
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-right" src="simp/fire3.jpg" page="simp" name="Fire III" year="2020">
+                <div id="simp-row5" class="row" onLoad="fadeIn(this)">
+                    <div id="simp-row5-left" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="simp/dawnforest3.jpg" page="simp" name="Dawnforest III" year="2018">
+                    </div>
+                    <div id="simp-row5-right" class="text-column">
+                        <p id="simp-text5" class="text">
+                            Even now, after years of practice, I still have trouble slowing down and stepping back from the viewfinder. As obvious as it sounds, the first step of capturing a feeling is noticing that feeling, and that only comes with patience and open eyes.
+                            <br><br>
+                            I know, now, that capturing ambiance is not objective or routine. There is no procedure to capture a feeling. I can't rely on what has worked in the past; each new photograph is the product of trial and error and unbound intuition.
+                            <br><br>
+                            I'm not sure what compels me towards minimalism, but I think it has something to do with steam on a mirror, each simple composition wiping at the glass, revealing another glimpse of the essence beyond. Perhaps one day, I will capture the essence of the world in its true, simplest form, and the glass will be wiped fully clean. Until then, I'll savor those glimpses.
+                        </p>
+                    </div>
+                </div>
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-right" src="simp/whitepine3.jpg" page="simp" name="White Pine III" year="2019">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-wide" src="simp/wingbeat2.jpg" page="simp" name="Wingbeat II" year="2019">
+            </div>
+
+            <div id="horiz" class="content">
+                <div id="horiz-row1" class="row row1 row-justify-left" onLoad="fadeIn(this)">
+                    <div id="horiz-row1-left" class="left-column img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img img-sticky" src="horiz/rainshadow5.jpg" page="horiz" name="Rainshadow V" year="2020">
+                    </div>
+                    <div id="horiz-row1-right" class="right-column text-column">
+                        <h3 id="horiz-what" class="w">what</h3>
+                        <h1 id="horiz-title" class="title">I chase the churning vastness.</h1>
+                        <p id="horiz-text1" class="text">
+                            For years I struggled to photograph the large bodies of water in my life. Lakes and oceans have always been my refuge and my solace, and they never fail to attract my lens.
+                            <br><br>
+                            However, time and time again I failed to capture the water; my photos were much too busy, seeing everything while capturing nothing.
+                        </p>
+                    </div>
+                </div>
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-right" src="horiz/gloaming3.jpg" page="horiz" name="Gloaming III" year="2020">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class=" img-small img-left" src="horiz/kapow.jpg" page="horiz" name="Ka-Pow!" year="2021">
+                <div id="horiz-row2" class="row row2 row-justify-right" onLoad="fadeIn(this)">
+                    <div id="horiz-row2-left" class="left-column text-column">
+                        <p id="horiz-text2" class="text">
+                            Now, I distill the water into its simplest form, making abstract what is too big to capture conventionally.
+                            <br><br>
+                            By panning the camera while holding down its shutter, I create blurred abstracts of the water’s most distinctive qualities: color and texture.
+                            <br><br>
+                            I strip away the busy imperfections, the out-of-place waves and clouds and flotsam. After the pan, only the essence of the subject is left.
+                        </p>
+                    </div>
+                    <div id="horiz-row2-right" class="right-column img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="horiz/copper3.jpg" page="horiz" name="Copper Sky III" year="2020">
+                    </div>
+                </div>
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class=" img-small img-left" src="horiz/ripple3.jpg" page="horiz" name="Ripple III" year="2020">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class=" img-small img-right" src="horiz/darkwater6.jpg" page="horiz" name="Darkwater VI" year="2020">
+                <div id="horiz-row3" class="row row3 row-justify-left" onLoad="fadeIn(this)">
+                    <div id="horiz-row3-left" class="left-column img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="horiz/mistwater2.jpg" page="horiz" name="Mistwater II" year="2020">
+                    </div>
+                    <div id="horiz-row3-right" class="right-column text-column">
+                        <p id="horiz-text3" class="text">
+                            The sea is vast, not only in space, but in time as well; my work is a pursuit of that sea, an attempt to find something fundamental in its transient idiosyncrasies.
+                            <br><br>
+                            I cast a wide net across the sea’s fleeting daily faces, from the bright haze of a stale mid-morning to the deep and dusky greens of the gloaming, in hopes that I might create some foundational manifestation of its being.
+                        </p>
+                    </div>
+                </div>
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-right" src="horiz/waterlines3.jpg" page="horiz" name="Waterlines III" year="2020">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-left" src="horiz/mooncall.jpg" page="horiz" name="Mooncall" year="2021">
+                <div id="horiz-row4" class="row row4 row-justify-right" style="margin-bottom: 60px;" onLoad="fadeIn(this)">
+                    <div id="horiz-row4-left" class="left-column text-column">
+                        <p id="horiz-text4" class="text">
+                            In these images, I photograph the very human feeling we get when we gaze out at the horizon. Rather than capture it objectively, I strip water of its time and space, like a studio portrait or a simple line drawing.
+                            <br><br>
+                            By siphoning the essence of that rich and varied vastness, by veiling the dizzying busyness of context, I unveil the water.
+                        </p>
+                    </div>
+                    <div id="horiz-row4-right" class="right-column img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="horiz/cloudparade9.jpg" page="horiz" name="Cloud Parade IX" year="2020">
+                    </div>
+                </div>
+
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-wide" src="horiz/softsurge1.jpg" page="horiz" name="Softsurge I" year="2021">
+                
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-left" src="horiz/windfleet4.jpg" page="horiz" name="Windfleet IV" year="2021">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-right" src="horiz/cirrustracks1.jpg" page="horiz" name="Cirrus Tracks I" year="2020">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-left" src="horiz/fire2.jpg" page="horiz" name="Fire II" year="2019">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-right" src="horiz/magenta1.jpg" page="horiz" name="Magenta I" year="2020">
+                
+            </div>
+
+            <div id="cloud" class="content">
+                <div id="cloud-row1" onLoad="fadeIn(this)">
+                    <div id="cloud-row1-left">
+                            <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" src="cloud/cloudswells2.jpg" name="Cloudswells II" year="2021">
+                    </div>
+                    <div id="cloud-row1-right">
+                        <h3 class="w">what</h3>
+                        <h1 id="cloud-title" class="title">I've found a<br>fluffy cloud.</h1>
+                        <p id="cloud-text-fluffy">
+                            You heard that right. I’ve done it. I’ve found a fluffy cloud.
+                            <br><br>
+                            No, this isn’t a false alarm. I’m not crying wolf. (The clouds are blocking the moon, anyway.) No pranks here. Just a fluffy cloud.
+                            <br><br>
+                            “But Duncan,” people tell me, “there are fluffy clouds in the sky all of the time!” They clearly haven’t seen this fluffy cloud.
+                            <br><br>
+                            When the news broke, many thought it was a hoax. In online message boards, conspiracy theorists of the new group Cloud-Anon touted wild suppositions about giant space blow-dryers and cloudfake technologies funded by the deep state.
+                            <br><br>
+                            Professional animators and CG artists spent days searching for signs that the cloud wasn’t actually that fluffy. But you can’t debunk the truth.
+                            <br><br>
+                            It really is as fluffy as it looks. Across the world, streets of every width and cobble-pattern have erupted in protests. I’m With Fluffy stickers garnish lampposts. In 91 languages, activists chant, in call and response, “Say it loud! Fluffy Cloud!”
+                            <br><br>
+                            Critics agree. “That cloud is really fluffy,” writes <i>Times</i> cloud correspondant Sirius Tratus.
+                            <br><br>
+                            “In all my years of covering clouds, I’ve never seen one as fluffy as that,” said <i>Post</i> cloud critic Cumulo Nimbus.
+                            <br><br>
+                            Needless to say, I’m over the moon about this fluffy cloud. I really hope it doesn’t rain on my parade.
+                        </p>
+                    </div>
+                </div>
+                <div id="cloud-row2" onLoad="fadeIn(this)">
+                    <div id="cloud-row2-left">
+                        <!-- <h2 class="w">how</h2> -->
+                        <p id="cloud-text-desc">
+                            <!-- where<br><br> -->
+                            Normally, when the evening drags its pastel curtain westward across the sky, I’m focused on the <a onclick="linkToContent('horiz')">horizon</a>. Every once and a while, however, I muster the strength to lift my lens to the wide above.
+                            <br><br>
+                            Here are a few of those skies.
+                        </p>
+                    </div>
+                    <div id="cloud-row2-right">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" src="cloud/skycandy.jpg" name="Sky Candy V" year="2021">
+                    </div>
+                </div>
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="cloud-img-left" src="cloud/streaks.jpg" name="Just missed it" year="2021">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="cloud-img-right" src="cloud/day.jpg" name="Daybreak III" year="2020">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="cloud-img-left" src="cloud/longing1.jpg" name="Longing I" year="2021">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="cloud-img-right" src="cloud/longing2.jpg" name="Longing II" year="2021">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="cloud-img-left" src="cloud/fire.jpg" name="Skyfire II" year="2021">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="cloud-img-right" src="cloud/moon.jpg" name="Moonsliver I" year="2021">
+            </div>
+
+            <div id="drift" class="content">
+                <div id="drift-row1" class="drift-row" onLoad="fadeIn(this)">
+                    <div id="drift-row1-left">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="" src="drift/drift1.jpg" page="drift" name="A Drift" year="2020">
+                    </div>
+                    <div id="drift-row1-right">
+                        <h3 id="drift-what" class="w">what</h3>
+                        <h1 id="drift-title" class="title">I tramp through wind-whisked drifts.</h1>
+                        <p id="drift-text">
+                            Occasionally, when I’m romping through the snow, my hands will thaw for just enough time to pull out my camera. They quickly freeze again, but, if I'm lucky,  I find an image in the stillness of the softly falling snow.
+                            <br><br>
+                            At the end of 2020, I found myself on the eastern shoulder of Mont de Grange, in the French Alps. It was raining when I set out from the valley floor, but there, five hundred meters up the mountain, snow drifted through the understory, frosting needles and leaves. Between my boots ran the slow babble of a snowmelt brook on its bed of freckled pebbles. All else was silent, a fitting foil to the end of a trying year.
+                        </p>
+                    </div>
+                </div>
+                <div id="drift-row2" class="drift-row" onLoad="fadeIn(this)">
+                    <div id="drift-row2-left">
+                        <img id="drift-row2-left-img1" onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="" src="drift/drift3.jpg" page="drift" name="Another Drift" year="2020">
+                        <img id="drift-row2-left-img2" onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="" src="drift/drift5.jpg" page="drift" name="A Real Big Rocky Drift" year="2020">
+                    </div>
+                    <div id="drift-row2-right">
+                        <img id="drift-row2-right-img1" onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="" src="drift/drift2.jpg" page="drift" name="A Subtle Drift" year="2020">
+                        <img id="drift-row2-right-img2" onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="" src="drift/drift4.jpg" page="drift" name="That First Drift Again, But From a New Angle" year="2020">
+                    </div>
+                </div>
+                <img id="drift-row3" onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="" src="drift/drift6.jpg" page="drift" name="Silent Wing" year="2019">
+
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="drift-img-right" src="drift/drift7.jpg" page="drift" name="A Fence Adrift" year="2021">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="drift-img-left" src="drift/drift8.jpg" page="drift" name="Snowmeadow" year="2021">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="drift-img-right" src="drift/drift9.jpg" page="drift" name="Pines Dappled III" year="2020">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="drift-img-left" src="drift/drift10.jpg" page="drift" name="Driftlines" year="2020">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="drift-img-right" src="drift/drift11.jpg" page="drift" name="Pines Dappled II" year="2020">
+
+                <img id="drift-row4" onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="" src="drift/drift12.jpg" page="drift" name="Snowfall I" year="2019">
+
+            </div>
+
+            <div id="pizza" class="content">
+                <div id="pizza-row1" onLoad="fadeIn(this)">
+                    <div id="pizza-row1-left">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="" src="pizza/pizza.gif" page="pizza" name="Pizza Time" year="2020">
+                    </div>
+                    <div id="pizza-row1-right">
+                        <h3 id="pizza-what" class="w">what</h3>
+                        <h1 id="pizza-title" class="title">I raised that pizza.</h1>
+                        <p id="pizza-text-desc">This short film, produced in spring of 2020, was created from almost 2,500 individual photographs over the course of several days. It is best watched with sound on.</p>
+                    </div>
+                </div>
+                <div id="pizza-film">
+                    <video width="100%" controls onplay="foleyOff()" onpause="foleyOn()" preload="metadata" onLoad="fadeIn(this)">
+                        <source src="pizza/pizza.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div id="pizza-row2" onLoad="fadeIn(this)">
+                    <div id="pizza-caption">
+                        <p>
+                            Pizza has long been a staple of the modern western diet, adorning the tables of birthday parties, school dances, and office socials. It even defines its own gathering: the pizza party. It is convenient, unifying, and versatile, with cauliflower crusts for the gluten free, cheeseless cheese for the lactose intolerant, and pineapple on top for the criminally insane.
+                            <br><br>
+                            However, in today’s hyper-health-conscious world, pizza reigns as an epitome of poor nutrition. High in saturated fats, sodium, and refined carbohydrates, modern pizza has the power to <a href="https://doi.org/10.1172/JCI89444" target="_blank">damage</a> metabolism and insulin resistance, leading to diabetes, liver disease, and other complications. Worse yet, modern, processed pizza is addictive; <a href="https://doi.org/10.1371/journal.pone.0117959" target="_blank">one study</a> used survey data to rank pizza as the fourth most addictive food, behind chocolate, ice cream, and french fries.
+                            <br><br>
+                            Despite pizza’s evident drawbacks, a possibility remains to harness pizza’s place in the zeitgeist in order to benefit public health. <a href="https://doi.org/10.1017/S1368980013002814" target="_blank">Researchers</a> found success with a “health-by-stealth” approach, which aims to improve rather than replace common junk food. Unprocessed, traditional pizza is relatively healthy, with whole-wheat flour, fresh tomatoes and cheese, and vegetable toppings. Thus, creating a nutritionally balanced pizza is relatively simple. By adjusting ingredients in the dough, sauce, and cheese and adding toppings to supplement nutrition, researchers created a pizza which, while remaining delicious, includes the recommended calories for a single meal, as well as reasonable levels of sodium, fat, and fibre. This traditional, health-conscious pizza has been linked to lower risk of <a href="https://doi.org/10.1038/sj.ejcn.1601997" target="_blank">heart attacks</a> and <a href="https://doi.org/10.1002/ijc.11382" target="_blank">several cancers</a>. Additionally, olive oil and vegetables, both common on pizza, are <a href="https://doi.org/10.1038/sj.bjc.6690400" target="_blank">inversely related</a> to risk of throat cancer. At its essence, pizza is a force for good. While its modern form is extremely detrimental to human health, pizza’s future is as bright as its past.
+                        </p>
+                    </div>
+                        <div id="pizza-last-photo">
+                            <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="" src="pizza/pizza.jpg" page="pizza" name="Pizza Time II" year="2020">
+                        </div>
+                </div>
+            </div>
+
+            <div id="wiki" class="content">
+                <div id="wiki-row1" class="row row1" onLoad="fadeIn(this)">
+                    <div id="wiki-row1-left" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="wiki.png" page="wiki" name="" year="">
+                    </div>
+                    <div id="wiki-row1-right" class="text-column">
+                        <h3 id="wiki-what" class="w">what</h3>
+                        <h1 id="wiki-title" class="title">I deep-dive the public domain.</h1>
+                        <p id="wiki-text" class="text">
+                            In Spring of 2021 I spent a month scouring <a href="https://commons.wikimedia.org/wiki/Main_Page">Wikimedia Commons</a>, Wikipedia's file repository in which every image, video, and audio file is freely usable, under a Creative Commons license or in the public domain. I created this film, for free, using 144 of those files.
+                        </p>
+                    </div>
+                </div>
+                <div id="wiki-film">
+                    <iframe id="wiki-film-player" src="https://www.youtube.com/embed/JRXZAaDxGCQ"></iframe>
+                </div>
+            </div>
+
+            <div id="cliff" class="content">
+                <div id="cliff-row1" class="row row1 rows-below" onLoad="fadeIn(this)">
+                    <div id="cliff-row1-left" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img img-column-img-skinny" src="cliff/moonglint.jpg" page="cliff" name="The moon-soaked sea lies dormant in twilight." year="2021">
+                    </div>
+                    <div id="cliff-row1-right" class="text-column">
+                        <h3 id="cliff-what" class="w">what</h3>
+                        <h1 id="cliff-title" class="title">I walk the winding ways.</h1>
+                        <p id="cliff-text1" class="text">
+                            The first time I saw the sea, the tide was out. The night was cold but windless, and the water, in gentle moon-soaked rushes, washed glinting sand. I had known vastness before—I grew up on Lake Michigan, which resembles the sea on a calm day—but this was something different, like meeting the twin of an old friend for the first time. The sea was familiar, and yet utterly new.                            
+                        </p>
+                    </div>
+                </div>
+                <div id="cliff-row2" class="row row-justify-right rows-above rows-below" onLoad="fadeIn(this)">
+                    <div id="cliff-row2-left" class="text-column">
+                        <p id="cliff-text2" class="text">
+                            Just days before, I had arrived in Falmouth, Cornwall, four thousand miles from home. I was adrift in a world I did not know. To get to know my new environment, I started walking: lichen-draped lanes through local woodlands, narrow village alleys between leaning terraced facades, muddied tracks over cow-clogged moorland. It was the South West Coast Path, however, which won my heart.
+                        </p>
+                    </div>
+                    <div id="clifv-row2-right" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="cliff/mud.jpg" page="cliff" name="Echoes of boots long gone linger in the mud of the path." year="2020">
+                    </div>
+                </div>
+                <div id="cliff-row3" class="row rows-above rows-below" onLoad="fadeIn(this)">
+                    <div id="cliff-row3-left" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="cliff/march.jpg" page="cliff" name="Surf breaks on its march ashore, surging over smooth and sun-stained sand." year="2020">
+                    </div>
+                    <div id="cliff-row3-right" class="text-column">
+                        <p id="cliff-text3" class="text">
+                            The Coast Path is England’s most comprehensive trail, covering six hundred and thirty miles of cliffs and beaches from Minehead, in northern Somerset, to Poole, in southern Dorset, by way of Devon and Cornwall. It joins national reserves, local parks, and privately managed estates and gardens along high and winding cliffs and surf-battered beaches. I walked my home section, meandering west from Falmouth’s Gyllyngvase Beach, more times than I could count; it was my refuge and my respite in the tumult of my life.
+                        </p>
+                    </div>
+                </div>
+                <div id="cliff-row4" class="row row-justify-right rows-above rows-below" onLoad="fadeIn(this)">
+                    <div id="cliff-row4-left" class="text-column">
+                        <p id="cliff-text4" class="text">
+                            I have now walked my local stretch of the Coast Path hundreds of times, under hundreds of skies, and seen hundreds of disparate oceans. I’ve found every color of the rainbow in those shimmering waters, every kind of cloud in the pastel sky. I know the muddy turns of my home section better than the street in front of my home itself.
+                        </p>
+                    </div>
+                    <div id="cliff-row4-right" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="cliff/blackberry.jpg" page="cliff" name="Heavy with blackberries, hedges lean over the gleaming sea." year="2020">
+                    </div>
+                </div>
+                <div id="cliff-row5" class="row rows-above rows-below" onLoad="fadeIn(this)">
+                    <div id="cliff-row5-left" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="cliff/magenta.jpg" page="cliff" name="The evening hangs low over the wind-rippled sea." year="2021">
+                    </div>
+                    <div id="cliff-row5-right" class="text-column">
+                        <p id="cliff-text5" class="text">
+                            In the early days, the Coast Path was a bridge: on one side, the sea, that grounding blue expanse, and on the other, unfamiliar England. I could walk its high and twisting cliffs and surf battered beaches with one foot in the old and one in the new. Now, although the new is no longer so new, the coast and its winding walk remain my refuge. Far from my old life, I can always look out across that vastness and find reassurance, some inkling of familiarity in a distant land.
+                        </p>
+                    </div>
+                </div>
+                <div id="cliff-row6" class="row row-justify-right rows-above rows-below" onLoad="fadeIn(this)">
+                    <div id="cliff-row6-left" class="text-column">
+                        <p id="cliff-text6" class="text">
+                            Whenever I miss home, walking the path makes four thousand miles feel not quite as far.  Perhaps one day, I will appreciate the Atlantic not as an emotional derivative of the lake of my youth, but rather as its own entity, a vastness in and of itself. I will find refuge in the Coast Path not because it reminds me of home, but because it is home. Until then, I’ll keep walking.
+                        </p>
+                    </div>
+                    <div id="cliff-row6-right" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="cliff/linger.jpg" page="cliff" name="Last light’s magenta tendrils take hours to unweave." year="2020">
+                    </div>
+                </div>
+            </div>
+
+            <div id="wisco" class="content">
+                <div id="wisco-row1" class="row row1 rows-below" onLoad="fadeIn(this)">
+                    <div id="wisco-row1-left" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="wisco/corn.jpg" page="wisco" name="Susurrus III" year="2018">
+                    </div>
+                    <div id="wisco-row1-right" class="text-column">
+                        <h3 id="wisco-what" class="w">what</h3>
+                        <h1 id="wisco-title" class="title">I find new beauty in old Wisconsin.</h1>
+                        <p id="wisco-text1" class="text">
+                            I grew up in boring old Wisconsin, and I spent the first 18 years of my life waiting to get out.
+                            <br><br>
+                            My dreams were too big for cows and cornfields. I was ready--had been for years--to escape, to see the ends of the earth through the end of a lens. I wanted mountains, icebergs, jungles. Pulled towards extremes, I never saw this lumpy wheat-swamp as a destination.
+                            <br><br>
+                            I think I do now.
+                        </p>
+                    </div>
+                </div>
+                <div id="wisco-row2" class="row row-justify-right rows-above rows-below" onLoad="fadeIn(this)">
+                    <div id="wisco-row2-left" class="text-column">
+                        <p id="wisco-text2" class="text">
+                            This project is a years-long exploration of the subtleties I failed to notice for so long.
+                            <br><br>
+                            Nothing in Wisconsin is grand. If any majesty exists among these muddy hills, I have not yet photographed it. I seek instead the character of the land, the muted idiosyncrasies I did not see growing up.
+                        </p>
+                    </div>
+                    <div id="wisco-row2-right" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="wisco/lastcall.jpg" page="wisco" name="Last Call I" year="2020">
+                    </div>
+                </div>
+                <div id="wisco-row3" class="row rows-above rows-below" onLoad="fadeIn(this)">
+                    <div id="wisco-row3-left" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="wisco/cycling.jpg" page="wisco" name="Cycling" year="2019">
+                    </div>
+                    <div id="wisco-row3-right" class="text-column">
+                        <p id="wisco-text3" class="text">
+                            Back for the summer, I entered Wisconsin not as a long-time resident but as a visitor. I found inspiration in great writers who remove themselves from the context of life, who seem to view the world from a thousand miles away and write about human nature as if it is alien.
+                            <br><br>
+                            While I strive for intimacy in my work, for a deep connection to the natural world, I utilise the curiosity and nondismissive willingness that comes from removal to find beauty in the mundane.
+                        </p>
+                    </div>
+                </div>
+                <div id="wisco-row4" class="row row-justify-right rows-above rows-below" onLoad="fadeIn(this)">
+                    <div id="wisco-row4-left" class="text-column">
+                        <p id="wisco-text4" class="text">
+                            The great struggle in creating these images was not in finding extraordinary subjects but in finding extraordinary ways to photograph.
+                            <br><br>
+                            I have walked past the same stand of tall grasses--the same weeds, essentially--hundreds of times; how do I see them anew?
+                            How do I capture with a fresh and novel perspective while maintaining my intimate familiarity with the land?
+                        </p>
+                    </div>
+                    <div id="wisco-row4-right" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="wisco/grasshopper.jpg" page="wisco" name="Cattails I" year="2018">
+                    </div>
+                </div>
+                <div id="wisco-row5" class="row rows-above rows-below" onLoad="fadeIn(this)">
+                    <div id="wisco-row5-left" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="wisco/maple.jpg" page="wisco" name="Maple I" year="2019">
+                    </div>
+                    <div id="wisco-row5-right" class="text-column">
+                        <p id="wisco-text5" class="text">
+                            These images are raw and poetic vignettes of the land of my youth. They are deeply rooted in my past, but owe their existance to my expatriation.
+                            <br><br>
+                            This project would not exist if had never left Wisconsin just as it would not exist if I grew up somewhere else; it was born from this dichotomy of intimacy and removal. 
+                            <br><br>
+                            Above all, it allowed me to finally see what I had missed for so long: the quiet beauty of Wisconsin's small nature.
+                        </p>
+                    </div>
+                </div>
+                <!-- <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="wisco-img-right" src="wisco/warb.jpg" page="wisco" name="Meadowbird II" year="2019">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="wisco-img-left" src="wisco/swifts.jpg" page="wisco" name="Susurrus II" year="2018"> -->
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-right" src="wisco/meadowlark.jpg" page="wisco" name="Meadowlark" year="2020">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-left" src="wisco/blackbird.jpg" page="wisco" name="Russet" year="2019">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-right" src="wisco/sus.jpg" page="wisco" name="Susurrus I" year="2018">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-left" src="wisco/moon.jpg" page="wisco" name="Deep Sky" year="2020">
+            </div>
+
+            <div id="cart" class="content">
+                <div id="cart-row1" class="row row1 rows-below" onLoad="fadeIn(this)">
+                    <div id="cart-row1-left" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="cart/cart1.jpg" page="cart" name="Trouble Afoot" year="2019">
+                    </div>
+                    <div id="cart-row1-right" class="text-column">
+                        <h3 id="cart-what" class="w">what</h3>
+                        <h1 id="cart-title" class="title">I mourn the forlorn carts.</h1>
+                        <p id="cart-text1" class="text">
+                            I've always had a problem with shopping carts. Not the carts themselves—I generally regard them as a nice way to get peanut butter from point A to point B—but, rather, how lots of people treat them.
+                            <br><br>
+                            This angry fixation began when, at the store with my parents, I was old enough to push the cart. We'd shlep to the car, unload our bags, and it would be my job to drive the cart to the corral (is that what they're called?).
+                            <br><br>
+                            And, more often than not, my Errand of Upmost Importance would be interrupted. Straining to see around the tall cart, I'd skillfully navigate my way between the metal bars of the cart corral, only to be stopped with a clang.
+                            <br><br>
+                            Some sap had left their cart crooked!
+                            <br><br>
+                            With the naive due diligence that came coupled to my childhood I would shuffle around, push in the offending victual vessel and then my own, and restore order to the universe.
+                            <br><br>
+                            Man, I bet 7-year old, self-righteous me was fun at parties.
+                        </p>
+                    </div>
+                </div>
+                <div id="cart-row2" class="row row-justify-right rows-above rows-below" onLoad="fadeIn(this)">
+                    <div id="cart-row2-left" class="text-column">
+                        <p id="cart-text2" class="text">
+                            As I aged, I became more and more cart-conscious. I noticed them strewn everywhere: in the store's doorways, on the sidewalk adjacent, in parking spots and in bushes. Worst of all were the ones drifted carelessly against the corrals. So close, and yet so far away.
+                            <br><br>
+                            I didn't understand why people wouldn't take 30 seconds to make everyone else's day easier. Little Duncan was angry.
+                            <br><br>
+                            Wasn't there satisfaction in a job well done? Joy for a world in order? I was so young to be exposed so violently to the tragedy of the commons.
+                            <br><br>
+                            Although I like to think I lost a bit of my self-righteousness as I grew—the offending shoppers were probably just late for something—, my dark fascination continued. At 14, for the mandatory science fair, I wanted to conduct a behavioral study on the psychology of cart abandonment. It wasn't science-y enough, which I can understand.
+                            <br><br>
+                            I moved on.
+                        </p>
+                    </div>
+                    <div id="cart-row2-right" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="cart/cart2.jpg" page="cart" name="Macabre Doings" year="2019">
+                    </div>
+                </div>
+                <div id="cart-row3" class="row rows-above rows-below" onLoad="fadeIn(this)">
+                    <div id="cart-row3-left" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="cart/cart3.jpg" page="cart" name="Like Cow Tipping - But Worse" year="2021">
+                    </div>
+                    <div id="cart-row3-right" class="text-column">
+                        <p id="cart-text3" class="text">
+                            After many undisturbed and unperturbed years—at least by shopping carts—, I arrived at University. There I was, in a new land, free of past pet peeves, at peace with myself.
+                            <br><br>
+                            That is, until I went for my first walk.
+                            <br><br>
+                            I saw more carts strewn across campus and the surrounding roads than I ever had at home. It was a shock to the system. How could I coexist with this madness? I thought I was free.
+                        </p>
+                    </div>
+                </div>
+                <div id="cart-row4" class="row row-justify-right rows-above rows-below" onLoad="fadeIn(this)">
+                    <div id="cart-row4-left" class="text-column">
+                        <p id="cart-text4" class="text">
+                            My aforementioned personal growth stayed strong, more or less. I too had walked to the nearest grocery store: it was a hike. Without a backpack, I wouldn't have wanted to carry groceries back to campus.
+                            <br><br>
+                            I noticed that my old anger had been replaced with melancholy. I didn't fault the weary, sleepless students for their misdeeds; instead, I mourned this cart diaspora, these migrant beasts forever on the road, out of place and out of time, stranded in a world they never made.
+                        </p>
+                    </div>
+                    <div id="cart-row4-right" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="cart/cart4.jpg" page="cart" name="Passersby" year="2021">
+                    </div>
+                </div>
+                <div id="cart-row5" class="row rows-above" onLoad="fadeIn(this)">
+                    <div id="cart-row5-left" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="cart/cart5.jpg" page="cart" name="The Lumbering Herd" year="2019">
+                    </div>
+                    <div id="cart-row5-right" class="text-column">
+                        <p id="cart-text5" class="text">
+                            I imagine shopping carts are a lot like Eeyore the donkey, strong in build but anhedonic and malleable in heart. The kind of creature that wouldn't hurt a fly, only bum it out.
+                            <br><br>
+                            I imagine carts are independent folk. They are loyal to their fellow carts, but don't waste time with attachment, and are hardy in all weather. Practiced grumblers, they never complain with the intent to make change.
+                            <br><br>
+                            Despite their predicament, I imagine they are proud at heart, and wouldn't wish anyone inconvenience for their sake. I imagine that they'll never stand up for themselves, and I imagine we'll continue to find them, roaming lost and aimless, unless we lend them our voices
+                            <br><br>
+                            A Dr Seuss character—I can never remember who—once proclaimed, "I am the Lorax I speak for the [carts]." Be that Lorax, and return those carts.
+
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="birds" class="content">
+                <div id="birds-row1" class="row row1" onLoad="fadeIn(this)">
+                    <div id="birds-row1-left" class="img-column">
+                        <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-column-img" src="birds/yellowwarbler.jpg" page="birds" name="Yellow Warbler" year="2019">
+                    </div>
+                    <div id="birds-row1-right" class="text-column">
+                        <h3 id="birds-what" class="w">what</h3>
+                        <h1 id="birds-title" class="title">I seek the wingéd things.</h1>
+                        <p id="birds-text" class="text">
+                            A few years ago, I set out to find every bird. There are a lot of them, as it turns out. Finding all of the birds isn't the one-weekend project I thought it would be. In any case, here are a few.
+                        </p>
+                    </div>
+                </div>
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-right" src="birds/bluetit.jpg" page="birds" name="Blue Tit" year="2019">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-left" src="birds/goose.jpg" page="birds" name="Canada Goose" year="2020">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-right" src="birds/merganser.jpg" page="birds" name="Red-Breasted Merganser" year="2020">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-left" src="birds/sparrow.jpg" page="birds" name="Sparrow" year="2019">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-right" src="birds/robin.jpg" page="birds" name="American Robin" year="2020">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-left" src="birds/woodpecker.jpg" page="birds" name="Downy Woodpecker" year="2019">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-small img-right" src="birds/lego.jpg" page="birds" name="Working From Home" year="2020">
+                <img onclick="lightbox(this)" onmouseover="imgHoverOn(this)" onmouseout="imgHoverOff(this)" loading="lazy" onLoad="fadeIn(this)" class="img-wide" src="birds/pelican.jpg" page="birds" name="White Pelicans" year="2019">
+            </div>
+
+
+            <h3 id="bottom-link-container">
+                <a onclick="scrollToTheTopOfThePage()">top</a> / <a href="about.html"> bio</a> / <a href="https://www.instagram.com/probablyduncan/" target="blank">instagram</a>
+            </h3>
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+        <script type="text/javascript">
+
+            var currentContent = 1;
+
+            var skillsListArr = ['simp','horiz','cloud','drift','pizza','wiki','cliff','wisco','cart','birds'];
+            //get param from url, takes anything after '?' and selects that content
+            var fullUrl = window.location.href;
+            var index = fullUrl.indexOf('?');
+            var urlParam = fullUrl.substring(index + 1, fullUrl.length);
+            if(index != -1) {
+                currentContent = getNum(urlParam);
+            }
+
+            selectContent(skillsListArr[currentContent]);
+            skillOpacity(currentContent);
+
+
+
+        
+            function selectSkill(e,num){
+                //this is the first 4-5 letters of the link clicked, which will be used to switch to the correct page content
+                var skillID = e.id.substring(0,e.id.indexOf('-'));
+
+                selectContent(skillID);
+                skillOpacity(num);
+                currentContent = num;
+                
+                //scroll to the content
+                window.scrollTo({
+                    top: document.getElementById(skillID).offsetTop - 79,
+                    left:0,
+                    behavior: 'smooth'
+                });
+
+            }
+
+            function selectContent(id){
+                for(var i = 0; i < document.getElementsByClassName('content').length; i++){
+                    document.getElementsByClassName('content')[i].classList.remove('fadeIn');
+                    document.getElementsByClassName('content')[i].style.display = 'none';
+                }
+
+                document.getElementById(id).style.display = 'block';
+                document.getElementById(id).classList.add('fadeIn');
+            }
+            function getNum(id){
+                for(var i = 0; i < skillsListArr.length; i++){
+                    if(id === skillsListArr[i]) return i;
+                }
+                return -1;
+            }
+
+
+            //takes the child number of the element clicked and sets the opacities accordingly
+            function skillOpacity(num){
+
+                if(num == -1) return;
+
+                var childArray = document.getElementById('skills-list').children;
+
+                childArray[num].style.opacity = 1;
+
+                //this loop goes towards the start of the child array
+                var count = 0.4;
+                for(var i = num - 1; i >= 0; i--){
+                    if(count > 0.9) count = 0.9;
+                    childArray[i].style.opacity = 1 - count;
+                    count += 0.1;
+                }
+
+                //this look goes towards the back of the child array
+                count = 0.4;
+                for(var i = num + 1; i < childArray.length; i++){
+                    if(count > 0.9) count = 0.9;
+                    childArray[i].style.opacity = 1 - count;
+                    count += 0.1;
+                }
+
+            }
+
+
+            //IMG HOVER
+
+
+            function imgHoverOn(e){
+                if(e.offsetLeft + e.width/2 > window.innerWidth/2)
+                    e.style.transform = 'Rotate(-3deg)';
+                else
+                    e.style.transform = 'Rotate(3deg)';
+            }
+            function imgHoverOff(e){
+                e.style.transform = 'Rotate(0deg)';
+            }
+
+
+            function scrollToTheTopOfThePage(){
+                window.scrollTo({
+                    top: document.getElementById('main-container').offsetTop - 80,
+                    left:0,
+                    behavior: 'smooth'
+                });
+            }
+
+            function linkToContent(str){
+                selectContent(str);
+                skillOpacity(getNum(str));
+                currentContent = getNum(str);
+                window.scrollTo({
+                    top: document.getElementById('skills-list').offsetTop + document.getElementById('skills-list').clientHeight,
+                    left:0,
+                    behavior: 'smooth'
+                });
+            }
+
+
+
+
+            //LIGHTBOX
+
+
+            var currentImg = null;
+
+            function lightbox(e){
+                if(e == null) return;
+
+                //so first we want to get the img
+                currentImg = e;
+                document.getElementById('lightbox').children[0].src = e.src;
+                
+                //this makes sure the next/prev images are loaded
+                getNextImg(e); getPrevImg(e);
+
+                //get the aspect ratio
+                var aspect = e.width / e.height;
+
+                //then we want to get the name of the img
+                document.getElementById('lightbox-caption').children[0].innerHTML = e.getAttribute('name');
+                document.getElementById('lightbox-caption').children[1].innerHTML = e.getAttribute('year');
+
+                //set width/height of the image/etc
+
+                //if window is taller than image, image width is priority
+                var imgWidth = '90vw';
+                var imgHeight = 90 / aspect + 'vw';
+
+                //if window is wider than image, image height is priority
+                if(window.innerWidth / window.innerHeight > aspect) {
+                    imgHeight = '80vh';
+                    imgWidth = 80 * aspect + 'vh';
+                }
+
+                //set the image and caption width/height
+                document.getElementById('lightbox').children[0].style.width = imgWidth;
+                document.getElementById('lightbox').children[0].style.height = imgHeight;
+                document.getElementById('lightbox').children[1].style.width = imgWidth;
+
+
+                //set the lightbox background color
+                var range = 5;
+                var baseValue = 250;
+                var rand = Math.random() * 2 * Math.PI;
+                var r = Math.sin(rand) * range + baseValue;
+                var g = Math.sin(rand + (2/3) * Math.PI) * range + baseValue;
+                var b = Math.sin(rand + (4/3) * Math.PI) * range + baseValue;
+
+                //concatonate color, add to background
+                var color = 'rgb(' + r + ',' + g + ',' + b + ')';
+                document.getElementById('lightbox').style.backgroundColor = color;
+
+
+                //make the lightbox visible
+                document.getElementById('lightbox').style.display = 'flex';
+                
+            }
+
+            function lightboxOff(){
+                
+                document.getElementById('lightbox').style.display = 'none';
+            }
+
+            function lightboxChange(d){
+                if(d == 1)
+                    lightbox(getNextImg(currentImg));
+                if(d == 0)
+                    lightbox(getPrevImg(currentImg));
+            }
+
+
+
+
+
+
+
+            //IMG GETTERS
+
+            //takes in an image
+            //returns the next image element on the page, unless it's not displayed
+            function getNextImg(e){
+                var imgArray = document.getElementsByTagName('img');
+                var next = false
+                var nextImg = e;
+                for(var i = 0; i < imgArray.length; i++) {
+                    if(next) {
+                        nextImg = imgArray[i];
+                        break;
+                    }
+                    if(imgArray[i] == e) next = true;
+                }
+                
+                if(nextImg.getAttribute('page') != e.getAttribute('page')) return e;
+
+                nextImg.setAttribute('loading','eager');
+                
+                return nextImg;
+            }
+
+            function getPrevImg(e){
+                var imgArray = document.getElementsByTagName('img');
+                var prev = false
+                var prevImg = e;
+                for(var i = imgArray.length - 1; i > 0; i--) {
+                    if(prev) {
+                        prevImg = imgArray[i];
+                        break;
+                    }
+                    if(imgArray[i] == e) prev = true;
+                }
+
+                if(prevImg.getAttribute('page') != e.getAttribute('page')) return e;
+
+                prevImg.setAttribute('loading','eager');
+
+                return prevImg;
+            }
+
+            function htmlSwap(e,str){
+                e.innerHTML = str;
+            }
+
+            function fadeInBody(){
+                document.body.classList.add('fadeIn');
+            }
+
+            function fadeIn(e){
+                e.classList.add('fadeIn');
+            }
+
+            var audio = false;
+            function foleyOn(){
+                document.getElementById('waves-foley').play();
+                audio = true;
+            }
+            function foleyOff(){
+                document.getElementById('waves-foley').pause();
+                audio = false;
+            }
+            function toggleAudio(){
+                if(audio){
+                    document.getElementById('audio-controls').innerHTML = 'audio off';
+                    foleyOff();
+                }
+                else {
+                    document.getElementById('audio-controls').innerHTML = 'audio on';
+                    foleyOn();
+                }
+            }
+
+
+
+            document.addEventListener('keydown', (e) => {
+                if(e.code === 'Escape'){
+                    lightboxOff();
+                }
+                if(e.code === 'ArrowRight'){
+                    lightboxChange('1')
+                }
+                if(e.code === 'ArrowLeft'){
+                    lightboxChange('0')
+                }
+            });
+
+
+
+            //mobile stuff
+        var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) && window.innerWidth < 586;
+        if(isMobile){
+            var h1Arr = document.getElementsByTagName('h1');
+            var h2Arr = document.getElementsByTagName('h2');
+            var h3Arr = document.getElementsByTagName('h3');
+            var h4Arr = document.getElementsByTagName('h4');
+            var pArr = document.getElementsByTagName('p');
+            var topLinkArr = document.getElementById('top-link-container').getElementsByTagName('a');
+            var skillLinkArr = document.getElementById('skills-list').getElementsByTagName('a');
+
+            for(var i = 0; i < h1Arr.length; i++) h1Arr[i].classList.add('h1-mobile');
+            for(var i = 0; i < h2Arr.length; i++) h2Arr[i].classList.add('h2-mobile');
+            for(var i = 0; i < h3Arr.length; i++) h3Arr[i].classList.add('h3-mobile');
+            for(var i = 0; i < h4Arr.length; i++) h4Arr[i].classList.add('h4-mobile');
+            for(var i = 0; i < pArr.length; i++) pArr[i].classList.add('p-mobile');
+
+            for(var i = 0; i < topLinkArr.length; i++){
+                topLinkArr[i].style.fontSize = '20px';
+            }
+
+            for(var i = 0; i < skillLinkArr.length; i++){
+                skillLinkArr[i].style.paddingBottom = '6px';
+                skillLinkArr[i].style.fontSize = '24px';
+            }
+            document.getElementById('hello-and-welcome').style.fontSize = '24px';
+            document.getElementById('hello-and-welcome').style.width = '80vw';
+
+            document.getElementById('main-container').style.flexFlow = 'column nowrap';
+            document.getElementById('main-container').style.width = '80vw';
+            document.getElementById('main-container-right').style.flexFlow = 'row-reverse nowrap';
+            document.getElementById('main-container-right').style.marginTop = '40px';
+            document.getElementById('main-line').style.display = 'none';
+
+            document.getElementById('pizza-title').style.width = '60vw';
+
+        }
+
+
+
+
+        </script>
+    </body>
+</html>

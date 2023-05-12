@@ -1,0 +1,518 @@
+@media screen and (max-width: 1152px){
+    h1{
+        font-size: 48px;
+    }
+    h2{
+        font-size: 16px;
+    }
+    h3{
+        font-size: 15px;
+    }
+    p{
+        font-size: 15px;
+        line-height: 30px;
+    }
+    #skills-list a{
+        font-size: 28px;
+    }
+    .title{
+        font-size: 42px;
+    }
+    .what{
+        margin-bottom: 28px;
+    }
+
+
+
+    /*CONTENT STUFF*/
+
+
+
+
+    #cloud-row1-left{
+        width: calc(90vw - 470px);
+    }
+
+    #cloud-row1-left img{
+        top: calc(40vh - (90vw - 470px) / 4);
+    }
+
+    #cloud-row1-right{
+        width: 400px;
+    }
+
+    #cloud-row2-left{
+        width: 400px;
+    }
+
+    #cloud-row2-right{
+        width: calc(90vw - 470px);
+    }
+
+    .cloud-img-left, .cloud-img-right{
+        width: calc((90vw - 470px) * .75);
+    }
+
+    .cloud-img-left{
+        margin-left: calc((90vw - 470px) *.25);
+    }
+    .cloud-img-right{
+        margin-left: calc(100vw - (90vw - 470px));
+    }
+
+
+    /* DRIFT */
+
+    #drift-row1-left{
+        width: calc(80vw - 470px);
+    }
+    #drift-row1-right{
+        width: 400px;
+    }
+
+
+    #cart .img-column{
+        width: calc(80vw - 400px);
+        margin-left: 5vw;
+        margin-right: 5vw;
+    }
+
+
+
+}
+
+
+@media screen and (max-width: 960px){
+    h1{
+        font-size: 42px;
+    }
+    h2{
+        font-size: 13px;
+    }
+    h3{
+        font-size: 13px;
+    }
+    p{
+        font-size: 15px;
+        line-height: 28px;
+    }
+    #skills-list a{
+        font-size: 24px;
+    }
+    .title{
+        font-size: 38px;
+    }
+
+
+
+    /*CONTENT STUFF*/
+
+
+    .text-column{
+        width: 360px;
+    }
+    .img-column{
+        width: calc(80vw - 360px);
+    }
+    .img-small{width: calc(80vw - 360px);}
+    .img-right{margin-left: calc(15vw + 360px);}
+    .row1 .img-column .img-column-img{
+        margin-top: -20px;
+    }
+
+    #cart .img-column{
+        width: calc(80vw - 360px);
+    }
+
+
+
+
+
+    /*CLOUD*/
+
+    #cloud-row1{
+        flex-flow: column wrap;
+    }
+
+    #cloud-row1-left{
+        width: 90vw;
+        margin-left: 5vw;
+    }
+
+    #cloud-row1-left img{
+        margin-top: 0;
+        margin-bottom: 60px;
+    }
+
+    #cloud-row1-right{
+        width: 60vw;
+        margin-left: 20vw;
+    }
+
+    #cloud-row2{
+        flex-flow: column-reverse wrap;
+        margin-top: 60px;
+    }
+
+    #cloud-row2-left{
+        width: 60vw;
+        margin-left: 20vw;
+    }
+
+    #cloud-row2-right{
+        width: 90vw;
+        margin-left: 5vw;
+    }
+
+    .cloud-img-left, .cloud-img-right{
+        width: 67.5vw;
+    }
+
+    .cloud-img-left{
+        margin-left: 5vw;
+    }
+    .cloud-img-right{
+        margin-left: 27.5vw;
+    }
+
+
+    /* DRIFT */
+
+    #drift-row1-left{
+        width: calc(85vw - 420px);
+    }
+    #drift-row1-right{
+        width: 350px;
+    }
+    .drift-img-left, .drift-img-right{
+        width: 42vw;
+        margin-top: 80px;
+        margin-left: 10vw;
+    }
+    .drift-img-right{
+        margin-left: 48vw;
+    }
+
+
+    /*PIZZA*/
+
+
+    #pizza-row1{
+        flex-flow: column wrap;
+    }
+    #pizza-row1-left{
+        width: 90vw;
+        margin-left: 5vw;
+    }
+    #pizza-row1-left img{
+        margin: 0;
+        margin-bottom: 60px;
+        width: 100%;
+    }
+    #pizza-row1-right{
+        width: 60vw;
+        margin-left: 20vw;
+    }
+    #pizza-what{
+        margin-bottom: 24px;
+    }
+    #pizza-title{
+        width: 400px;
+        margin-bottom: 18px;
+    }
+    #pizza-film{
+        width: 90vw;
+        margin-left: 5vw;
+        margin-top: 60px;
+    }
+    #pizza-row2{
+        flex-flow: column wrap;
+    }
+    #pizza-caption{
+        width: 60vw;
+        margin-left: 20vw;
+        margin-bottom: 60px;
+    }
+    #pizza-last-photo{
+        width: 90vw;
+        margin-left: 5vw;
+    }
+    #pizza-last-photo img{
+        width: 100%;
+    }
+
+
+}
+
+
+@media screen and (max-width: 835px){
+    h1{
+        font-size: 36px;
+    }
+    h3{
+        color: rgba(0, 0, 0, 0.4);
+        letter-spacing: 0.5px;
+    }
+    p{
+        font-size: 15px;
+        line-height: 28px;
+    }
+    #skills-list a{
+        font-size: 24px;
+    }
+    .title{
+        font-size: 36px;
+    }
+    #top-img-container{
+        margin-bottom: 40px;
+    }
+    #who{
+        margin-top: 8;
+        margin-bottom: 16px;
+    }
+    
+    #hello-and-welcome{
+        margin-bottom: 24px;
+    }
+
+
+    .text-column{
+        width: 320px;
+    }
+    .img-column{
+        width: calc(80vw - 320px);
+    }
+    .img-small{width: calc(80vw - 320px);}
+    .img-right{margin-left: calc(15vw + 320px);}
+
+    #cart .img-column{
+        width: calc(80vw - 320px);
+    }
+
+
+
+
+
+    /* DRIFT */
+
+
+    #drift-row1{
+        flex-flow: column wrap;
+        margin-top: 120px;
+    }
+    #drift-row1-left{
+        width: 90vw;
+        margin-left: 5vw;
+        margin-top: 40px;
+        margin-bottom: 120px;
+    }
+    #drift-row1-right{
+        width: 60vw;
+        margin-left: 20vw;
+    }
+
+
+
+}
+
+@media screen and (max-width: 749px){
+    h1{
+        font-size: 34px;
+    }
+    h3{
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.4);
+        font-weight: normal;
+        letter-spacing: 0.5px;
+    }
+    p{
+        font-size: 15px;
+        line-height: 28px;
+    }
+    #skills-list a{
+        font-size: 22px;
+    }
+    .title{
+        font-size: 34px;
+    }
+
+
+
+    .row{
+        flex-flow: column wrap;
+        margin-bottom: 0px;
+        margin-top: 0;
+    }
+    .img-column{
+        width: 80vw;
+        margin-left: 10vw;
+        margin-top: 0;
+        margin-bottom: 80px;
+    }
+    .img-column-img{
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+    .text-column{
+        width: 60vw;
+        margin-left: 20vw;
+        margin-bottom: 80px;
+    }
+    .row-justify-right{
+        flex-flow: column-reverse wrap;
+    }
+    .img-small{
+        width: 60vw;
+        margin-top: 0;
+        margin-bottom: 80px;
+    }
+    .img-left{margin-left: 15vw;}
+    .img-right{margin-left: 25vw;}
+    
+    .img-wide{
+        width: 100vw;
+        margin-top: 0;
+        margin-bottom: 80px;
+        margin-left: 0vw;
+    }
+
+
+    #simp .img-column-img{
+        width: 60vw;
+    }
+    #simp-row1 .img-column-img{
+        margin-left: 10vw;
+    }
+
+    #cart .img-column{
+        width: 80vw;
+        margin: 0 0 80px 10vw;
+    }
+
+    
+
+}
+
+@media screen and (max-width: 703px){
+    h1{
+        font-size: 32px;
+    }
+    h2{
+        font-size: 14px;
+    }
+    h3{
+        font-size: 14px;
+    }
+    p{
+        font-size: 15px;
+        line-height: 28px;
+    }
+    #skills-list a{
+        font-size: 22px;
+    }
+    .title{
+        font-size: 32px;
+    }
+}
+
+@media screen and (max-width: 675px){
+    h1{
+        font-size: 30px;
+    }
+    h2{
+        font-size: 14px;
+    }
+    h3{
+        font-size: 12px;
+    }
+    p{
+        font-size: 15px;
+        line-height: 28px;
+    }
+    #skills-list a{
+        font-size: 22px;
+    }
+    .title{
+        font-size: 30px;
+    }
+    .what{
+        margin-bottom: 12px;
+    }
+}
+
+@media screen and (max-width: 645px){
+    h1{
+        font-size: 28px;
+    }
+    h2{
+        font-size: 14px;
+    }
+    p{
+        font-size: 15px;
+        line-height: 28px;
+    }
+    #skills-list a{
+        font-size: 23px;
+    }
+    .title{
+        font-size: 28px;
+    }
+}
+
+@media screen and (max-width: 623px){
+
+    h1{
+        font-size: 26px;
+    }
+    h2{
+        font-size: 12px;
+    }
+    p{
+        font-size: 14px;
+        line-height: 28px;
+    }
+    #skills-list a{
+        font-size: 22px;
+    }
+    .title{
+        font-size: 26px;
+        margin-bottom: 26px;
+    }
+
+
+}
+
+
+@media screen and (max-width: 585px){
+
+}
+
+
+
+
+/*
+
+        MOBILE FONT SIZES
+
+*/
+
+
+.h1-mobile{
+    font-size: 32px;
+}
+.h2-mobile{
+    font-size: 18px;
+    font-weight: normal;
+}
+.h3-mobile{
+    font-size: 12px;
+}
+.h4-mobile{
+    font-size: 16px;
+}
+.p-mobile{
+    font-size: 18px;
+    letter-spacing: 1.2px;
+    line-height: 42px;
+    font-weight: normal;
+}

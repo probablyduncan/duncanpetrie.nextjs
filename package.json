@@ -1,0 +1,32 @@
+{
+  "name": "next",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prod": "next build && next start"
+  },
+  "dependencies": {
+    "@mdx-js/loader": "^2.3.0",
+    "@mdx-js/react": "^2.3.0",
+    "@next/font": "13.1.6",
+    "@next/mdx": "^13.3.0",
+    "esbuild": "^0.17.16",
+    "eslint": "8.34.0",
+    "eslint-config-next": "13.1.6",
+    "framer-motion": "^10.12.4",
+    "fs": "^0.0.1-security",
+    "gray-matter": "^4.0.3",
+    "mdx-bundler": "^9.2.1",
+    "modern-normalize": "^1.1.0",
+    "next": "13.1.6",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-error-overlay": "^6.0.9",
+    "react-rough-notation": "^1.0.3",
+    "roughjs": "^4.5.2"
+  }
+}
