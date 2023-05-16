@@ -1,10 +1,11 @@
 import Lonk from './Lonk';
 import style from './navbar.module.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { RoughNotation, RoughNotationGroup } from "react-rough-notation";
 import { Cinzel_Decorative, Lato, EB_Garamond } from '@next/font/google';
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { ViewportContext } from './Viewport';
 
 const cinzel = Cinzel_Decorative({ subsets: ['latin'], display: 'swap', weight: '700' });
 const garamond = EB_Garamond({subsets: ['latin'], display: 'swap', variable: true, weight: '500'});
@@ -23,6 +24,8 @@ const defaultLinks = [
 ];
 
 export function NewsNav( {homelink, links} ) {
+
+    const {touch} = useContext(ViewportContext);
 
     // refresh date
     const [date, setDate] = useState(null);
@@ -65,7 +68,7 @@ export function NewsNav( {homelink, links} ) {
             
             {/* email */}
             <span className={style.links + " right"}>
-            <RoughNotationGroup show={emailHover}>
+            <RoughNotationGroup show={!touch && emailHover}>
                 <RoughNotation
                     type="highlight"
                     strokeWidth={1}
@@ -94,7 +97,7 @@ export function Navlink({text, href}) {
 
     const [hover, toggleHover] = useState(false);
 
-    return (<RoughNotationGroup show={hover}>
+    return (<RoughNotationGroup show={!touch && hover}>
         <RoughNotation
             type={"circle"}
             strokeWidth={1.5}
@@ -159,6 +162,8 @@ export function SimpleNav( props ) {
 
 function Menurl({ pageName = "menu", menuName = "menu", color, menuFunction, menuLink, spread }) {
 
+    const {touch} = useContext(ViewportContext);
+
     const [hover, setHover] = useState(false);
 
     return (<div style={{
@@ -175,7 +180,7 @@ function Menurl({ pageName = "menu", menuName = "menu", color, menuFunction, men
                 onHoverEnd={() => setHover(false)}
             >
                 <Lonk href={menuLink}>
-                    &nbsp;&nbsp;&nbsp;&nbsp;{hover ? menuName?.toUpperCase() : pageName?.toUpperCase()}
+                    &nbsp;&nbsp;&nbsp;&nbsp;{!touch && hover ? menuName?.toUpperCase() : pageName?.toUpperCase()}
                 </Lonk>
             </motion.span>
         :
@@ -187,7 +192,7 @@ function Menurl({ pageName = "menu", menuName = "menu", color, menuFunction, men
                 onHoverStart={() => setHover(true)}
                 onHoverEnd={() => setHover(false)}
             >
-                &nbsp;&nbsp;&nbsp;&nbsp;{hover ? menuName?.toUpperCase() : pageName?.toUpperCase()}
+                &nbsp;&nbsp;&nbsp;&nbsp;{!touch && hover ? menuName?.toUpperCase() : pageName?.toUpperCase()}
             </motion.button>
         }
     </div>)

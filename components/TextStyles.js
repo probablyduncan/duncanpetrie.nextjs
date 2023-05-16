@@ -1,8 +1,9 @@
 import { Lato, Merriweather, EB_Garamond } from "@next/font/google";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { RoughNotation } from "react-rough-notation";
 import Lonk from "./Lonk";
 import { motion } from "framer-motion";
+import { ViewportContext } from "./Viewport";
 
 const merriweather = Merriweather({ subsets: ['latin'], variable: true, weight: '700' });
 const garamond = EB_Garamond({subsets: ['latin'], display: 'swap', variable: true, weight: '500'});
@@ -59,13 +60,14 @@ export function Caption({ children, small, textAlign, color, ...props }) {
 
 export function UnderLonk({ href, action, noUnderline, color, children, ...props }) {
 
+    const {touch} = useContext(ViewportContext);
     const [hover, setHover] = useState(false);
 
     const duration = children.length * 15 ?? 100;
     color = color ?? '#6495ed';
 
     return (
-        <Underline show={!noUnderline && hover} duration={duration} color={color}>
+        <Underline show={!noUnderline && !touch && hover} duration={duration} color={color}>
             {action ? 
                 <button onClick={action} {...props} style={{color}}
                     onMouseEnter={() => setHover(true)} 

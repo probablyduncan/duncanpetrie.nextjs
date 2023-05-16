@@ -19,8 +19,8 @@ export default function ArticleImage({ imgKey, first, type, sidePosition, mobile
 
     return (imgKey in imgData && (
         <div ref={ref} style={{
-            opacity: inView ? 1 : 0, 
-            transition: 'opacity 0.5s',
+            // opacity: inView ? 1 : 0, 
+            // transition: 'opacity 0.5s',
             display: 'flex', justifyContent: textCentered && !first ? 'center' : 'flex-start'
         }}>
             {mobile ? 

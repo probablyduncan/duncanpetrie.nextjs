@@ -37,7 +37,7 @@ export default function Story({ img, dept, title, text, link, route, color, chil
 
         {/* image */}
         {img &&
-            <RoughNotationGroup show={annotateMap && hover} >
+            <RoughNotationGroup show={!touch && annotateMap && hover} >
                 <Lonk href={route}>
                     <RoughNotation
                         type="box"
@@ -80,7 +80,7 @@ export default function Story({ img, dept, title, text, link, route, color, chil
         }
         
         {/* build paragraph rows */}
-        <RoughNotationGroup show={hover} >
+        <RoughNotationGroup show={!touch &&hover} >
         {text && text.map((p, i) => {
             return (
                 <Paragraph small={!mobile} key={`story-${i}`}>
@@ -105,7 +105,7 @@ export default function Story({ img, dept, title, text, link, route, color, chil
         {link && 
             <Dept small={!mobile} margin={text ? '40px 0 20px 0' : null} color={hover || touch ? color : "inherit"}
             >
-                <RoughNotationGroup show={hover}>
+                <RoughNotationGroup show={!touch &&hover}>
                     <RoughNotation
                         type="circle"
                         color={color}
