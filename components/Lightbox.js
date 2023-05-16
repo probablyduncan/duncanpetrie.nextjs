@@ -66,7 +66,9 @@ export default function Lightbox({ index }) {
 
     return ( lightboxKeys[index] != null &&
         <motion.div layout initial={{
-            minHeight: '-webkit-fill-available' ,
+            width: '100%', height: '100%',
+            maxHeight: '-webkit-fill-available', maxHeight: '-moz-available', maxHeight: 'fill-available',
+            maxWidth: '-webkit-fill-available', maxWidth: '-moz-available', maxWidth: 'fill-available',
             top: 0, left: 0,
             display: 'flex', justifyContent: 'space-between',
             backgroundColor: '#fafaff',
