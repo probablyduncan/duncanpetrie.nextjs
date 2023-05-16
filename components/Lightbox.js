@@ -96,7 +96,7 @@ export default function Lightbox({ index }) {
 
     return ( lightboxKeys[index] != null &&
         <motion.div layout initial={{
-            width: `calc(100svw - ${2 * (isTall ? 25 : 40)}px)`, height: `calc(100svh - ${2 * (isTall ? 25 : 40)}px)`,
+            width: `calc(100dvw - ${2 * (isTall ? 25 : 40)}px)`, height: `calc(100dvh - ${2 * (isTall ? 25 : 40)}px)`,
             padding: isTall ? '25px' : '40px',
             top: 0, left: 0,
             display: 'flex', justifyContent: 'space-between',
@@ -108,12 +108,12 @@ export default function Lightbox({ index }) {
             opacity: 1,
             flexFlow: isTall ? 'column' : 'row',
             alignItems: 'flex-end',
-            width: `calc(100svw - ${2 * (isTall ? 25 : 40)}px)`, height: `calc(100svh - ${2 * (isTall ? 25 : 40)}px)`, 
+            width: `calc(100dvw - ${2 * (isTall ? 25 : 40)}px)`, height: `calc(100dvh - ${2 * (isTall ? 25 : 40)}px)`, 
             padding: isTall ? '25px' : '40px',
         }}>
             {/* image container */}
             <div style={{
-                width: isTall ? `calc((100svh - 225px) * ${imgData[lightboxKeys[index]].ratio})` : 'calc(100% - 250px)',
+                width: isTall ? `calc((100dvh - 225px) * ${imgData[lightboxKeys[index]].ratio})` : 'calc(100% - 250px)',
                 maxWidth: isTall ? `100%` : `calc((100dvh - 80px) * ${imgData[lightboxKeys[index]].ratio})`,
                 display: 'flex',
                 alignItems: 'flex-end',
