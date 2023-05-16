@@ -54,8 +54,6 @@ export default function Index({ articleData }) {
         const tempArticles = articleData.concat(extraLinks).filter(a => i == 'all' || a.tags?.includes(i));
         shuffle(tempArticles);
 
-        console.log(tempArticles);
-
         let tempArticleGroups = [tempArticles];
         if (!mobile) {
             tempArticleGroups = [

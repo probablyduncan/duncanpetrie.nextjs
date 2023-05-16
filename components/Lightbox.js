@@ -4,7 +4,7 @@ import { Caption, LightboxButton, LightboxText, UnderLonk } from "./TextStyles";
 import { ViewportContext } from "./Viewport";
 import { motion } from "framer-motion";
 import Img from "./Img";
-import { getCaption } from "@/lib/imageHelper";
+import { getCaption, getNextIndex } from "@/lib/imageHelper";
 import { imgData } from "@/data/images";
 
 /**
@@ -37,7 +37,6 @@ export default function Lightbox({ index }) {
 
         const onLightboxResize = () => {
             setLightboxTall(lightboxQuery.matches);
-            console.log(lightboxQuery.matches);
         }
 
         onLightboxResize();
@@ -50,7 +49,9 @@ export default function Lightbox({ index }) {
     }, [])
 
     // next() to go forward, next(false) to go back
-    const next = useCallback((prev = false) => {if (index != null) toggleLightbox((index + lightboxKeys.length + (prev ? -1 : 1)) % lightboxKeys.length);}, [lightboxKeys.length, index, toggleLightbox])
+    const next = useCallback((prev = false) => {
+        if (index != null) toggleLightbox(getNextIndex(index, lightboxKeys.length, prev, 1), prev ? 'left' : 'right');
+    }, [index, toggleLightbox, lightboxKeys.length]);
 
     // set up keypress events
     useEffect(() => {
@@ -82,8 +83,8 @@ export default function Lightbox({ index }) {
         }}>
             {/* image container */}
             <div style={{
-                width: isTall ? `calc((100vh - 225px) * ${imgData[lightboxKeys[index]].ratio})` : 'calc(100% - 250px)',
-                maxWidth: isTall ? `100%` : `calc((100vh - 80px) * ${imgData[lightboxKeys[index]].ratio})`,
+                width: isTall ? `calc((100dvh - 225px) * ${imgData[lightboxKeys[index]].ratio})` : 'calc(100% - 250px)',
+                maxWidth: isTall ? `100%` : `calc((100dvh - 80px) * ${imgData[lightboxKeys[index]].ratio})`,
                 display: 'flex',
                 alignItems: 'flex-end',
             }}>
