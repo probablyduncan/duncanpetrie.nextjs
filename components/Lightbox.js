@@ -113,7 +113,7 @@ export default function Lightbox({ index }) {
         }}>
             {/* image container */}
             <div style={{
-                width: isTall ? `calc((100vh - 225px) * ${imgData[lightboxKeys[index]].ratio})` : 'calc(100% - 250px)',
+                width: isTall ? `calc((100svh - 225px) * ${imgData[lightboxKeys[index]].ratio})` : 'calc(100% - 250px)',
                 maxWidth: isTall ? `100%` : `calc((100dvh - 80px) * ${imgData[lightboxKeys[index]].ratio})`,
                 display: 'flex',
                 alignItems: 'flex-end',
