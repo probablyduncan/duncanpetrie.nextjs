@@ -88,10 +88,10 @@ export default function Lightbox({ index }) {
         };
         
         window.addEventListener('wheel', handleWindowWheel, { passive: false });
-        window.addEventListener('touchstart', handleWindowWheel, { passive: false });
+        window.addEventListener('touchmove', handleWindowWheel, { passive: false });
         return () => {
             window.removeEventListener('wheel', handleWindowWheel, { passive: false });
-            window.removeEventListener('touchstart', handleWindowWheel, { passive: false });
+            window.removeEventListener('touchmove', handleWindowWheel, { passive: false });
         };
 
     }, [index]);
