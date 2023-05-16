@@ -96,7 +96,8 @@ export default function Lightbox({ index }) {
 
     return ( lightboxKeys[index] != null &&
         <motion.div layout initial={{
-            width: '100dvw', height: '100dvh',
+            width: `calc(100dvw - ${2 * (isTall ? 20 : 40)}px)`,
+            height: `calc(100dvh - ${2 * (isTall ? 20 : 40)}px - (100vh - 100svh))`,
             top: 0, left: 0,
             display: 'flex', justifyContent: 'space-between',
             backgroundColor: '#fafaff',
@@ -107,8 +108,8 @@ export default function Lightbox({ index }) {
             opacity: 1,
             flexFlow: isTall ? 'column' : 'row',
             alignItems: 'flex-end',
-            width: `calc(100dvw - ${2 * (isTall ? 20 : 40)}px)`, height: `calc(100dvh - ${2 * (isTall ? 20 : 40)}px)`, 
-            padding: isTall ? '20px' : '40px',
+            width: `calc(100dvw - ${2 * (isTall ? 20 : 40)}px)`, height: `calc(100dvh - ${2 * (isTall ? 20 : 40)}px - (100vh - 100svh))`, 
+            padding: isTall ? '20px 20px calc(20px + 100vh - 100svh) 20px' : '40px',
         }}>
             {/* image container */}
             <div style={{
