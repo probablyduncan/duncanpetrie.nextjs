@@ -143,7 +143,7 @@ export default function FrontPage( props ) {
         img={imgData.diss}
       />
       <FooterSection />
-    </> : <>
+    </> : <>                                                      {/* mobile home page below here */} 
         <MobileTopNav />
         <MobileHero img={imgData.surrogate} />
         <Story

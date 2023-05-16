@@ -95,6 +95,8 @@ export function NewsNav( {homelink, links} ) {
 
 export function Navlink({text, href}) {
 
+    const {touch} = useContext(ViewportContext);
+
     const [hover, toggleHover] = useState(false);
 
     return (<RoughNotationGroup show={!touch && hover}>
