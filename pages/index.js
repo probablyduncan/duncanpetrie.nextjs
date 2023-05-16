@@ -11,7 +11,7 @@ export default function FrontPage( props ) {
   const {mobile} = useContext(ViewportContext);
 
   return ( 
-    <Layout newsNav>{!mobile ? <>
+    <Layout pageName="home" menuLink="/i/all" newsNav>{!mobile ? <>
       <SlideshowSection 
         images={[
           imgData.jubilee, 

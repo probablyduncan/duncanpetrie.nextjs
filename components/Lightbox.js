@@ -1,5 +1,5 @@
 import { ArticleContext } from "@/pages/a/[a]";
-import { useCallback, useContext, useEffect } from "react";
+import { useCallback, useContext, useEffect, useLayoutEffect, useState } from "react";
 import { Caption, LightboxButton, LightboxText, UnderLonk } from "./TextStyles";
 import { ViewportContext } from "./Viewport";
 import { motion } from "framer-motion";
@@ -30,6 +30,25 @@ export default function Lightbox({ index }) {
     const {lightboxKeys, toggleLightbox} = useContext(ArticleContext);
     const {mobile} = useContext(ViewportContext);
 
+    const [isTall, setLightboxTall] = useState();
+    useLayoutEffect(() => {
+
+        const lightboxQuery = matchMedia(`(max-aspect-ratio: 2/3)`);
+
+        const onLightboxResize = () => {
+            setLightboxTall(lightboxQuery.matches);
+            console.log(lightboxQuery.matches);
+        }
+
+        onLightboxResize();
+
+        lightboxQuery.addEventListener('change', onLightboxResize);
+        return () => {
+            lightboxQuery.removeEventListener('change', onLightboxResize);
+        }
+
+    }, [])
+
     // next() to go forward, next(false) to go back
     const next = useCallback((prev = false) => {if (index != null) toggleLightbox((index + lightboxKeys.length + (prev ? -1 : 1)) % lightboxKeys.length);}, [lightboxKeys.length, index, toggleLightbox])
 
@@ -45,48 +64,59 @@ export default function Lightbox({ index }) {
         return () => window.removeEventListener("keydown", keyDownHandler);
     }, [index, next, toggleLightbox]);
 
-
     return ( lightboxKeys[index] != null &&
         <motion.div layout initial={{
-            width: 'calc(100vw - 80px)', height: 'calc(100vh - 80px)',
-            padding: '40px',
+            minHeight: '-webkit-fill-available' ,
             top: 0, left: 0,
-            display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
+            display: 'flex', justifyContent: 'space-between',
             backgroundColor: '#fafaff',
             position: 'fixed',
             zIndex: '100',
             opacity: 0
         }} animate={{
-            opacity: 1
+            opacity: 1,
+            flexFlow: isTall ? 'column' : 'row',
+            alignItems: 'flex-end',
+            width: `calc(100vw - ${2 * (isTall ? 20 : 40)}px)`, height: `calc(100vh - ${2 * (isTall ? 20 : 40)}px)`, 
+            padding: isTall ? '20px' : '40px',
         }}>
             {/* image container */}
             <div style={{
-                width: 'calc(100% - 250px)', 
-                maxWidth: `calc((100vh - 80px) * ${imgData[lightboxKeys[index]].ratio})`, 
-                display: 'flex', 
-                alignItems: 'flex-end'
+                width: isTall ? `calc((100vh - 225px) * ${imgData[lightboxKeys[index]].ratio})` : 'calc(100% - 250px)',
+                maxWidth: isTall ? `100%` : `calc((100vh - 80px) * ${imgData[lightboxKeys[index]].ratio})`,
+                display: 'flex',
+                alignItems: 'flex-end',
             }}>
                 <Img img={imgData[lightboxKeys[index]]} onClick={() => toggleLightbox(null)} style={{cursor: 'zoom-out', boxShadow: 'none', width: '100%', }} />
             </div>
             {/* text container */}
             <div style={{
-                height: '100%', width: '200px',
-                display: 'flex', flexFlow: 'column nowrap',
-                justifyContent: 'space-between'
+                height: '100%', width: isTall ? '100%' : '200px',
+                display: 'flex', flexFlow: isTall ? 'column-reverse' : 'column',
+                justifyContent: isTall ? 'flex-start' : 'space-between', 
+                alignItems: 'flex-end',
             }}>
-                <div>
+                <div style={isTall ? {
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                    alignItems: 'flex-end'
+                } : {}}>
                     <LightboxText noSelect color={imgData[lightboxKeys[index]].color} >{index + 1}&nbsp;/&nbsp;{lightboxKeys.length}</LightboxText>
                     <br />
-                    <LightboxText noSelect>
-                        <LightboxButton action={() => next(true)}>prev</LightboxButton>
-                        &nbsp;&nbsp;|&nbsp;&nbsp;
-                        <LightboxButton action={() => next()}>next</LightboxButton>
-                    </LightboxText>
-                    <br />
-                    <LightboxText noSelect><LightboxButton action={() => toggleLightbox(null)}>exit.</LightboxButton></LightboxText>
+                    <div>
+                        <LightboxText noSelect>
+                            <LightboxButton action={() => next(true)}>prev</LightboxButton>
+                            &nbsp;&nbsp;|&nbsp;&nbsp;
+                            <LightboxButton action={() => next()}>next</LightboxButton>
+                        </LightboxText>
+                        <br />
+                        <LightboxText noSelect><LightboxButton action={() => toggleLightbox(null)}>exit.</LightboxButton></LightboxText>
+                    </div>
                 </div>
                 <div>
                     <LightboxText select>{getCaption(imgData[lightboxKeys[index]])}</LightboxText>
+                    <br />
                 </div>
             </div>
         </motion.div>

@@ -10,26 +10,26 @@ import { ArticleContext } from "@/pages/a/[a]";
  * @param {boolean} first styles image as cover 
  * @returns 
  */
-export default function ArticleImage({ imgKey, first, type }) {
+export default function ArticleImage({ imgKey, first, type, sidePosition, mobileOnly, noMobile }) {
     const {textCentered} = useContext(ArticleContext);
     const {mobile} = useContext(ViewportContext);
     const ref = useRef();
 
-    const inView = useInView(ref, {once: true, margin: '0px 0px -100px 0px'});
+    const inView = useInView(ref, {once: true, margin: '0px 0px 0px 0px'});
 
     return (imgKey in imgData && (
         <div ref={ref} style={{
             opacity: inView ? 1 : 0, 
             transition: 'opacity 0.5s',
-            display: !first && 'flex', justifyContent: !first && 'center'
+            display: 'flex', justifyContent: textCentered && !first ? 'center' : 'flex-start'
         }}>
             {mobile ? 
-                <MobileImage first={first} imgKey={imgKey} />
+                (!noMobile && <MobileImage first={first} imgKey={imgKey} />)
             :
                 (textCentered && !first ? 
-                    <InlineImage imgKey={imgKey} type={type} />
+                    (!mobileOnly && <InlineImage imgKey={imgKey} type={type} />)
                 : 
-                    <SideImage first={first} imgKey={imgKey} />
+                    (!mobileOnly && <SideImage first={first} imgKey={imgKey} sidePosition={sidePosition} />)
                 )
             }
         </div>
@@ -47,7 +47,7 @@ function MobileImage({ imgKey, first }) {
     );
 }
 
-function SideImage({ imgKey, first }) {
+function SideImage({ imgKey, first, sidePosition = {width: 1, left: 0} }) {
 
     const ref = useRef();
 
@@ -67,11 +67,11 @@ function SideImage({ imgKey, first }) {
         <motion.div ref={ref} style={{
             display: 'block',
             position: 'absolute',
-            width: '580px',
+            width: `${580 * sidePosition.width}px`,
+            x: 580 * sidePosition.left,
             height: '0',
             zIndex: '50',
-            x: 0,
-            y,
+            y: first ? -180 : 0,
         }}>
             <LightboxLinkedImg imgKey={imgKey} />
         </motion.div>

@@ -40,10 +40,10 @@ function ArticleSlideIn({ children }) {
         [640, textCentered ? 460 : 640]
     )
 
-    return <motion.div ref={ref} style={{
+    return <motion.div ref={ref} initial={{x: 0}} style={{
         width: mobile ? 'auto' : `${textWidth}px`,
-        x: mobile ? 0 : (!slideIn || inView ? x : 820),
-        opacity: inView ? 1 : 0,
+        x: mobile !== false ? 0 : (!slideIn || inView ? x : 820),
+        opacity: !slideIn || inView ? 1 : 0,
         transition: 'transform 0.5s, opacity 0.5s',
     }}>
         {children}
