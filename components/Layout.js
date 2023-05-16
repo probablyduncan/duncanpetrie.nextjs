@@ -25,7 +25,10 @@ export default function Layout({ title, children, newsNav, color, pageName, menu
         <Loading loadOnDefined={mobile} />
         {!mobile && newsNav && <NewsNav />}
         {!mobile && !newsNav && <SimpleNav color={color} pageName={pageName} menuName={menuName} menuLink={menuLink} galleryAction={galleryAction} galleryName={galleryName} galleryColor={galleryColor} />}
-        <main className={!mobile ? 'content ' : 'mobileContent '} style={newsNav && {paddingTop: mobile ? 'inherit' : '20px', backgroundColor: '#fff'}}>
+        <main className={!mobile ? 'content ' : 'mobileContent '} style={{
+            paddingTop: !newsNav || mobile ? 'inherit' : '20px', 
+            backgroundColor: newsNav ? '#fff' : 'none',
+        }}>
             {children}
             {mobile && <MobileNav color={color} pageName={pageName} menuName={menuName} menuLink={menuLink} />}
         </main>

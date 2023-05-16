@@ -30,6 +30,11 @@ export default function Lightbox({ index }) {
     const {lightboxKeys, toggleLightbox} = useContext(ArticleContext);
     const {mobile} = useContext(ViewportContext);
 
+
+    /**
+     * listener for changing lightbox layout based on aspect ratio
+     */
+
     const [isTall, setLightboxTall] = useState();
     useLayoutEffect(() => {
 
@@ -48,6 +53,11 @@ export default function Lightbox({ index }) {
 
     }, [])
 
+
+    /**
+     * handle changing images
+     */
+
     // next() to go forward, next(false) to go back
     const next = useCallback((prev = false) => {
         if (index != null) toggleLightbox(getNextIndex(index, lightboxKeys.length, prev, 1), prev ? 'left' : 'right');
@@ -64,6 +74,25 @@ export default function Lightbox({ index }) {
         window.addEventListener("keydown", keyDownHandler);
         return () => window.removeEventListener("keydown", keyDownHandler);
     }, [index, next, toggleLightbox]);
+
+
+    /**
+     * prevent scrolling while in lightbox
+     */
+
+    useEffect(() => {
+        const handleWindowWheel = (e) => {
+        if (index){
+            e.preventDefault();
+        }
+        };
+        
+        window.addEventListener('wheel', handleWindowWheel, { passive: false });
+        return () => {
+            window.removeEventListener('wheel', handleWindowWheel);
+        };
+
+    }, [index]);
 
     return ( lightboxKeys[index] != null &&
         <motion.div layout initial={{
