@@ -66,9 +66,7 @@ export default function Lightbox({ index }) {
 
     return ( lightboxKeys[index] != null &&
         <motion.div layout initial={{
-            width: '100%', height: '100%',
-            maxHeight: '-webkit-fill-available', maxHeight: '-moz-available', maxHeight: 'fill-available',
-            maxWidth: '-webkit-fill-available', maxWidth: '-moz-available', maxWidth: 'fill-available',
+            width: '100dvw', height: '100dvh',
             top: 0, left: 0,
             display: 'flex', justifyContent: 'space-between',
             backgroundColor: '#fafaff',
@@ -79,7 +77,7 @@ export default function Lightbox({ index }) {
             opacity: 1,
             flexFlow: isTall ? 'column' : 'row',
             alignItems: 'flex-end',
-            width: `calc(100vw - ${2 * (isTall ? 20 : 40)}px)`, height: `calc(100vh - ${2 * (isTall ? 20 : 40)}px)`, 
+            width: `calc(100dvw - ${2 * (isTall ? 20 : 40)}px)`, height: `calc(100dvh - ${2 * (isTall ? 20 : 40)}px)`, 
             padding: isTall ? '20px' : '40px',
         }}>
             {/* image container */}
