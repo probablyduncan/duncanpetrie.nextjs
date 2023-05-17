@@ -1,5 +1,5 @@
 import { ArticleContext } from "@/pages/a/[a]";
-import { useCallback, useContext, useEffect, useLayoutEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Caption, LightboxButton, LightboxText, UnderLonk } from "./TextStyles";
 import { ViewportContext } from "./Viewport";
 import { AnimatePresence, motion } from "framer-motion";
@@ -173,25 +173,26 @@ export default function Lightbox({ index }) {
  * @returns Img component wrapped in button that toggles lightbox.
  * If no lightbox images, the action/effects are disabled.
  */
-export function LightboxLinkedImg({ imgKey, noCaption }) {
+export function LightboxLinkedImg({ imgKey, noCaption, noBorder, margin }) {
     const {lightboxKeys, toggleLightbox} = useContext(ArticleContext);
 
     const openLightbox = () => toggleLightbox(lightboxKeys.indexOf(imgKey))
 
-    return (<>
+    return (<div style={{display: 'flex', flexFlow: 'column nowrap'}}>
         <motion.button
             style={{
                 display: 'block', 
-                width: 'calc(100% - 4px)',
-                boxShadow: '4px 4px #242626',
+                width: !noBorder ? 'calc(100% - 4px)' : 'auto',
+                boxShadow: !noBorder ? '4px 4px #242626' : '0px 0px #73787873',
                 cursor: lightboxKeys[0] ? 'zoom-in' : 'auto',
+                margin
             }} 
-            whileHover={lightboxKeys[0] && {boxShadow: '6px 6px #242626'}}
-            whileTap={lightboxKeys[0] && {boxShadow: '4px 4px #242626'}}
+            whileHover={lightboxKeys[0] && (noBorder ? {boxShadow: '4px 4px #73787873'} : {boxShadow: '6px 6px #242626'})}
+            whileTap={lightboxKeys[0] && (noBorder ? {boxShadow: '2px 2px #73787873'} : {boxShadow: '4px 4px #242626'})}
             onClick={lightboxKeys[0] && openLightbox} 
         >
             <Img img={imgData[imgKey]} style={{boxShadow: 'inherit', width: '100%'}}/>
         </motion.button>
         {!noCaption && <Caption>{getCaption(imgData[imgKey])}</Caption>}
-    </>);
+    </div>);
 }
