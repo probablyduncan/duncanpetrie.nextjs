@@ -8,7 +8,7 @@ import Img from "./Img";
 
 export default function Story({ img, dept, title, text, link, route, color, children, background, annotateMap }) {
 
-    const {mobile, setMobile, touch} = useContext(ViewportContext)
+    const {mobile, touch} = useContext(ViewportContext)
     const [hover, toggleHover] = useState(false);
 
     const className = mobile ? style.mobileStory + " " + style.story : style.story;

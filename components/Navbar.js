@@ -25,8 +25,6 @@ const defaultLinks = [
 
 export function NewsNav( {homelink, links} ) {
 
-    const {touch} = useContext(ViewportContext);
-
     // refresh date
     const [date, setDate] = useState(null);
     useEffect(() => {
@@ -68,7 +66,7 @@ export function NewsNav( {homelink, links} ) {
             
             {/* email */}
             <span className={style.links + " right"}>
-            <RoughNotationGroup show={!touch && emailHover}>
+            <RoughNotationGroup show={emailHover}>
                 <RoughNotation
                     type="highlight"
                     strokeWidth={1}
@@ -95,11 +93,9 @@ export function NewsNav( {homelink, links} ) {
 
 export function Navlink({text, href}) {
 
-    const {touch} = useContext(ViewportContext);
-
     const [hover, toggleHover] = useState(false);
 
-    return (<RoughNotationGroup show={!touch && hover}>
+    return (<RoughNotationGroup show={hover}>
         <RoughNotation
             type={"circle"}
             strokeWidth={1.5}

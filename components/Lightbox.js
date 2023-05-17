@@ -36,7 +36,7 @@ export default function Lightbox({ index }) {
      */
 
     const [isTall, setLightboxTall] = useState();
-    useLayoutEffect(() => {
+    useEffect(() => {
 
         const lightboxQuery = matchMedia(`(max-aspect-ratio: 1)`);
 
@@ -94,24 +94,28 @@ export default function Lightbox({ index }) {
 
     }, [index]);
 
+    const tallPadding = 25;
+    const widePadding = 40;
+
     return <AnimatePresence> {
         lightboxKeys[index] != null && (
-            <motion.div layout initial={{
-                width: `calc(100dvw - ${2 * (isTall ? 25 : 40)}px)`, height: `calc(100dvh - ${2 * (isTall ? 25 : 40)}px)`,
-                padding: isTall ? '25px' : '40px',
-                top: 0, left: 0,
-                display: 'flex', justifyContent: 'space-between',
-                backgroundColor: '#fafaff',
-                position: 'fixed',
-                zIndex: '100',
-                opacity: 0
-            }} animate={{
-                opacity: 1,
-                flexFlow: isTall ? 'column' : 'row',
-                alignItems: 'flex-end',
-                width: `calc(100dvw - ${2 * (isTall ? 25 : 40)}px)`, height: `calc(100dvh - ${2 * (isTall ? 25 : 40)}px)`, 
-                padding: isTall ? '25px' : '40px',
-            }} exit={{ opacity: 0 }}>
+            <motion.div layout 
+                style={{
+                    width: `calc(100dvw - ${2 * (isTall ? tallPadding : widePadding)}px)`, 
+                    height: `calc(100dvh - ${2 * (isTall ? tallPadding : widePadding)}px)`,
+                    padding: isTall ? `${tallPadding}px` : `${widePadding}px`,
+                    
+                    position: 'fixed',
+                    top: 0, left: 0,
+                    zIndex: '100',
+                    
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
+                    flexFlow: isTall ? 'column' : 'row',
+                    
+                    backgroundColor: '#fafaff',
+                }}
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ ease: "easeOut", duration: 0.1 }}
+            >
                 {/* image container */}
                 <div style={{
                     width: isTall ? `calc((100dvh - 225px) * ${imgData[lightboxKeys[index]].ratio})` : 'calc(100% - 250px)',
