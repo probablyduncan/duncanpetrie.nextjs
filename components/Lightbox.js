@@ -28,27 +28,29 @@ export function LightboxLink({ index = 0, imageKey, children }) {
 export default function Lightbox({ index }) {
     
     const {lightboxKeys, toggleLightbox} = useContext(ArticleContext);
-    const {mobile} = useContext(ViewportContext);
+    const {touch} = useContext(ViewportContext);
 
 
     /**
      * listener for changing lightbox layout based on aspect ratio
      */
 
-    const [isTall, setLightboxTall] = useState();
+    const [isTall, setIsTall] = useState();
     useEffect(() => {
 
         const lightboxQuery = matchMedia(`(max-aspect-ratio: 1)`);
 
         const onLightboxResize = () => {
-            setLightboxTall(lightboxQuery.matches);
+            setIsTall(lightboxQuery.matches || window.innerWidth <= window.innerHeight);
         }
 
         onLightboxResize();
 
         lightboxQuery.addEventListener('change', onLightboxResize);
+        window.addEventListener('resize', onLightboxResize);
         return () => {
             lightboxQuery.removeEventListener('change', onLightboxResize);
+            window.removeEventListener('resize', onLightboxResize);
         }
 
     }, [])
@@ -65,15 +67,20 @@ export default function Lightbox({ index }) {
 
     // set up keypress events
     useEffect(() => {
-        const keyDownHandler = (e) => {
-            if (e.code === "ArrowLeft") next(true);
-            if (e.code === "ArrowRight") next();
-            if (e.code === "Escape") toggleLightbox(false);
-        };
+        
+        if (!touch) {
+            
+            const keyDownHandler = (e) => {
+                if (e.code === "ArrowLeft") next(true);
+                if (e.code === "ArrowRight") next();
+                if (e.code === "Escape") toggleLightbox(false);
+            };
+    
+            window.addEventListener("keydown", keyDownHandler);
+            return () => window.removeEventListener("keydown", keyDownHandler);
+        }
 
-        window.addEventListener("keydown", keyDownHandler);
-        return () => window.removeEventListener("keydown", keyDownHandler);
-    }, [index, next, toggleLightbox]);
+    }, [index, next, toggleLightbox, touch]);
 
 
     /**
