@@ -160,8 +160,6 @@ export function SimpleNav( props ) {
 
 function Menurl({ pageName = "menu", menuName = "menu", color, menuFunction, menuLink, spread }) {
 
-    const {touch} = useContext(ViewportContext);
-
     const [hover, setHover] = useState(false);
 
     return (<div style={{
@@ -178,7 +176,7 @@ function Menurl({ pageName = "menu", menuName = "menu", color, menuFunction, men
                 onHoverEnd={() => setHover(false)}
             >
                 <Lonk href={menuLink}>
-                    &nbsp;&nbsp;&nbsp;&nbsp;{!touch && hover ? menuName?.toUpperCase() : pageName?.toUpperCase()}
+                    &nbsp;&nbsp;&nbsp;&nbsp;{hover ? menuName?.toUpperCase() : pageName?.toUpperCase()}
                 </Lonk>
             </motion.span>
         :
@@ -190,7 +188,7 @@ function Menurl({ pageName = "menu", menuName = "menu", color, menuFunction, men
                 onHoverStart={() => setHover(true)}
                 onHoverEnd={() => setHover(false)}
             >
-                &nbsp;&nbsp;&nbsp;&nbsp;{!touch && hover ? menuName?.toUpperCase() : pageName?.toUpperCase()}
+                &nbsp;&nbsp;&nbsp;&nbsp;{hover ? menuName?.toUpperCase() : pageName?.toUpperCase()}
             </motion.button>
         }
     </div>)

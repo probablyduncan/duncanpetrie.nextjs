@@ -5,7 +5,7 @@ import {NewsNav, MobileNav, SimpleNav} from "./Navbar";
 
 export default function Layout({ title, children, newsNav, color, pageName, menuName, menuLink, galleryAction, galleryName, galleryColor }) {
 
-    const {mobile, setMobile} = useContext(ViewportContext);
+    const {mobile} = useContext(ViewportContext);
 
     return (<>
         <Head>

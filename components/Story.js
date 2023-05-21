@@ -8,7 +8,7 @@ import Img from "./Img";
 
 export default function Story({ img, dept, title, text, link, route, color, children, background, annotateMap }) {
 
-    const {mobile, touch} = useContext(ViewportContext)
+    const {mobile} = useContext(ViewportContext)
     const [hover, toggleHover] = useState(false);
 
     const className = mobile ? style.mobileStory + " " + style.story : style.story;
@@ -37,7 +37,7 @@ export default function Story({ img, dept, title, text, link, route, color, chil
 
         {/* image */}
         {img &&
-            <RoughNotationGroup show={!touch && annotateMap && hover} >
+            <RoughNotationGroup show={annotateMap && hover} >
                 <Lonk href={route}>
                     <RoughNotation
                         type="box"
@@ -80,7 +80,7 @@ export default function Story({ img, dept, title, text, link, route, color, chil
         }
         
         {/* build paragraph rows */}
-        <RoughNotationGroup show={!touch &&hover} >
+        <RoughNotationGroup show={!mobile && hover} >
         {text && text.map((p, i) => {
             return (
                 <Paragraph small={!mobile} key={`story-${i}`}>
@@ -103,9 +103,9 @@ export default function Story({ img, dept, title, text, link, route, color, chil
 
         {/* bottom page link */}
         {link && 
-            <Dept small={!mobile} margin={text ? '40px 0 20px 0' : null} color={hover || touch ? color : "inherit"}
+            <Dept small={!mobile} margin={text ? '40px 0 20px 0' : null} color={mobile || hover ? color : "inherit"}
             >
-                <RoughNotationGroup show={!touch &&hover}>
+                <RoughNotationGroup show={hover}>
                     <RoughNotation
                         type="circle"
                         color={color}

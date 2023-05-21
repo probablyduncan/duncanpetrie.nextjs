@@ -60,14 +60,14 @@ export function Caption({ children, small, textAlign, color, ...props }) {
 
 export function UnderLonk({ href, action, noUnderline, color, children, ...props }) {
 
-    const {touch} = useContext(ViewportContext);
+    const {mobile} = useContext(ViewportContext);
     const [hover, setHover] = useState(false);
 
     const duration = children.length * 15 ?? 100;
     color = color ?? '#6495ed';
 
     return (
-        <Underline show={!noUnderline && !touch && hover} duration={duration} color={color}>
+        <Underline show={!noUnderline && (hover)} duration={duration} color={color}>
             {action ? 
                 <button onClick={action} {...props} style={{color}}
                     onMouseEnter={() => setHover(true)} 
