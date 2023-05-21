@@ -28,8 +28,6 @@ export function LightboxLink({ index = 0, imageKey, children }) {
 export default function Lightbox({ index }) {
     
     const {lightboxKeys, toggleLightbox} = useContext(ArticleContext);
-    const {touch} = useContext(ViewportContext);
-
 
     /**
      * listener for changing lightbox layout based on aspect ratio
@@ -67,20 +65,17 @@ export default function Lightbox({ index }) {
 
     // set up keypress events
     useEffect(() => {
-        
-        if (!touch) {
-            
-            const keyDownHandler = (e) => {
-                if (e.code === "ArrowLeft") next(true);
-                if (e.code === "ArrowRight") next();
-                if (e.code === "Escape") toggleLightbox(false);
-            };
-    
-            window.addEventListener("keydown", keyDownHandler);
-            return () => window.removeEventListener("keydown", keyDownHandler);
-        }
 
-    }, [index, next, toggleLightbox, touch]);
+        const keyDownHandler = (e) => {
+            if (e.code === "ArrowLeft") next(true);
+            if (e.code === "ArrowRight") next();
+            if (e.code === "Escape") toggleLightbox(false);
+        };
+
+        window.addEventListener("keydown", keyDownHandler);
+        return () => window.removeEventListener("keydown", keyDownHandler);
+
+    }, [index, next, toggleLightbox]);
 
 
     /**
