@@ -5,6 +5,8 @@ import Magnifier from '@/components/Magnifier';
 import { Lato, Merriweather } from "@next/font/google";
 import Link from 'next/link';
 import Img from './Img';
+import Head from "next/head";
+import { getSrc } from '@/lib/imageHelper';
 
 const lato = Lato({ subsets: ['latin'], display: 'swap', weight: '700', variable: true});
 const merriweather = Merriweather({ subsets: ['latin'], variable: true, weight: '700' });
@@ -60,6 +62,12 @@ export function SlideshowSection( props ) {
     }, [img, props.images.length]);
 
     return (<>
+        <Head>
+            {props.images.map(i => 
+                // preload slideshow images
+                <link key={`preload-${i.src}`} rel="preload" as="image" href={getSrc(i)} />
+            )}
+        </Head>
         <section className={style.slideshow + " " + style.section}>
             <div className={style.slideshowStory}>
                 <Story { ...props.storyLeft } />
