@@ -106,6 +106,7 @@ export default function Lightbox({ index }) {
                     width: `calc(100svw - ${2 * (isTall ? tallPadding : widePadding)}px)`, 
                     height: `calc(100svh - ${2 * (isTall ? tallPadding : widePadding)}px)`,
                     padding: isTall ? `${tallPadding}px` : `${widePadding}px`,
+                    paddingBottom: `calc(100vh - 100svh + ${isTall ? tallPadding : widePadding}px)`,    // normal padding val plus difference between 100vh and 100svh
                     
                     position: 'fixed',
                     top: 0, left: 0,
