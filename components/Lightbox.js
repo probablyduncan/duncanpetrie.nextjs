@@ -103,8 +103,8 @@ export default function Lightbox({ index }) {
         lightboxKeys[index] != null && (
             <motion.div layout 
                 style={{
-                    width: `calc(100dvw - ${2 * (isTall ? tallPadding : widePadding)}px)`, 
-                    height: `calc(100dvh - ${2 * (isTall ? tallPadding : widePadding)}px)`,
+                    width: `calc(100svw - ${2 * (isTall ? tallPadding : widePadding)}px)`, 
+                    height: `calc(100svh - ${2 * (isTall ? tallPadding : widePadding)}px)`,
                     padding: isTall ? `${tallPadding}px` : `${widePadding}px`,
                     
                     position: 'fixed',
@@ -120,8 +120,8 @@ export default function Lightbox({ index }) {
             >
                 {/* image container */}
                 <div style={{
-                    width: isTall ? `calc((100dvh - 225px) * ${imgData[lightboxKeys[index]].ratio})` : 'calc(100% - 250px)',
-                    maxWidth: isTall ? `100%` : `calc((100dvh - 80px) * ${imgData[lightboxKeys[index]].ratio})`,
+                    width: isTall ? `calc((100svh - 225px) * ${imgData[lightboxKeys[index]].ratio})` : 'calc(100% - 250px)',
+                    maxWidth: isTall ? `100%` : `calc((100svh - 80px) * ${imgData[lightboxKeys[index]].ratio})`,
                     display: 'flex',
                     alignItems: 'flex-end',
                 }}>
