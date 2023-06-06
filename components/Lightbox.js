@@ -174,21 +174,23 @@ export function LightboxLinkedImg({ imgKey, noCaption, noBorder, margin }) {
 
     const openLightbox = () => toggleLightbox(lightboxKeys.indexOf(imgKey))
 
-    return (<div style={{display: 'flex', flexFlow: 'column nowrap'}}>
+    const imgObject = imgData[imgKey];
+
+    return (<div style={{display: 'flex', flexFlow: 'column nowrap', width: '100%', maxWidth: `calc(80vh * ${imgObject.ratio})`}}>
         <motion.button
             style={{
                 display: 'block', 
-                width: !noBorder ? 'calc(100% - 4px)' : 'auto',
-                boxShadow: !noBorder ? '4px 4px #242626' : '0px 0px #73787873',
+                width: !noBorder ? 'calc(100% - 4px)' : '100%',
+                boxShadow: !noBorder ? '4px 4px #242626' : '0px 0px 0px #2426260f',
                 cursor: lightboxKeys[0] ? 'zoom-in' : 'auto',
                 margin
             }} 
-            whileHover={lightboxKeys[0] && (noBorder ? {boxShadow: '4px 4px #73787873'} : {boxShadow: '6px 6px #242626'})}
-            whileTap={lightboxKeys[0] && (noBorder ? {boxShadow: '2px 2px #73787873'} : {boxShadow: '4px 4px #242626'})}
+            whileHover={lightboxKeys[0] && (noBorder ? {boxShadow: '4px 4px 15px #2426260f'} : {boxShadow: '6px 6px #242626'})}
+            whileTap={lightboxKeys[0] && (noBorder ? {boxShadow: '4px 4px 5px #2426260f'} : {boxShadow: '4px 4px #242626'})}
             onClick={lightboxKeys[0] && openLightbox} 
         >
-            <Img img={imgData[imgKey]} style={{boxShadow: 'inherit', width: '100%'}}/>
+            <Img img={imgObject} style={{boxShadow: 'inherit', width: '100%'}}/>
         </motion.button>
-        {!noCaption && <Caption>{getCaption(imgData[imgKey])}</Caption>}
+        {!noCaption && <Caption>{getCaption(imgObject)}</Caption>}
     </div>);
 }

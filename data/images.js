@@ -744,7 +744,7 @@ export const imgData = {
         tags: ['diss'],
     },
     diss4: {
-        src: 'diss4.png',
+        src: 'diss4.jpg',
         caption: 'Fig. 4: Tolkien and Riddett 1976. The Misty Mountains looking West from the Eyrie towards Goblin Gate [colored drawing]',
         ratio: 524/406,
         tags: ['diss'],

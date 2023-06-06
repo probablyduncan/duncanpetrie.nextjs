@@ -1,6 +1,6 @@
 import { useContext, useRef } from "react";
 import { Caption, Dept, Paragraph, Subtitle, Title } from "./TextStyles";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useInView, useScroll, useSpring, useTransform } from "framer-motion";
 import { ArticleContext } from "@/pages/a/[a]";
 import { ViewportContext } from "./Viewport";
 
@@ -9,7 +9,7 @@ export function ArticleTitle({ children, ...props }) {
 }
 
 export function ArticleSubtitle({ children, ...props }) {
-    return <ArticleSlideIn><Subtitle {...props}>{children}</Subtitle></ArticleSlideIn>
+    return <ArticleSlideIn><HeadingLink name={children}><Title {...props}>{children}</Title></HeadingLink></ArticleSlideIn>
 }
 
 export function ArticleDept({ children, ...props }) {
@@ -31,21 +31,46 @@ function ArticleSlideIn({ children }) {
     
     const ref = useRef();
 
+    // if centered: x is 460 when in view, 640 otherwise
+
+    // if not centered: x is always 640
+
     const inView = useInView(ref, {once: true});
     
     const { scrollY } = useScroll();
     const x = useTransform(
         scrollY,
         [640, 820],
-        [640, textCentered ? 460 : 640]
+        [640, inView ? 460 : 640]
     )
+    const springX = useSpring(x, { stiffness: 200, damping: 40 });
 
-    return <motion.div ref={ref} initial={{x: 0}} style={{
+    return <motion.div ref={ref} initial={{
+        x: mobile !== false ? 0 : 640,
+    }} style={{
         width: mobile ? 'auto' : `${textWidth}px`,
-        x: mobile !== false ? 0 : (!slideIn || inView ? x : 820),
+        x: mobile !== false ? 0 : (textCentered ? (slideIn ? springX : x) : 640),
         // opacity: !slideIn || inView ? 1 : 0,
         // transition: 'opacity 0.5s',
-    }}>
+    }} >
         {children}
     </motion.div>
+}
+
+function HeadingLink({ children, name }) {
+
+    const id = name.replace(' ', '');
+
+    return (<div id={id} style={{padding: '120px 0 0 0',
+    margin: '-80px 0 20px 0'}}>
+        <motion.a 
+            href={`#${id}`}
+            title="#"
+            whileHover={{
+                opacity: 0.8
+            }}
+        >
+            {children}
+        </motion.a>
+    </div>);
 }

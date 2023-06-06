@@ -40,7 +40,12 @@ export async function getStaticProps( {params} ) {
  * tags: 'writing,photography'
  * 
  * cover: 'jubilee'
- * textWidth: '50%'
+ * 
+ * text: {
+ *     centered: true,      // defaults to true
+ *     slideIn: false,      // defaults to true, only works if centered=true
+ *     width: '500',        // val in px, defaults to 500
+ * }
  * 
  * lightbox: {
  *     tag: 'myth',

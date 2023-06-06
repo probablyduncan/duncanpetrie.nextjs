@@ -13,24 +13,18 @@ import { getCaption } from "@/lib/imageHelper";
  * @returns 
  */
 export default function ArticleImage({ imgKey, imgKeys, first, type, inlineOptions, sidePosition, mobileOnly, noMobile }) {
-    const {textCentered} = useContext(ArticleContext);
     const {mobile} = useContext(ViewportContext);
-    const ref = useRef();
-
-    const inView = useInView(ref, {once: true, margin: '0px 0px 0px 0px'});
 
     const processedImgKeys = (imgKey ? [imgKey] : imgKeys?.split(',') ?? []).filter(k => k in imgData);
 
     return (processedImgKeys.length > 0 && (
-        <div ref={ref} style={{
-            // opacity: inView ? 1 : 0, 
-            // transition: 'opacity 0.5s',
-            display: 'flex', justifyContent: textCentered && !first ? 'center' : 'flex-start'
+        <div style={{
+            display: 'flex', justifyContent: !first ? 'center' : 'flex-start'
         }}>
             {mobile ? 
                 (!noMobile && <MobileImage first={first} imgKey={processedImgKeys[0]} />)
             :
-                (textCentered && !first ? 
+                (!first ? 
                     (!mobileOnly && <InlineImage imgKeys={processedImgKeys} type={type} options={inlineOptions} />)
                 : 
                     (!mobileOnly && <SideImage first={first} imgKey={processedImgKeys[0]} sidePosition={sidePosition} />)
@@ -53,26 +47,22 @@ function MobileImage({ imgKey, first }) {
 
 function SideImage({ imgKey, first, sidePosition = {width: 1, left: 0} }) {
 
-    const ref = useRef();
+    const { textCentered } = useContext(ArticleContext);
 
-    const { scrollYProgress } = useScroll({
-        target: ref,
-        offset: ["start end", "end start"]
-    });
-    const springScrollProgress = useSpring(scrollYProgress, { stiffness: 400, damping: 50 });
-
-    const y = useTransform(
-        springScrollProgress,
-        [0, 1],
-        first ? [-200, -100] : [0, 100]
-    );
+    const { scrollY } = useScroll();
+    const x = useTransform(
+        scrollY,
+        [640, 820],
+        [580 * sidePosition.left, 580 * sidePosition.left - (textCentered ? 80 : 0)]
+    )
+    const springX = useSpring(x, { stiffness: 200, damping: 40 });
 
     return (
-        <motion.div ref={ref} style={{
+        <motion.div style={{
             display: 'block',
             position: 'absolute',
             width: `${580 * sidePosition.width}px`,
-            x: 580 * sidePosition.left,
+            x: springX,
             height: '0',
             zIndex: '50',
             y: first ? -180 : 0,
@@ -169,7 +159,7 @@ function InlineImageWrapper({ children, width = '85%', margin = '80px 0 80px 15%
         gridTemplateColumns: columns
     } : {
         display: 'flex',
-        justifyContent: 'space-between',
+        justifyContent: 'space-evenly',
         alignItems: align == 'bottom' ? 'flex-end' : align,
     }
 
