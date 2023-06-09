@@ -147,6 +147,66 @@ export default function FrontPage( props ) {
         <MobileTopNav />
         <MobileHero img={imgData.surrogate} />
         <Story
+          img={imgData.jubilee}
+          color='#ff9200'
+          dept='on yearning'
+          title='Lingermyth'
+          text={[
+            "Gradually, we grew out of our past, explained away halos and beasts and cities of clouds.",
+            "But it’s still there, that old world, glinting through chips and scratches."
+          ]}
+          link="gallery"
+          route="/a/myth"
+        />
+        {/* <Story
+          img={imgData.bigmap}
+          dept='mind map'
+          title='Charting the Wilds'
+          route="/world"
+          background="#FAFAFF"
+          annotateMap
+        /> */}
+        <Story
+          img={imgData.cover_wiki}
+          dept='for reel'
+          title='A Triumph of the Commons'
+          text={[
+            "24 Dutch children in a phone booth? It’s more common than you think.",
+            "The full breadth of humanity, every hope and every sorrow, every song and every sigh, is on Wikimedia Commons, an open file repository maintained by Wikipedia. In Spring of 2021 I created this film, for free, using 144 of those files."
+          ]}
+          link="youtube"
+          route="https://youtu.be/JRXZAaDxGCQ"
+          background='#fafaff'
+        />
+        <Story 
+          img={imgData.diss}
+          dept='on yearning'
+          title='From The Edge of Impassable Vastness'
+          text={[
+            "I wrote my undergraduate dissertation about, basically, the nostalgic feeling I get when I watch the sun go down.","If you're interested in the theories behind my photographic practice, check it out."
+          ]}
+          link='read'
+          route='/a/yearn'
+          background='#fff5f5'
+        />
+        <Story 
+          img={imgData.blurry7}
+          dept='DEPT. OF BLURRY PICTURES'
+          title='Crystalizing the Vastness'
+          text='For years I struggled to photograph water; my photos were much too busy, seeing everything while capturing nothing.'
+          route='/a/blurry'
+          link='gallery'
+          color='#e70044'
+        />
+        <Story 
+          img={imgData.heartland15}
+          dept='heartland'
+          title='New Beauty, Old Wisconsin'
+          text='I grew up in boring old Wisconsin, and I spent the first 18 years of my life waiting to get out.'
+          route='/a/heartland'
+          link='gallery'
+        />
+        <Story
           img={imgData.aboutprints}
           dept='profiles'
           title='Who am I?'
@@ -159,45 +219,20 @@ export default function FrontPage( props ) {
           background="#FFEEEE"
         />
         <Story
-          img={imgData.jubilee}
-          color='#ff9200'
-          dept='on yearning'
-          title='Lingermyth'
-          text={[
-            "Gradually, we grew out of our past, explained away halos and beasts and cities of clouds.",
-            "But it’s still there, that old world, glinting through chips and scratches."
-          ]}
-          link="gallery"
-          route="/a/myth"
+          img={imgData.cloudswells}
+          dept='the cutting edge'
+          title='Cloud Discovered, Fluffiest in World'
+          // text=''
+          link="read all about it"
+          route="/a/cloud"
         />
         <Story
-          img={imgData.bigmap}
-          dept='mind map'
-          title='Charting the Wilds'
-          route="/world"
-          background="#FAFAFF"
-          annotateMap
-        />
-        <Story
-          img={imgData.cover_wiki}
-          dept='for reel'
-          title='A Triumph of the Commons'
-          text={[
-            "24 Dutch children in a phone booth? It’s more common than you think.",
-            "The full breadth of humanity, every hope and every sorrow, every song and every sigh, is on Wikimedia Commons, an open file repository maintained by Wikipedia. In Spring of 2021 I created this film, for free, using 144 of those files."
-          ]}
-          link="youtube"
-          route="https://youtu.be/JRXZAaDxGCQ"
-        />
-        <Story 
-          img={imgData.diss}
-          dept='on yearning'
-          title='From The Edge of Impassable Vastness'
-          text={[
-            "I wrote my undergraduate dissertation about, basically, the nostalgic feeling I get when I watch the sun go down.","If you're interested in the theories behind my photographic practice, check it out."
-          ]}
-          link='read'
-          route='/a/yearn'
+          img={imgData.pizzagif}
+          dept='the cutting board'
+          title='Man Makes Pizza, Fast'
+          // text=''
+          link="watch"
+          route="/a/pizza"
         />
     </>}</Layout>
   )
