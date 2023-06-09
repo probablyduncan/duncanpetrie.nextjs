@@ -36,7 +36,7 @@ const extraLinks = [
         title: 'The Triumph of the Commons',
         dept: 'dept. of rabbit holes',
         link: 'https://youtu.be/JRXZAaDxGCQ',
-        images: ['cover_wiki'],
+        cover: 'cover_wiki',
         tags: ['films'],
     },
 ]
@@ -92,7 +92,7 @@ function IndexCard({ article, first }) {
     useEffect(() => setRandState(Math.random()), []);
     const rand = useMemo(() => randState, [randState]);
 
-    const imageKey = article.indexImages ? article.indexImages[Math.floor(article.indexImages.length * rand)] : (article.images ? article.images[Math.floor(article.images.length * rand)] : null);
+    const imageKey = article.indexImages ? article.indexImages[Math.floor(article.indexImages.length * rand)] : (article.cover?.split(',')[Math.floor(article.cover?.split(',').length * rand)] ?? null);
 
     const { scrollYProgress } = useScroll({
         target: ref,
@@ -123,7 +123,7 @@ function IndexCard({ article, first }) {
             opacity: isInView ? 1 : 0, transition: 'opacity 0.5s',
         }} whileHover={!mobile && {boxShadow: '4px 4px 30px #24262632'}} whileTap={!mobile && {boxShadow: '4px 4px 5px #24262632'}}>
             <Lonk href={article.link ?? `/a/${article.id}`} style={{padding: '18px 18px 12px 18px', display: 'block'}}>
-                {!mobile && rand > 0.2 && imageKey && <Img img={imgData[imageKey]} style={{marginBottom: '12px', boxShadow: 'none', width: '100%'}} />}
+                {!mobile && imageKey && <Img img={imgData[imageKey]} style={{marginBottom: '12px', boxShadow: 'none', width: '100%'}} />}
                 <Dept color={imageKey ? imgData[imageKey].color : (article.colors ? article.colors[0] : article.color ?? 'cornflowerblue')} small>{article.dept.toUpperCase() }</Dept>
                 <Title small>{article.title}</Title>
             </Lonk>

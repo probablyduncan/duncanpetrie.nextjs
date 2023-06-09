@@ -9,6 +9,16 @@ const merriweather = Merriweather({ subsets: ['latin'], variable: true, weight: 
 const garamond = EB_Garamond({subsets: ['latin'], display: 'swap', variable: true, weight: '500'});
 const lato = Lato({ subsets: ['latin'], display: 'swap', weight: '700', variable: true});
 
+export function MerriweatherWrapper({ children, div }) {
+    return div ? (<div className={merriweather.className}>{children}</div>) : (<span className={merriweather.className}>{children}</span>);
+}
+export function GaramondWrapper({ children, div }) {
+    return div ? (<div className={garamond.className}>{children}</div>) : (<span className={garamond.className}>{children}</span>);
+}
+export function LatoWrapper({ children, div }) {
+    return div ? (<div className={lato.className}>{children}</div>) : (<span className={lato.className}>{children}</span>);
+}
+
 export function Title({ children, small, ...props }) {
     return (<h1 className={merriweather.className} style={{
         color: '#242626',

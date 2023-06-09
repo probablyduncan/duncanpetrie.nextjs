@@ -1,9 +1,3 @@
-// tags:
-// project: myth, cart, birdhat, etc
-// location: cornwall, spain, heartland, iceland, etc
-// subject: walls, windows, landscapes, wildlife, etc
-
-
 export const imgData = {
 
     //#region MYTH
@@ -499,7 +493,7 @@ export const imgData = {
         ratio: 3/2,
         color: '#6a9ed7',
         caption: 'Algae-yellowed rocks in Lake Michigan',
-        date: '2020-??-??',
+        date: '2020',
         tags: ['blurry','heartland','best'],
     },
     blurry1: {
@@ -540,7 +534,7 @@ export const imgData = {
         color: '#6a9ed7',
         caption: 'Lake Superior, facing west',
         date: '2020',
-        tags: ['blurry','heartland'],
+        tags: ['blurry'],
     },
     blurry6: {
         src: 'blurry6.jpg',
@@ -548,7 +542,7 @@ export const imgData = {
         color: '#6a9ed7',
         caption: 'Lake Michigan, facing north',
         date: '2020',
-        tags: ['blurry','heartland'],
+        tags: ['blurry'],
     },
     blurry7: {
         src: 'blurry7.jpg',
@@ -572,7 +566,7 @@ export const imgData = {
         color: '#6a9ed7',
         caption: 'Lake Michigan, facing east',
         date: '2019',
-        tags: ['blurry','heartland'],
+        tags: ['blurry'],
     },
     blurry10: {
         src: 'blurry10.jpg',
@@ -720,7 +714,7 @@ export const imgData = {
         color: '#ffff22',
         caption: 'Wow! What a metaphorical explosion of experience',
         year: 2019,
-        tags: ['heartland', 'landscape'],
+        tags: ['landscape'],
     },
 
 
@@ -790,7 +784,7 @@ export const imgData = {
 
     heartland1: {
         src: 'heartland1.jpg',
-        ratio: 1,
+        ratio: 3/2,
         color: '#fd8e81',
         caption: 'Westward, Lake Michigan',
         year: '2021',
@@ -800,7 +794,7 @@ export const imgData = {
         src: 'heartland2.jpg',
         ratio: 3/2,
         color: '#f8955c',
-        caption: 'Just missed it',
+        caption: 'Just missed it!',
         date: '2021',
         tags: ['heartland', 'clouds','best'],
     },
@@ -1069,4 +1063,9 @@ export const imgData = {
         ratio: 2690/1826,
         color: '#ef0000'
     },
+    sites3: {
+        src: 'sites3.png',
+        ratio: 1,
+        color: '#ef0000'
+    }
 };

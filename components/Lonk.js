@@ -12,13 +12,16 @@ export default function Lonk({href, children, ...props}) {
                 target="_blank" 
                 rel="noreferrer"
                 alt={href}
+                title={href}
                 {...props}
             >{children}</a>
         ) : (
             <Link 
-            href={href}
+                href={href}
                 {...props}
-            >{children}</Link>
+            >
+                {children}
+            </Link>
         )}
     </>) : (<>
         <span {...props}>{children}</span>

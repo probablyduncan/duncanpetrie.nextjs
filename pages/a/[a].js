@@ -1,10 +1,10 @@
 import { getArticle, getArticleIDs } from "@/lib/dataParser";
-import { createContext, useContext, useMemo, useRef } from "react";
+import { createContext, useContext, useMemo } from "react";
 import { getMDXComponent } from "mdx-bundler/client"
 import { ViewportContext } from "@/components/Viewport";
 import Layout from "@/components/Layout";
-import { Paragraph, Title, Dept, Caption, UnderLonk, Subtitle } from "@/components/TextStyles";
-import { motion, useInView, useScroll, useSpring, useTransform } from "framer-motion";
+import { UnderLonk } from "@/components/TextStyles";
+import { motion } from "framer-motion";
 import { getColors } from "@/lib/articleHelper";
 import ArticleImage from "@/components/ArticleImage";
 import Lightbox, { LightboxLink } from "@/components/Lightbox";
@@ -40,19 +40,25 @@ export async function getStaticProps( {params} ) {
  * tags: 'writing,photography'
  * 
  * cover: 'jubilee'
+ * coverCaptions: true      // defualts to true
  * 
  * text: {
  *     centered: true,      // defaults to true
  *     slideIn: false,      // defaults to true, only works if centered=true
  *     width: '500',        // val in px, defaults to 500
+ *     stickyCover: true    // defaults to false, only works if centered=false
  * }
  * 
  * lightbox: {
  *     tag: 'myth',
- *     shuffle: true,       // defaults to true?
+ *     shuffle: true,       // defaults to true
  *     images: 'extra,images,here',
- *     link: true,  // defaults to true?
+ *     link: true,  // defaults to true
  * }
+ * 
+ * indexImages: [
+ *     // array of image keys for cards in [i].js
+ * ]
  * 
  */
 
@@ -66,12 +72,15 @@ export default function ArticleLayout({ article }) {
     const [lightbox, lightboxKeys, toggleLightbox] = useLightbox(article.frontmatter.lightbox);
 
     // get colors from frontmatter
-    const colors = getColors(article.frontmatter.colors, [article.frontmatter.cover].concat(lightboxKeys));
+    const colors = getColors(article.frontmatter.colors, article.frontmatter.cover.split(',').concat(lightboxKeys));
     
     // this is the distance between the top of the window and the start of the article
     const topOffset = article.frontmatter.text?.top ?? 300;
     const textWidth = article.frontmatter.text?.width ?? 500;
-    const textCentered = !mobile && (article.frontmatter.text?.centered ?? true);
+
+    // text/other stuff
+    const stickyCover = !mobile && (article.frontmatter.text?.stickyCover);
+    const textCentered = !mobile && !stickyCover && (article.frontmatter.text?.centered ?? true);
     const slideIn = !mobile && (article.frontmatter.text?.slideIn ?? true);
 
     const galleryAction = article.frontmatter.lightbox?.link ? () => toggleLightbox(0) : null;
@@ -92,7 +101,12 @@ export default function ArticleLayout({ article }) {
                     margin: mobile ? '0 20px' : `${topOffset}px 0 20vh 0%`,
                     paddingTop: mobile ? '20px' : 'inherit',
                 }}>
-                    <ArticleImage imgKey={article.frontmatter.cover ?? lightboxKeys[0]} first />
+                    <ArticleImage 
+                        first
+                        imgKeys={article.frontmatter.cover}
+                        sticky={stickyCover} 
+                        noCaption={!(article.frontmatter.coverCaption ?? true)} 
+                    />
                     <ArticleDept color={colors[0]}>
                         {article.frontmatter.dept.toUpperCase()}
                     </ArticleDept>

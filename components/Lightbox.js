@@ -1,8 +1,7 @@
 import { ArticleContext } from "@/pages/a/[a]";
-import { useCallback, useContext, useEffect, useState } from "react";
-import { Caption, LightboxButton, LightboxText, UnderLonk } from "./TextStyles";
-import { ViewportContext } from "./Viewport";
-import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { Caption, LatoWrapper, LightboxButton, LightboxText, UnderLonk } from "./TextStyles";
+import { AnimatePresence, animate, motion, useInView } from "framer-motion";
 import Img from "./Img";
 import { getCaption, getNextIndex } from "@/lib/imageHelper";
 import { imgData } from "@/data/images";
@@ -155,7 +154,7 @@ export default function Lightbox({ index }) {
                     </div>
                     <div>
                         <LightboxText select>{getCaption(imgData[lightboxKeys[index]])}</LightboxText>
-                        <br />
+                        {isTall && <br />}
                     </div>
                 </div>
             </motion.div>
@@ -169,14 +168,14 @@ export default function Lightbox({ index }) {
  * @returns Img component wrapped in button that toggles lightbox.
  * If no lightbox images, the action/effects are disabled.
  */
-export function LightboxLinkedImg({ imgKey, noCaption, noBorder, margin }) {
+export function LightboxLinkedImg({ imgKey, noCaption, noBorder, margin, restrictHeight, width }) {
     const {lightboxKeys, toggleLightbox} = useContext(ArticleContext);
 
-    const openLightbox = () => toggleLightbox(lightboxKeys.indexOf(imgKey))
+    const openLightbox = () => toggleLightbox(lightboxKeys.indexOf(imgKey));
 
     const imgObject = imgData[imgKey];
 
-    return (<div style={{display: 'flex', flexFlow: 'column nowrap', width: '100%', maxWidth: `calc(80vh * ${imgObject.ratio})`}}>
+    return (<div style={{display: 'flex', flexFlow: 'column nowrap', width: width ?? '100%', maxWidth: restrictHeight ? `calc(80vh * ${imgObject.ratio})` : width ?? '100%'}}>
         <motion.button
             style={{
                 display: 'block', 
@@ -193,4 +192,113 @@ export function LightboxLinkedImg({ imgKey, noCaption, noBorder, margin }) {
         </motion.button>
         {!noCaption && <Caption>{getCaption(imgObject)}</Caption>}
     </div>);
+}
+
+export function LightboxLinkedSlideshow({ imgKeys, noCaptions, noBorder, margin, restrictHeight, width }) {
+    
+    const {lightboxKeys, toggleLightbox} = useContext(ArticleContext);
+
+    const openLightbox = () => toggleLightbox(lightboxKeys.indexOf(imgKeys[slide]));
+
+    const [slide, setSlide] = useState(0);
+    const arrowLeft = useRef(); const arrowRight = useRef(); const slideshowRef = useRef();
+    const slideshowInView = useInView(slideshowRef);
+
+    useEffect(() => {
+        const keyDownHandler = (e) => {
+
+            // if slideshow out of view, do not toggle slide
+            if (!slideshowInView) return;
+
+            if (e.code === "ArrowLeft") {
+                setSlide(getNextIndex(slide, imgKeys.length, true));
+                stylePress(arrowLeft.current);
+            }
+            else if (e.code === "ArrowRight") {
+                setSlide(getNextIndex(slide, imgKeys.length, false));
+                stylePress(arrowRight.current);
+            }
+        };
+
+        // flash hover effect on keypress
+        const stylePress = (e) => {
+            animate(e, {backgroundColor: '#efefef'}, {duration: 0.1});
+            setTimeout(() => {
+                animate(e, {backgroundColor: '#ffffffff'}, {duration: 0.2});
+            }, 200);
+        };
+
+        document.addEventListener("keydown", keyDownHandler);
+        return () => document.removeEventListener("keydown", keyDownHandler);
+        
+    }, [imgKeys.length, slide, slideshowInView]);
+
+    const slideshowButtonStyle = {
+        style: {
+            fontFamily: 'inherit',
+            fontSize: '16px',
+            color: '#898989',
+            margin: '15px 6px 0 6px',
+            padding: '0px 6px 2px',
+            borderRadius: '20%',
+            backgroundColor: '#ffffffff',
+        },
+        whileHover: {
+            backgroundColor: '#efefef',
+            transition: {duration: 0.2}
+        },
+    }
+
+    return (
+        <div style={{
+            display: 'flex', 
+            flexFlow: 'column nowrap', 
+            width: width ?? '100%', 
+            maxWidth: restrictHeight ? `calc(80vh * ${imgData[imgKeys[slide]].ratio})` : width ?? '100%'
+        }}>
+            <motion.button
+                ref={slideshowRef} 
+                style={{
+                    display: 'block', 
+                    width: !noBorder ? 'calc(100% - 4px)' : '100%',
+                    boxShadow: !noBorder ? '4px 4px #242626' : '0px 0px 0px #2426260f',
+                    cursor: lightboxKeys[0] ? 'zoom-in' : 'auto',
+                    margin
+                }} 
+                whileHover={lightboxKeys[0] && (noBorder ? {boxShadow: '4px 4px 15px #2426260f'} : {boxShadow: '6px 6px #242626'})}
+                whileTap={lightboxKeys[0] && (noBorder ? {boxShadow: '4px 4px 5px #2426260f'} : {boxShadow: '4px 4px #242626'})}
+                onClick={lightboxKeys[0] && openLightbox}
+            >
+                <Img img={imgData[imgKeys[slide]]} style={{boxShadow: 'inherit', width: '100%'}}/>
+            </motion.button>
+            <div style={{display: 'flex', flexFlow: 'row-reverse nowrap', justifyContent: 'space-between',}}>
+                {!noCaptions && <Caption>{getCaption(imgData[imgKeys[slide]])}</Caption>}
+                <LatoWrapper div>
+                    <div style={{display: 'flex', alignItems: 'flex-end', userSelect: 'none'}}>
+                        <motion.button 
+                            ref={arrowLeft} 
+                            {...slideshowButtonStyle} 
+                            onClick={() => setSlide(getNextIndex(slide, imgKeys.length, true))}
+                        >
+                            &lt;
+                        </motion.button>
+                        <span style={{
+                            fontSize: '12px', 
+                            marginBottom: '5px', 
+                            color: 'cornflowerblue'
+                        }}>
+                            {slide + 1 + "/" + imgKeys.length}
+                        </span>
+                        <motion.button 
+                            ref={arrowRight} 
+                            {...slideshowButtonStyle} 
+                            onClick={() => setSlide(getNextIndex(slide, imgKeys.length))}
+                        >
+                            &gt;
+                        </motion.button>
+                    </div>
+                </LatoWrapper>
+            </div>
+        </div>
+    );
 }
