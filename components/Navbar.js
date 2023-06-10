@@ -1,15 +1,10 @@
 import Lonk from './Lonk';
 import style from './navbar.module.css';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RoughNotation, RoughNotationGroup } from "react-rough-notation";
-import { Cinzel_Decorative, Lato, EB_Garamond } from '@next/font/google';
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ViewportContext } from './Viewport';
-
-const cinzel = Cinzel_Decorative({ subsets: ['latin'], display: 'swap', weight: '700' });
-const garamond = EB_Garamond({subsets: ['latin'], display: 'swap', variable: true, weight: '500'});
-const lato = Lato({ subsets: ['latin'], display: 'swap', weight: '700', variable: true});
+import { CinzelWrapper, GaramondWrapper, LatoWrapper } from './TextStyles';
 
 const logo = 'The Daily DunCAn';
 const linkSpacer = '/';
@@ -38,22 +33,26 @@ export function NewsNav( {homelink, links} ) {
 
     return (<>
         <header className={style.logoWrapper}>
-            <h1 className={style.logo + " " + cinzel.className}>
-                <Lonk href={"/"}>{logo}</Lonk>
-            </h1>
+            <CinzelWrapper>
+                <h1 className={style.logo}>
+                    <Lonk href={"/"}>{logo}</Lonk>
+                </h1>
+            </CinzelWrapper>
         </header>
 
         <nav className={style.navbar}>
 
             {/* either date or link back to home */}
-            <span className={style.links}>{homelink ? (
-                <Lonk className={style.sidelink + " " + garamond.className} href={homelink ?? "/"}>back! to the front page</Lonk>
-            ) : (
-                <span className={style.sidelink + " " + garamond.className}>{date}</span>
-            )}</span>
+            <GaramondWrapper className={style.links}>
+                {homelink ? (
+                    <Lonk className={style.sidelink} href={homelink ?? "/"}>back! to the front page</Lonk>
+                ) : (
+                    <span className={style.sidelink}>{date}</span>
+                )}
+            </GaramondWrapper>
 
             {/* list of links */}
-            <span className={style.links + " " + lato.className}>
+            <LatoWrapper className={style.links}>
                 {links.map((linkdata, i) => {
                     return (
                         <span key={`navlink-${linkdata.text}`}>
@@ -62,30 +61,31 @@ export function NewsNav( {homelink, links} ) {
                         </span>
                     );
                 })}
-            </span>
+            </LatoWrapper>
             
             {/* email */}
-            <span className={style.links + " right"}>
-            <RoughNotationGroup show={emailHover}>
-                <RoughNotation
-                    type="highlight"
-                    strokeWidth={1}
-                    padding={10}
-                    iterations={1}
-                    animationDuration={200}
-                    color={'rgb(255, 248, 172)'}
-                >
-                    <a 
-                        className={style.sidelink + " " + garamond.className} 
-                        href="mailto:duncanpetrie.com" target="_blank" 
-                        rel="noopener noreferrer"
-                        onMouseEnter={() => setEmailHover(true)}
-                        onMouseLeave={() => setEmailHover(false)}
+            <GaramondWrapper className={style.links + " right"}>
+                <RoughNotationGroup show={emailHover}>
+                    <RoughNotation
+                        type="highlight"
+                        strokeWidth={1}
+                        padding={10}
+                        iterations={1}
+                        animationDuration={200}
+                        color={'rgb(255, 248, 172)'}
                     >
-                        duncanpetrie1@gmail.com
-                    </a>
-                </RoughNotation>
-            </RoughNotationGroup></span>
+                        <a 
+                            className={style.sidelink} 
+                            href="mailto:duncanpetrie.com" target="_blank" 
+                            rel="noopener noreferrer"
+                            onMouseEnter={() => setEmailHover(true)}
+                            onMouseLeave={() => setEmailHover(false)}
+                        >
+                            duncanpetrie1@gmail.com
+                        </a>
+                    </RoughNotation>
+                </RoughNotationGroup>
+            </GaramondWrapper>
 
         </nav>
     </>);
@@ -104,28 +104,30 @@ export function Navlink({text, href}) {
             animationDuration={text.length * 30}
             color={"#0e0862"}
         >
-            <h3 
-                className={lato.className + " " + style.link} 
-                onMouseEnter={() => toggleHover(true)} 
-                onMouseLeave={() => toggleHover(false)}
-            >
-                <Lonk href={href}>
-                    {text.toUpperCase()}
-                </Lonk>
-            </h3>
+            <LatoWrapper>
+                <h3 
+                    className={style.link} 
+                    onMouseEnter={() => toggleHover(true)} 
+                    onMouseLeave={() => toggleHover(false)}
+                >
+                    <Lonk href={href}>
+                        {text.toUpperCase()}
+                    </Lonk>
+                </h3>
+            </LatoWrapper>
         </RoughNotation>
     </RoughNotationGroup>);
 }
 
 export function MobileTopNav({ }) {
-    return <div className={lato.className + " opacityLink"} style={{
+    return <LatoWrapper div className={"opacityLink"} style={{
         display: 'flex',
         justifyContent: 'space-between',
         padding: '20px 24px'
     }}>
         <Link href='mailto:duncanpetrie1@gmail.com' style={{color: '#32ae5d'}}>EMAIL ME</Link>
         <Lonk href='https://instagram.com/probablyduncan' style={{color: '#fad549'}}>INSTAGRAM</Lonk>
-    </div>;
+    </LatoWrapper>;
 }
 
 export function MobileNav( props ) {
@@ -134,11 +136,11 @@ export function MobileNav( props ) {
         
     };
 
-    return <div className={style.mobileNavContainer}>
-        <nav className={style.mobileNav + " " + lato.className}>
-        <Menurl {...props} menuFunction={mobileNavMenu} spread />
+    return <LatoWrapper className={style.mobileNavContainer} div>
+        <nav className={style.mobileNav}>
+            <Menurl {...props} menuFunction={mobileNavMenu} spread />
         </nav>
-    </div>;
+    </LatoWrapper>;
 }
 
 export function SimpleNav( props ) {
@@ -152,10 +154,12 @@ export function SimpleNav( props ) {
 
     const galleryName = props.galleryName === true || !props.galleryName ? 'GALLERY' : props.galleryName.toUpperCase();
 
-    return <nav className={style.simpleNav + " " + lato.className}>
-        <Menurl {...props} />
-        {props.galleryAction && <motion.button style={{color}} whileHover={{rotate: 4}} whileTap={{rotate: 16}} onClick={props.galleryAction}>{galleryName}</motion.button>}
-    </nav>;
+    return <LatoWrapper div>
+        <nav className={style.simpleNav}>
+            <Menurl {...props} />
+            {props.galleryAction && <motion.button style={{color}} whileHover={{rotate: 4}} whileTap={{rotate: 16}} onClick={props.galleryAction}>{galleryName}</motion.button>}
+        </nav>
+    </LatoWrapper>;
 }
 
 function Menurl({ pageName = "menu", menuName = "menu", color, menuFunction, menuLink, spread }) {

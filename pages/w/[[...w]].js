@@ -5,12 +5,7 @@ import { useRouter } from 'next/router';
 import { useMemo } from "react";
 import style from "@/components/world.module.css";
 import text from "@/components/text.module.css";
-import { Lato, Merriweather, EB_Garamond } from "@next/font/google";
 import { UnderLonk } from "@/components/TextStyles";
-
-const merriweather = Merriweather({ subsets: ['latin'], variable: true, weight: '700' });
-const garamond = EB_Garamond({subsets: ['latin'], display: 'swap', variable: true, weight: '500'});
-const lato = Lato({ subsets: ['latin'], display: 'swap', weight: '700', variable: true});
 
 export async function getStaticPaths() {
     const paths = await getWorldCardPaths();
@@ -48,15 +43,15 @@ function Card({ w, code, frontmatter }) {
     const MDXContent = useMemo(() => getMDXComponent(code, {WorldLink: WorldLink}), [code]);
     if (frontmatter.backlinks && frontmatter.backlinks.constructor !== Array) frontmatter.backlinks = [frontmatter.backlinks];
     
-    return (<div id={w} className={style.card + ' ' + text.textContainer + ' ' + garamond.className} style={{backgroundColor: 'none'}}>
-        <h2 className={lato.className}>
+    return (<div id={w} className={style.card + ' ' + text.textContainer} style={{backgroundColor: 'none'}}>
+        <h2>
             {frontmatter.backlink && 
                 <WorldLink current={w} target={frontmatter.backlink} noUnderline style={{fontStyle: 'normal', textDecoration: 'none', color: frontmatter.color ? frontmatter.color : '#6495ED'}}>
                     {frontmatter.backlink.toUpperCase()}&nbsp;&nbsp;&lt;
                 </WorldLink>
             }
         </h2>
-        <h1 className={merriweather.className}>
+        <h1>
             {frontmatter.title}
         </h1>
         <MDXContent />

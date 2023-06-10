@@ -68,7 +68,7 @@ export default function Index({ articleData }) {
     }, [articleData, i, mobile, setArticlesState]);
     const articles = useMemo(() => articlesState, [articlesState]);
 
-    return(<Layout title={`${"Index"} - DuncanPetrie.com`} pageName={i} menuName='filter' menuLink='/i/all' color={'green'}>
+    return(<Layout title='Index' pageName={i} menuName='filter' menuLink='/i/all' color={'green'}>
         <div 
             style={{display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(3, 1fr)', gap: '18px', margin: mobile ? '0 0 120px 0' : '120px 0 20vh 0'}}
         >

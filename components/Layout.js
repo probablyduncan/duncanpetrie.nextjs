@@ -7,9 +7,11 @@ export default function Layout({ title, children, newsNav, color, pageName, menu
 
     const {mobile} = useContext(ViewportContext);
 
+    title = title ? title + ' - ' : '';
+
     return (<>
         <Head>
-            <title>{title ?? "DuncanPetrie.com"}</title>
+            <title>{`${title}DuncanPetrie.com`}</title>
             <meta name="author" content="Duncan Petrie" />
             <meta name="description" content="Abstract/Impressionist Photography | On the hunt for plants and birds and rocks and things" />
             <meta name="keywords" content="Duncan, Petrie, Photography, Abstract, Impressionist, Impressionism, Wildlife, Wisconsin, Milwaukee, Falmouth, Lake Michigan, water, blur, icm, intentional, camera, movement, probablyduncan" />

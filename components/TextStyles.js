@@ -1,22 +1,32 @@
-import { Lato, Merriweather, EB_Garamond } from "@next/font/google";
+import { Lato, Merriweather, EB_Garamond, Cinzel_Decorative } from "@next/font/google";
 import { useContext, useState } from "react";
 import { RoughNotation } from "react-rough-notation";
 import Lonk from "./Lonk";
 import { motion } from "framer-motion";
 import { ViewportContext } from "./Viewport";
 
+/**
+ * font wrappers
+ */
 const merriweather = Merriweather({ subsets: ['latin'], variable: true, weight: '700' });
+export function MerriweatherWrapper({ children, div, ...props }) {
+    return <FontWrapper fontClass={merriweather.className} {...props} div={div}>{children}</FontWrapper>;
+}
 const garamond = EB_Garamond({subsets: ['latin'], display: 'swap', variable: true, weight: '500'});
+export function GaramondWrapper({ children, div, ...props }) {
+    return <FontWrapper fontClass={garamond.className} {...props} div={div}>{children}</FontWrapper>;
+}
 const lato = Lato({ subsets: ['latin'], display: 'swap', weight: '700', variable: true});
+export function LatoWrapper({ children, div, ...props }) {
+    return <FontWrapper fontClass={lato.className} {...props} div={div}>{children}</FontWrapper>;
+}
+const cinzel = Cinzel_Decorative({ subsets: ['latin'], display: 'swap', weight: '700' });
+export function CinzelWrapper({ children, div, ...props }) {
+    return <FontWrapper fontClass={cinzel.className} {...props} div={div}>{children}</FontWrapper>;
+}
 
-export function MerriweatherWrapper({ children, div }) {
-    return div ? (<div className={merriweather.className}>{children}</div>) : (<span className={merriweather.className}>{children}</span>);
-}
-export function GaramondWrapper({ children, div }) {
-    return div ? (<div className={garamond.className}>{children}</div>) : (<span className={garamond.className}>{children}</span>);
-}
-export function LatoWrapper({ children, div }) {
-    return div ? (<div className={lato.className}>{children}</div>) : (<span className={lato.className}>{children}</span>);
+export function FontWrapper({ children, div, className, fontClass, style }) {
+    return div ? (<div className={fontClass + ' ' + className} style={style}>{children}</div>) : (<span className={fontClass + ' ' + className} style={style}>{children}</span>);
 }
 
 export function Title({ children, small, ...props }) {

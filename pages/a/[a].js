@@ -87,6 +87,7 @@ export default function ArticleLayout({ article }) {
 
     return (<>
         <Layout 
+            title={article.frontmatter.title}
             color={colors[1]} 
             pageName={article.a} 
             menuName={'all projects'} 

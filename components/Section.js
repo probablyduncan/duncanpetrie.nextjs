@@ -2,14 +2,11 @@ import style from './section.module.css';
 import Story from "./Story";
 import { useEffect, useRef, useState } from "react";
 import Magnifier from '@/components/Magnifier';
-import { Lato, Merriweather } from "@next/font/google";
 import Link from 'next/link';
 import Img from './Img';
 import Head from "next/head";
 import { getSrc } from '@/lib/imageHelper';
-
-const lato = Lato({ subsets: ['latin'], display: 'swap', weight: '700', variable: true});
-const merriweather = Merriweather({ subsets: ['latin'], variable: true, weight: '700' });
+import { LatoWrapper, MerriweatherWrapper } from './TextStyles';
 
 //#region default
 
@@ -71,11 +68,11 @@ export function SlideshowSection( props ) {
         <section className={style.slideshow + " " + style.section}>
             <div className={style.slideshowStory}>
                 <Story { ...props.storyLeft } />
-                <div className={style.slideshowArrows + " " + lato.className}>
+                <LatoWrapper className={style.slideshowArrows} div>
                     <button ref={arrowLeft} onClick={() => setImg(img > 0 ? img - 1 : props.images.length - 1)}>&lt;</button>
                     <span>{img + 1 + "/" + props.images.length}</span>
                     <button ref={arrowRight} onClick={() => setImg(img < props.images.length - 1 ? img + 1 : 0)}>&gt;</button>
-                </div>
+                </LatoWrapper>
             </div>
             <div><Img img={props.images[img]} /></div>
             <Story { ...props.storyRight } />
@@ -131,7 +128,7 @@ export function FooterSection( props ) {
             <span className={style.cmyk + " " + style.y}></span>
             <span className={style.cmyk + " " + style.k}></span>
         </div>
-        <button className={style.pagenum + " " + lato.className}><Link href="/i">{props.pagenum ?? "A1"}</Link></button>
+        <LatoWrapper><button className={style.pagenum}><Link href="/i">{props.pagenum ?? "A1"}</Link></button></LatoWrapper>
     </footer>)
 }
 
@@ -139,13 +136,13 @@ export function FooterSection( props ) {
 //#region mobile hero
 
 export function MobileHero( props ) {
-    return (<div style={{padding: "0 20px"}}>
+    return (<MerriweatherWrapper div style={{padding: "0 20px"}}>
         {props.img && <Img img={props.img} />}
         <div style={{border: "none", margin: "40px 4px 120px 4px", fontSize: "30px"}}>
-            <h2 style={{marginBottom: "20px"}} className={merriweather.className + " " + style.title}>Hello! I&apos;m<br/><Link className="opacityLink" href="/a/about" style={{textDecoration: "underline", color: "#F47665"}}>Duncan Petrie</Link>.</h2>
-            <h2 className={merriweather.className + " " + style.title}>This is my<br/>website.</h2>
+            <h2 style={{marginBottom: "20px"}} className={style.title}>Hello! I&apos;m<br/><Link className="opacityLink" href="/a/about" style={{textDecoration: "underline", color: "#F47665"}}>Duncan Petrie</Link>.</h2>
+            <h2 className={style.title}>This is my<br/>website.</h2>
         </div>
-    </div>);
+    </MerriweatherWrapper>);
 }
 
 //#endregion
