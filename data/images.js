@@ -103,7 +103,7 @@ export const imgData = {
         color: '#32baa9',
         caption: 'Cornish surf, St. Ives, Cornwall',
         date: "2021",
-        tags: ['myth','cornwall','water',],
+        tags: ['myth','cornwall','water','coastpath'],
     },
     myth14: {
         src: '14.jpg',
@@ -255,7 +255,7 @@ export const imgData = {
         color: '#f17682',
         caption: 'Moonrise, Rosemullion, Cornwall',
         date: "2021",
-        tags: ['myth','cornwall','walls',],
+        tags: ['myth','cornwall','walls','coastpath'],
     },
     myth33: {
         src: '33.jpg',
@@ -271,7 +271,7 @@ export const imgData = {
         color: '#dc9844',
         caption: 'Flaxengrass, Falmouth, Cornwall',
         date: "2021-10-15",
-        tags: ['myth','cornwall','landscapes','best',],
+        tags: ['myth','cornwall','landscapes','best'],
     },
     myth35: {
         src: '35.jpg',
@@ -391,7 +391,7 @@ export const imgData = {
         color: '#5d5562',
         caption: 'Moonset, Pennance Point, Cornwall',
         date: "2021",
-        tags: ['myth','cornwall','landscapes',],
+        tags: ['myth','cornwall','landscapes','coastpath'],
     },
     moonwalk: {
         src: '50.jpg',
@@ -502,7 +502,7 @@ export const imgData = {
         color: '#6a9ed7',
         caption: 'North Atlantic, facing east',
         date: '2021',
-        tags: ['blurry','cornwall'],
+        tags: ['blurry','cornwall','coastpath'],
     },
     blurry2: {
         src: 'blurry2.jpg',
@@ -518,7 +518,7 @@ export const imgData = {
         color: '#6a9ed7',
         caption: 'North Atlantic, facing south',
         date: '2021',
-        tags: ['blurry','cornwall'],
+        tags: ['blurry','cornwall','coastpath'],
     },
     blurry4: {
         src: 'blurry4.jpg',
@@ -1067,5 +1067,62 @@ export const imgData = {
         src: 'sites3.png',
         ratio: 1,
         color: '#ef0000'
-    }
+    },
+
+    coastpath1: {
+        src: 'coastpath1.jpg',
+        ratio: 3/2,
+        color: '#74b862',
+        caption: 'Echoes of boots long gone linger in the mud of the path',
+        date: '2020',
+        tags: ['coastpath'],
+    },
+    coastpath2: {
+        src: 'coastpath2.jpg',
+        ratio: 3/2,
+        color: '#8abae2',
+        caption: 'Heavy with blackberries, hedges lean over the gleaming sea',
+        date: '2020',
+        tags: ['coastpath', 'blurry'],
+    },
+    coastpath3: {
+        src: 'coastpath3.jpg',
+        ratio: 3/2,
+        color: '#8b8e96',
+        caption: 'Surf breaks on its march ashore, surging over smooth and sun-stained sand',
+        date: '2020',
+        tags: ['coastpath', 'landscapes'],
+    },
+    coastpath4: {
+        src: 'coastpath4.jpg',
+        ratio: 3/2,
+        color: '#8aab61',
+        caption: 'Wildflowers on the path',
+        date: '2020',
+        tags: ['coastpath'],
+    },
+    coastpath5: {
+        src: 'coastpath5.jpg',
+        ratio: 3/2,
+        color: '#8aab61',
+        caption: 'Pine silhouettes in the deep blue sky',
+        date: '2020',
+        tags: ['coastpath'],
+    },
+    coastpath6: {
+        src: 'coastpath6.jpg',
+        ratio: 3/2,
+        color: '#ba93d2',
+        caption: 'Last light’s magenta tendrils take hours to unweave',
+        date: '2020',
+        tags: ['coastpath', 'blurry'],
+    },
+    coastpath7: {
+        src: '34.jpg',
+        ratio: 3/2,
+        color: '#dc9844',
+        caption: 'Pampas grass glows in the light of the sun',
+        date: "2021-10-15",
+        tags: ['coastpath'],
+    },
 };
