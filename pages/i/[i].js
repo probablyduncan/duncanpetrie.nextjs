@@ -92,7 +92,7 @@ function IndexCard({ article, first }) {
     useEffect(() => setRandState(Math.random()), []);
     const rand = useMemo(() => randState, [randState]);
 
-    const imageKey = article.indexImages ? article.indexImages[Math.floor(article.indexImages.length * rand)] : (article.cover?.split(',')[Math.floor(article.cover?.split(',').length * rand)] ?? null);
+    const imageKey = article.indexImages ? article.indexImages[Math.floor(article.indexImages.length * rand)] : (article.cover?.images.split(',')[Math.floor(article.cover?.images.split(',').length * rand)] ?? null);
 
     const { scrollYProgress } = useScroll({
         target: ref,
