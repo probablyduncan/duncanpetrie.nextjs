@@ -166,11 +166,11 @@ export default function Lightbox({ index }) {
 
 /**
  * @param {string} imgKey 
- * @param {boolean} noCaption
+ * @param {boolean} noCaptions
  * @returns Img component wrapped in button that toggles lightbox.
  * If no lightbox images, the action/effects are disabled.
  */
-export function LightboxLinkedImg({ imgKey, noCaption, noBorder, margin, restrictHeight, width }) {
+export function LightboxLinkedImg({ imgKey, noCaptions, noBorder, margin, restrictHeight, width }) {
     const {lightboxKeys, toggleLightbox} = useContext(ArticleContext);
 
     const openLightbox = () => toggleLightbox(lightboxKeys.indexOf(imgKey));
@@ -192,7 +192,7 @@ export function LightboxLinkedImg({ imgKey, noCaption, noBorder, margin, restric
         >
             <Img img={imgObject} style={{boxShadow: 'inherit', width: '100%'}}/>
         </motion.button>
-        {!noCaption && <Caption>{getCaption(imgObject)}</Caption>}
+        {!noCaptions && <Caption>{getCaption(imgObject)}</Caption>}
     </div>);
 }
 

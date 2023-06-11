@@ -1168,7 +1168,7 @@ export const imgData = {
     },
     adrift6: {
         src: 'adrift6.jpg',
-        ratio: 16/9,
+        ratio: 1080/394,
         color: '#303032',
         caption: 'Silent wing',
         date: '2019',
@@ -1226,7 +1226,7 @@ export const imgData = {
     film1: {
         src: 'film1.jpg',
         ratio: 5387/3603,
-        color: '#303032',
+        color: '#ff0000',
         caption: 'Pigeons dance above a crowded square',
         date: '2020',
         tags: ['cornwall', 'film'],
@@ -1234,7 +1234,7 @@ export const imgData = {
     film2: {
         src: 'film2.jpg',
         ratio: 5371/3581,
-        color: '#303032',
+        color: '#ff0000',
         caption: 'A trolley waits in a shop\'s dark shadow',
         date: '2019',
         tags: ['cornwall', 'film'],
@@ -1242,7 +1242,7 @@ export const imgData = {
     film3: {
         src: 'film3.jpg',
         ratio: 5332/3555,
-        color: '#303032',
+        color: '#ff0000',
         caption: 'A magpie skims an industrial estate',
         date: '2019',
         tags: ['cornwall', 'film'],
@@ -1250,7 +1250,7 @@ export const imgData = {
     film4: {
         src: 'film4.jpg',
         ratio: 5290/3526,
-        color: '#303032',
+        color: '#ff0000',
         caption: 'Ripples undulate beneath a strong concrete pier',
         date: '2020',
         tags: ['cornwall', 'film'],
@@ -1258,7 +1258,7 @@ export const imgData = {
     film5: {
         src: 'film5.jpg',
         ratio: 5396/3611,
-        color: '#303032',
+        color: '#ff0000',
         caption: 'Crows perch between wires and the subtle moon',
         date: '2020',
         tags: ['cornwall', 'film'],
@@ -1266,7 +1266,7 @@ export const imgData = {
     film6: {
         src: 'film6.jpg',
         ratio: 5380/3587,
-        color: '#303032',
+        color: '#ff0000',
         caption: 'Water freely flows from a century-old drainpipe',
         date: '2020',
         tags: ['cornwall', 'film'],
@@ -1274,7 +1274,7 @@ export const imgData = {
     film7: {
         src: 'film7.jpg',
         ratio: 5396/3620,
-        color: '#303032',
+        color: '#ff0000',
         caption: 'The low sun cuts a slanted shadow across decapitated cedars',
         date: '2020',
         tags: ['cornwall', 'film'],
@@ -1282,7 +1282,7 @@ export const imgData = {
     film8: {
         src: 'film8.jpg',
         ratio: 5396/3611,
-        color: '#303032',
+        color: '#ff0000',
         caption: 'The ocean surges against the frigid beach',
         date: '2020',
         tags: ['cornwall', 'film'],

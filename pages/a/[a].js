@@ -110,7 +110,7 @@ export default function ArticleLayout({ article }) {
                         first
                         imgKeys={article.frontmatter.cover?.images}
                         sticky={stickyCover} 
-                        noCaption={!(article.frontmatter.cover?.captions ?? true)} 
+                        noCaptions={!(article.frontmatter.cover.captions ?? true)} 
                         slideOnScroll={slideOnScroll}
                     />
                     <ArticleDept color={colors[0]}>

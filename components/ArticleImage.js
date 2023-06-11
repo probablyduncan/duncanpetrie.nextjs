@@ -12,7 +12,7 @@ import { getCaption } from "@/lib/imageHelper";
  * @param {boolean} first styles image as cover 
  * @returns 
  */
-export default function ArticleImage({ imgKey, imgKeys, first, type, inlineOptions = {}, sidePosition, mobileOnly, noMobile, sticky, noCaption, slideOnScroll }) {
+export default function ArticleImage({ imgKey, imgKeys, first, type, inlineOptions = {}, sidePosition, mobileOnly, noMobile, sticky, noCaptions, slideOnScroll }) {
     const {mobile} = useContext(ViewportContext);
     
     const processedImgKeys = (imgKey ? [imgKey] : imgKeys?.split(',') ?? []).filter(k => k in imgData);
@@ -21,17 +21,22 @@ export default function ArticleImage({ imgKey, imgKeys, first, type, inlineOptio
     const stickyStyle = first && sticky ? {position: 'sticky', top: '300px'} : {};
 
     // put override captions param into options
-    if (noCaption) inlineOptions.noCaptions = true;
+    if (mobile) {
+        inlineOptions.noCaptions = false;
+    }
+    else if (noCaptions) {
+        inlineOptions.noCaptions = true;
+    }
 
     return (processedImgKeys.length > 0 && (
         <div style={{
-            display: 'flex', justifyContent: !first ? 'center' : 'flex-start', ...stickyStyle
+            display: 'flex', justifyContent: (first || type == 'side') ? 'flex-start' : 'center', ...stickyStyle
         }}>
             {mobile ? 
-                (!noMobile && <MobileImage first={first} imgKey={processedImgKeys[0]} noCaption={noCaption} />)
+                (!noMobile && <MobileImage first={first} imgKey={processedImgKeys[0]} noCaptions={!mobile && noCaptions} />)
             :
                 (first || type == 'side' ? 
-                    (!mobileOnly && <SideImage first={first} imgKeys={processedImgKeys} sidePosition={sidePosition} noCaption={noCaption} slideOnScroll={first && slideOnScroll} />)
+                    (!mobileOnly && <SideImage first={first} imgKeys={processedImgKeys} sidePosition={sidePosition} noCaptions={!mobile && noCaptions} slideOnScroll={first && slideOnScroll} />)
                 :
                     (!mobileOnly && <InlineImage imgKeys={processedImgKeys} type={type} options={inlineOptions} />)
                 )
@@ -40,18 +45,18 @@ export default function ArticleImage({ imgKey, imgKeys, first, type, inlineOptio
     ));
 }
 
-function MobileImage({ imgKey, first, noCaption }) {
+function MobileImage({ imgKey, first, noCaptions }) {
 
     return (
         <div style={{
             padding: first ? '0' : '50px 0',
         }}>
-            <LightboxLinkedImg imgKey={imgKey} noCaption={noCaption} />
+            <LightboxLinkedImg imgKey={imgKey} noCaptions={noCaptions} />
         </div>
     );
 }
 
-function SideImage({ imgKeys, first, sidePosition = {width: 1, left: 0}, noCaption, slideOnScroll }) {
+function SideImage({ imgKeys, first, sidePosition = {width: 1, left: 0}, noCaptions, slideOnScroll }) {
 
     const { textCentered } = useContext(ArticleContext);
 
@@ -71,12 +76,12 @@ function SideImage({ imgKeys, first, sidePosition = {width: 1, left: 0}, noCapti
             x: springX,
             height: '0',
             zIndex: '50',
-            y: first ? -180 : 0,
+            y: -180,
         }}>
             {imgKeys.length > 1 ? 
-                <LightboxLinkedSlideshow imgKeys={imgKeys} noCaption={noCaption} slideOnScroll={slideOnScroll} /> 
+                <LightboxLinkedSlideshow imgKeys={imgKeys} noCaptions={noCaptions} slideOnScroll={slideOnScroll} /> 
             : 
-                <LightboxLinkedImg imgKey={imgKeys[0]} noCaption={noCaption} />}
+                <LightboxLinkedImg imgKey={imgKeys[0]} noCaptions={noCaptions} />}
         </motion.div>
     );
 }
@@ -87,9 +92,9 @@ function InlineImage({ imgKeys, type, options }) {
         return (
             <InlineImageWrapper width={options?.width ?? '65%'}>
                 {imgKeys.length > 1 ?
-                    <LightboxLinkedSlideshow imgKeys={imgKeys} noBorder restrictHeight={options?.restrictHeight ?? true} />
+                    <LightboxLinkedSlideshow imgKeys={imgKeys} noBorder restrictHeight={options?.restrictHeight ?? true} noCaptions={options.noCaptions} />
                 :
-                    <LightboxLinkedImg imgKey={imgKeys[0]} noBorder restrictHeight={options?.restrictHeight ?? true} />
+                    <LightboxLinkedImg imgKey={imgKeys[0]} noBorder restrictHeight={options?.restrictHeight ?? true} noCaptions={options.noCaptions} />
 
                 }
             </InlineImageWrapper>
@@ -100,7 +105,11 @@ function InlineImage({ imgKeys, type, options }) {
 
         // put captions under the shortest image
         return imgData[imgKeys[0]].ratio > imgData[imgKeys[1]].ratio ? (
-                <InlineImageWrapper align={options?.align} margin={`80px 0 calc(80px + ${Math.max(options?.leftOffset ?? 0, 0)}px) 15%`}>
+                <InlineImageWrapper 
+                    width={options?.width ?? '100%'} 
+                    align={options?.align} 
+                    margin={`80px 0 calc(80px + ${Math.max(options?.leftOffset ?? 0, 0)}px) 15%`}
+                >
                     <div style={{
                         display: 'flex', 
                         flexFlow: options?.align == 'bottom' ? 'column-reverse' : 'column', 
@@ -109,7 +118,7 @@ function InlineImage({ imgKeys, type, options }) {
                     }}>
                         <LightboxLinkedImg 
                             imgKey={imgKeys[0]} 
-                            noCaption 
+                            noCaptions 
                             noBorder 
                             margin={options?.align == 'bottom' ? '20px 0 0 0' : '0 0 8px 0'} 
                         />
@@ -118,11 +127,15 @@ function InlineImage({ imgKeys, type, options }) {
                             {captions[1] && <Caption><i>Right:&nbsp;&nbsp;</i>{captions[1]}</Caption>}
                         </>}
                     </div>
-                    <LightboxLinkedImg imgKey={imgKeys[1]} noCaption noBorder margin={`${options?.rightOffset ?? 0}px 0 0 0`} width={`calc(50% - ${IMAGE_GAP / 2}px)`} />
+                    <LightboxLinkedImg imgKey={imgKeys[1]} noCaptions noBorder margin={`${options?.rightOffset ?? 0}px 0 0 0`} width={`calc(50% - ${IMAGE_GAP / 2}px)`} />
                 </InlineImageWrapper>
             ) : (
-                <InlineImageWrapper align={options?.align} margin={`80px 0 calc(80px + ${Math.max(options?.rightOffset ?? 0, 0)}px) 15%`}>
-                    <LightboxLinkedImg imgKey={imgKeys[0]} noCaption noBorder margin={`0 0 ${options?.leftOffset ?? 0}px 0`} width={`calc(50% - ${IMAGE_GAP / 2}px)`} />
+                <InlineImageWrapper 
+                    width={options?.width ?? '100%'}
+                    align={options?.align} 
+                    margin={`80px 0 calc(80px + ${Math.max(options?.rightOffset ?? 0, 0)}px) 15%`}
+                >
+                    <LightboxLinkedImg imgKey={imgKeys[0]} noCaptions noBorder margin={`0 0 ${options?.leftOffset ?? 0}px 0`} width={`calc(50% - ${IMAGE_GAP / 2}px)`} />
                     <div style={{
                         display: 'flex', 
                         flexFlow: options?.align == 'bottom' ? 'column-reverse' : 'column', 
@@ -131,7 +144,7 @@ function InlineImage({ imgKeys, type, options }) {
                     }}>
                         <LightboxLinkedImg 
                             imgKey={imgKeys[1]} 
-                            noCaption 
+                            noCaptions 
                             noBorder 
                             margin={options?.align == 'bottom' ? '20px 0 0 0' : '0 0 8px 0'} 
                         />
@@ -146,6 +159,7 @@ function InlineImage({ imgKeys, type, options }) {
         
         return (
             <InlineImageWrapper 
+                width={options?.width ?? '100%'}
                 // get column sizes from image ratios
                 columns={imgKeys.map(k => `${imgData[k].ratio}fr`).join(' ')} 
                 // get top/bottom margin for wrapper based on offset
@@ -155,10 +169,12 @@ function InlineImage({ imgKeys, type, options }) {
                     imgKey={imgKeys[0]}
                     noBorder
                     margin={`${options?.leftOffset ?? ((options?.rightOffset ?? 0) * -1)}px 0 0 0`}
+                    noCaptions={options?.noCaptions}
                 />
                 <LightboxLinkedImg 
                     imgKey={imgKeys[1]}
                     noBorder
+                    noCaptions={options?.noCaptions}
                 />
             </InlineImageWrapper>
         );
@@ -243,7 +259,7 @@ function Filmstrip({ imgKeys, options }) {
                     width: `${imgData[imgKey].ratio * height}px`,
                     marginTop: options?.stagger && i % 2 ? '0' : '30px',
                 }}>
-                    <LightboxLinkedImg imgKey={imgKey} restrictHeight noBorder noCaption={options?.captions ?? false ? false : true} />
+                    <LightboxLinkedImg imgKey={imgKey} restrictHeight noBorder noCaptions={options?.noCaptions ?? false} />
                 </div>
             )}
         </motion.div>
