@@ -36,7 +36,7 @@ const extraLinks = [
         title: 'The Triumph of the Commons',
         dept: 'dept. of rabbit holes',
         link: 'https://youtu.be/JRXZAaDxGCQ',
-        cover: 'cover_wiki',
+        cover: {images: 'cover_wiki'},
         tags: ['films'],
     },
 ]
