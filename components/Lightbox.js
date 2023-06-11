@@ -1,7 +1,7 @@
 import { ArticleContext } from "@/pages/a/[a]";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Caption, LatoWrapper, LightboxButton, LightboxText, UnderLonk } from "./TextStyles";
-import { AnimatePresence, animate, motion, useInView } from "framer-motion";
+import { AnimatePresence, animate, motion, useInView, useMotionValueEvent, useScroll } from "framer-motion";
 import Img from "./Img";
 import { getCaption, getNextIndex } from "@/lib/imageHelper";
 import { imgData } from "@/data/images";
@@ -66,6 +66,8 @@ export default function Lightbox({ index }) {
     useEffect(() => {
 
         const keyDownHandler = (e) => {
+            if (index === false || index === null) return;
+
             if (e.code === "ArrowLeft") next(true);
             if (e.code === "ArrowRight") next();
             if (e.code === "Escape") toggleLightbox(false);
@@ -194,44 +196,78 @@ export function LightboxLinkedImg({ imgKey, noCaption, noBorder, margin, restric
     </div>);
 }
 
-export function LightboxLinkedSlideshow({ imgKeys, noCaptions, noBorder, margin, restrictHeight, width }) {
+export function LightboxLinkedSlideshow({ imgKeys, noCaptions, noBorder, margin, restrictHeight, width, slideOnScroll }) {
     
-    const {lightboxKeys, toggleLightbox} = useContext(ArticleContext);
+    const {lightbox, lightboxKeys, toggleLightbox} = useContext(ArticleContext);
 
     const openLightbox = () => toggleLightbox(lightboxKeys.indexOf(imgKeys[slide]));
 
     const [slide, setSlide] = useState(0);
+    const [manuallyChanged, setManuallyChanged] = useState(false);
+
     const arrowLeft = useRef(); const arrowRight = useRef(); const slideshowRef = useRef();
     const slideshowInView = useInView(slideshowRef);
 
+    const setSlideManually = (prev) => {
+        setSlide(getNextIndex(slide, imgKeys.length, prev));
+        setManuallyChanged(true);
+    }
+
+    // flash hover effect on keypress
+    const stylePress = (prev) => {
+
+        // get button ref
+        const buttonElement = prev ? arrowLeft.current : arrowRight.current;
+        
+        // start animation
+        animate(buttonElement, {backgroundColor: '#efefef'}, {duration: 0.1});
+        
+        // end animation
+        setTimeout(() => {
+            animate(buttonElement, {backgroundColor: '#ffffffff'}, {duration: 0.2});
+        }, 200);
+    };
+
+    // arrow key listener
     useEffect(() => {
         const keyDownHandler = (e) => {
 
-            // if slideshow out of view, do not toggle slide
-            if (!slideshowInView) return;
+            // if slideshow out of view or lightbox is up, do not toggle slide
+            if (!slideshowInView || (lightbox !== false && lightbox !== null)) return;
 
             if (e.code === "ArrowLeft") {
                 setSlide(getNextIndex(slide, imgKeys.length, true));
-                stylePress(arrowLeft.current);
+                stylePress(true);
             }
             else if (e.code === "ArrowRight") {
                 setSlide(getNextIndex(slide, imgKeys.length, false));
-                stylePress(arrowRight.current);
+                stylePress(false);
             }
         };
 
-        // flash hover effect on keypress
-        const stylePress = (e) => {
-            animate(e, {backgroundColor: '#efefef'}, {duration: 0.1});
-            setTimeout(() => {
-                animate(e, {backgroundColor: '#ffffffff'}, {duration: 0.2});
-            }, 200);
-        };
-
-        document.addEventListener("keydown", keyDownHandler);
-        return () => document.removeEventListener("keydown", keyDownHandler);
+        document.addEventListener('keydown', keyDownHandler);
+        return () => document.removeEventListener('keydown', keyDownHandler);
         
-    }, [imgKeys.length, slide, slideshowInView]);
+    }, [imgKeys.length, lightbox, slide, slideshowInView]);
+
+    // handle slideshow changing on scrolling
+    const { scrollYProgress } = useScroll();
+    useMotionValueEvent(scrollYProgress, 'change', (scrollProg) => {
+
+        if (!slideOnScroll) return;
+
+        const slideFromPos = Math.min(Math.floor(imgKeys.length * scrollProg), imgKeys.length - 1);
+        
+        if (slide == slideFromPos) {
+            if (slide == 0) setManuallyChanged(false);
+            return;
+        }
+
+        if (manuallyChanged) return;
+
+        setSlide(getNextIndex(slide, imgKeys.length, slide > slideFromPos));
+        stylePress(slide > slideFromPos);
+    })
 
     const slideshowButtonStyle = {
         style: {
@@ -278,21 +314,21 @@ export function LightboxLinkedSlideshow({ imgKeys, noCaptions, noBorder, margin,
                         <motion.button 
                             ref={arrowLeft} 
                             {...slideshowButtonStyle} 
-                            onClick={() => setSlide(getNextIndex(slide, imgKeys.length, true))}
+                            onClick={() => setSlideManually(true)}
                         >
                             &lt;
                         </motion.button>
                         <span style={{
                             fontSize: '12px', 
                             marginBottom: '5px', 
-                            color: 'cornflowerblue'
+                            color: imgData[imgKeys[slide]].color ?? 'cornflowerblue'
                         }}>
                             {slide + 1 + "/" + imgKeys.length}
                         </span>
                         <motion.button 
                             ref={arrowRight} 
                             {...slideshowButtonStyle} 
-                            onClick={() => setSlide(getNextIndex(slide, imgKeys.length))}
+                            onClick={() => setSlideManually()}
                         >
                             &gt;
                         </motion.button>

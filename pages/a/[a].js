@@ -39,14 +39,17 @@ export async function getStaticProps( {params} ) {
  * date: 'Spring, 2022'
  * tags: 'writing,photography'
  * 
- * cover: 'jubilee'
- * coverCaptions: true      // defualts to true
+ * cover: {
+ *     cover: 'jubilee'
+ *     captions: true       // defaults to true
+ *     sticky: true         // defaults to false, sets centered to false
+ *     slideOnScroll: true  // defaults to false, sets sticky true
+ * }
  * 
  * text: {
  *     centered: true,      // defaults to true
  *     slideIn: false,      // defaults to true, only works if centered=true
  *     width: '500',        // val in px, defaults to 500
- *     stickyCover: true    // defaults to false, only works if centered=false
  * }
  * 
  * lightbox: {
@@ -72,14 +75,15 @@ export default function ArticleLayout({ article }) {
     const [lightbox, lightboxKeys, toggleLightbox] = useLightbox(article.frontmatter.lightbox);
 
     // get colors from frontmatter
-    const colors = getColors(article.frontmatter.colors, article.frontmatter.cover.split(',').concat(lightboxKeys));
+    const colors = getColors(article.frontmatter.colors, article.frontmatter.cover?.images?.split(',').concat(lightboxKeys));
     
     // this is the distance between the top of the window and the start of the article
     const topOffset = article.frontmatter.text?.top ?? 300;
     const textWidth = article.frontmatter.text?.width ?? 500;
 
     // text/other stuff
-    const stickyCover = !mobile && (article.frontmatter.text?.stickyCover);
+    const slideOnScroll = !mobile && article.frontmatter.cover?.slideOnScroll;
+    const stickyCover = !mobile && (article.frontmatter.cover?.sticky || slideOnScroll);
     const textCentered = !mobile && !stickyCover && (article.frontmatter.text?.centered ?? true);
     const slideIn = !mobile && (article.frontmatter.text?.slideIn ?? true);
 
@@ -96,7 +100,7 @@ export default function ArticleLayout({ article }) {
             galleryColor={colors[0]} 
             galleryName={article.frontmatter.lightbox?.link}
         >
-            <ArticleContext.Provider value={{lightboxKeys, toggleLightbox, topOffset, textCentered, textWidth, slideIn}}>
+            <ArticleContext.Provider value={{lightbox, lightboxKeys, toggleLightbox, topOffset, textCentered, textWidth, slideIn}}>
                 <Lightbox index={lightbox} />
                 <motion.div style={{ 
                     margin: mobile ? '0 20px' : `${topOffset}px 0 20vh 0%`,
@@ -104,9 +108,10 @@ export default function ArticleLayout({ article }) {
                 }}>
                     <ArticleImage 
                         first
-                        imgKeys={article.frontmatter.cover}
+                        imgKeys={article.frontmatter.cover?.images}
                         sticky={stickyCover} 
-                        noCaption={!(article.frontmatter.coverCaption ?? true)} 
+                        noCaption={!(article.frontmatter.cover?.captions ?? true)} 
+                        slideOnScroll={slideOnScroll}
                     />
                     <ArticleDept color={colors[0]}>
                         {article.frontmatter.dept.toUpperCase()}

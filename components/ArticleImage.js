@@ -12,9 +12,9 @@ import { getCaption } from "@/lib/imageHelper";
  * @param {boolean} first styles image as cover 
  * @returns 
  */
-export default function ArticleImage({ imgKey, imgKeys, first, type, inlineOptions = {}, sidePosition, mobileOnly, noMobile, sticky, noCaption }) {
+export default function ArticleImage({ imgKey, imgKeys, first, type, inlineOptions = {}, sidePosition, mobileOnly, noMobile, sticky, noCaption, slideOnScroll }) {
     const {mobile} = useContext(ViewportContext);
-
+    
     const processedImgKeys = (imgKey ? [imgKey] : imgKeys?.split(',') ?? []).filter(k => k in imgData);
 
     // for cover
@@ -31,7 +31,7 @@ export default function ArticleImage({ imgKey, imgKeys, first, type, inlineOptio
                 (!noMobile && <MobileImage first={first} imgKey={processedImgKeys[0]} noCaption={noCaption} />)
             :
                 (first || type == 'side' ? 
-                    (!mobileOnly && <SideImage first={first} imgKeys={processedImgKeys} sidePosition={sidePosition} noCaption={noCaption} />)
+                    (!mobileOnly && <SideImage first={first} imgKeys={processedImgKeys} sidePosition={sidePosition} noCaption={noCaption} slideOnScroll={first && slideOnScroll} />)
                 :
                     (!mobileOnly && <InlineImage imgKeys={processedImgKeys} type={type} options={inlineOptions} />)
                 )
@@ -51,7 +51,7 @@ function MobileImage({ imgKey, first, noCaption }) {
     );
 }
 
-function SideImage({ imgKeys, first, sidePosition = {width: 1, left: 0}, noCaption }) {
+function SideImage({ imgKeys, first, sidePosition = {width: 1, left: 0}, noCaption, slideOnScroll }) {
 
     const { textCentered } = useContext(ArticleContext);
 
@@ -74,7 +74,7 @@ function SideImage({ imgKeys, first, sidePosition = {width: 1, left: 0}, noCapti
             y: first ? -180 : 0,
         }}>
             {imgKeys.length > 1 ? 
-                <LightboxLinkedSlideshow imgKeys={imgKeys} noCaption={noCaption} /> 
+                <LightboxLinkedSlideshow imgKeys={imgKeys} noCaption={noCaption} slideOnScroll={slideOnScroll} /> 
             : 
                 <LightboxLinkedImg imgKey={imgKeys[0]} noCaption={noCaption} />}
         </motion.div>
