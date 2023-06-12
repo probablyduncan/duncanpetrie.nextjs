@@ -103,21 +103,21 @@ export default function FrontPage( props ) {
             color="#fe809d"
             dept="trolley folley"
             title="I Mourn the Forlorn Carts"
-            link="gallery"
+            link="read"
             route="/a/cart"
           />
           <Story
-            color="#ceb654"
-            dept="color code"
-            title="Synesthesia Alive!"
-            link="play"
-            route="/a/synesthesia"
+            color="#b5c5dc"
+            dept="adrift in snow"
+            title="Romping and Tromping"
+            link="gallery"
+            route="/a/adrift"
           />
           <Story
             color="#d96f17"
             dept="heartland"
             title="New Beauty, Old Wisconsin"
-            link="gallery"
+            link="reminisce"
             route="/a/heartland"
           />
           <Story
