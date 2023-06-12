@@ -125,7 +125,7 @@ export default function FrontPage( props ) {
             dept="high fashion"
             title="Birds Have Hats, Now"
             link="showtime"
-            route="/g/birdhat"
+            route="/a/birdhat"
           />
       </Section>
       <FeatureSection 
