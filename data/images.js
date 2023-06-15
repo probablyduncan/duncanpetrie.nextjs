@@ -687,7 +687,7 @@ export const imgData = {
     },
     birdhat8: {
         src: 'birdhat8.jpg',
-        ratio: 3/2,
+        ratio: 4/3,
         color: '#6f7bb8',
         caption: 'Here is the fish',
         tags: ['birdhat',],
