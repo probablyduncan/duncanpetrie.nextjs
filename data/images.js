@@ -9,7 +9,7 @@ export const imgData = {
         date: "2022-",
         tags: ['myth','cornwall','walls','best',],
     },
-    crusdade: {
+    crusade: {
         src: '2.jpg',
         ratio: 1000/771,
         color: '#ce4a23',
