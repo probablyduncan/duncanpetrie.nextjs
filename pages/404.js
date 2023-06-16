@@ -6,36 +6,11 @@ import Head from "next/head";
 
 export default function FourOhFour() {
 
-    const {mobile} = useContext(ViewportContext);
-
-    const options = [
-        'get outta here!',
-        'go on, git!',
-        'steady, now',
-        'come... into the light...',
-        'back! to the future!',
-        'back! to the front page!',
-        'huzzah!',
-        'onward!',
-        'ta-ta for now',
-        'I wish I was... homeward bound...',
-        'home is where the art is',
-        'bye bye',
-        'and now: a real page!',
-        'c\'mon, dude!',
-        'c\'mon, lady!',
-        'c\'mon, chap!',
-        'c\'mon, friend!',
-        'c\'mon, fella!',
-        'c\'mon, now!',
-    ]
-
     return (<>
         <Head>
-            <title>{`404 - DuncanPetrie.com`}</title>
+            <title>{`404? Uh oh. Somebody's lost.`}</title>
             <meta name="author" content="Duncan Petrie" />
-            <meta name="description" content="Abstract/Impressionist Photography | On the hunt for plants and birds and rocks and things" />
-            <meta name="keywords" content="Duncan, Petrie, Photography, Abstract, Impressionist, Impressionism, Wildlife, Wisconsin, Milwaukee, Falmouth, Lake Michigan, water, blur, icm, intentional, camera, movement, probablyduncan" />
+            <meta name="description" content="How'd you end up here, huh?" />
 
             <link rel="icon" href="/favicon-32.png" sizes="32x32" />
             <link rel="icon" href="/favicon-128.png" sizes="128x128" />
@@ -46,6 +21,7 @@ export default function FourOhFour() {
             <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
         <div style={{
+            maxWidth: '95vw',
             margin: '120px 0 240px 0',
             textAlign: 'center',
         }}>
