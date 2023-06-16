@@ -93,15 +93,7 @@ export default function FourOhFour() {
 }
 
 function P({ children }) {
-
-    const pRef = useRef();
-    const inView = useInView(pRef, { once: true });
-
-    return <motion.div ref={pRef} initial={{opacity: 1}} animate={{opacity: inView ? 1 : 0}}>
-        <Paragraph style={{textAlign: 'center', margin: '0'}}>
-            {children}
-        </Paragraph>
-    </motion.div>
+    return <Paragraph style={{textAlign: 'center', margin: '0'}}>{children}</Paragraph>
 }
 
 function BR({ size = 1 }) {
