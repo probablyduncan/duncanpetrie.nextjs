@@ -78,27 +78,32 @@ export function Caption({ children, small, textAlign, color, ...props }) {
     }} {...props}>{children}</h4>);
 }
 
-export function UnderLonk({ href, action, noUnderline, color, children, ...props }) {
+// when hover stops, onHover(null) is called
+export function UnderLonk({ href, action, noUnderline, color, thick, children, onHover, ...props }) {
 
-    const {mobile} = useContext(ViewportContext);
     const [hover, setHover] = useState(false);
 
     const duration = children.length * 15 ?? 100;
     color = color ?? '#6495ed';
 
+    const hoverFunc = (on) => {
+        setHover(on);
+        if (onHover) onHover(on);
+    }
+
     return (
-        <Underline show={!noUnderline && (hover)} duration={duration} color={color}>
+        <Underline show={!noUnderline && hover} duration={duration} color={color} thickness={thick ? 2 : 1.5} >
             {action ? 
                 <button onClick={action} {...props} style={{color}}
-                    onMouseEnter={() => setHover(true)} 
-                    onMouseLeave={() => setHover(false)}
+                    onMouseEnter={() => {setHover(true); onHover(true);}} 
+                    onMouseLeave={() => {setHover(false); onHover(false);}}
                 >
                     {children}
                 </button>
             :
                 <Lonk href={href} {...props} style={{color}} 
-                    onMouseEnter={() => setHover(true)} 
-                    onMouseLeave={() => setHover(false)}
+                    onMouseEnter={() => hoverFunc(true)} 
+                    onMouseLeave={() => hoverFunc(false)}
                 >
                     {children}
                 </Lonk>
@@ -107,12 +112,12 @@ export function UnderLonk({ href, action, noUnderline, color, children, ...props
     );
 }
 
-function Underline({ show, duration, color, children }) {
+function Underline({ show, duration, color, children, thickness }) {
     return (
         <RoughNotation 
             show={show}
             padding={-1.5}
-            strokeWidth={1.5}
+            strokeWidth={thickness ?? 1.5}
             color={color}
             iterations={1}
             animationDuration={duration}

@@ -1,6 +1,17 @@
 import { getCaption, getSrc } from "@/lib/imageHelper";
 
-export default function Img({img, eager, ...props}) {
+export default function Img({img, eager, noBorder, ...props}) {
+
+    if (noBorder) {
+        if (props.style) {
+            props.style.boxShadow = 'inherit';
+            props.style.width = '100%';
+        } else {
+            props.style = {boxShadow: 'inherit', width: '100%'}
+        }
+        
+    }
+
     return img.src?.endsWith('mp4') ? 
         ( <video controls {...props}>
             <source src={getSrc(img)} type="video/mp4" />

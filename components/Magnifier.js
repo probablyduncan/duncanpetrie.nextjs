@@ -4,7 +4,7 @@ import Head from "next/head";
 import Img from "./Img";
 import { getSrc } from "@/lib/imageHelper";
 
-export default function Magnifier( props ) {
+export default function Magnifier({ img, magImg, magWidth, magHeight, magStrength, noBorder }) {
 
     const [hover, setHover] = useState(false);
     const [pos, setPos] = useState({ x: 0, y: 0 });
@@ -21,8 +21,8 @@ export default function Magnifier( props ) {
         setRelPos({ x: (e.clientX - ePos.x) / ePos.width, y: (e.clientY - ePos.y) / ePos.height });
     }
 
-    const width = (props.magWidth ?? 160);
-    const height = (props.magHeight ?? 200);
+    const width = (magWidth ?? 160);
+    const height = (magHeight ?? 200);
 
     // add a bit of space on either side of the background position
     // so that the center of mag is exactly where the mouse is pointing
@@ -32,7 +32,7 @@ export default function Magnifier( props ) {
     
     return (<>
         <Head>
-            <link rel="preload" as="image" href={getSrc(props.magImg)} />
+            <link rel="preload" as="image" href={getSrc(magImg)} />
         </Head>
         <div 
             className={style.magnifier}
@@ -41,9 +41,9 @@ export default function Magnifier( props ) {
                 width: width + 'px',
                 height: height + 'px',
                 backgroundColor: 'white',
-                backgroundImage: `url(${getSrc(props.magImg)})`,
+                backgroundImage: `url(${getSrc(magImg)})`,
                 backgroundRepeat: 'no-repeat',
-                backgroundSize: (1200 * (props.magStrength ?? 1)) + '%',
+                backgroundSize: (1200 * (magStrength ?? 1)) + '%',
                 backgroundPosition: calcBackPos(relPos.x, width) + ' ' + calcBackPos(relPos.y, height),
                 left: pos.x - width/2,
                 top: pos.y - height/2,
@@ -56,7 +56,7 @@ export default function Magnifier( props ) {
         </div>
         <Img
             className="crisp"
-            img={props.img} 
+            img={img} 
             onMouseEnter={() => setHover(true)} 
             onMouseLeave={() => setHover(false)}
             onMouseMove={updatePos}
@@ -64,6 +64,7 @@ export default function Magnifier( props ) {
             style={{
                 cursor: 'none',
             }}
+            noBorder={noBorder}
         />
     </>);
 }

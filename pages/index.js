@@ -83,8 +83,8 @@ export default function FrontPage( props ) {
             "I've spent more of my life than I care to admit looking at maps. There's always something new to see, and even familiar names feel like discoveries.",
             "So, it was only natural I create my own."
           ],
-          //link: "Explore",
-          //route: "/world"
+          link: "Explore",
+          route: "/world"
         }} 
         sideStory={{
           img: imgData.daybreak4,
@@ -158,14 +158,14 @@ export default function FrontPage( props ) {
           link="gallery"
           route="/a/myth"
         />
-        {/* <Story
+        <Story
           img={imgData.bigmap}
           dept='mind map'
           title='Charting the Wilds'
           route="/world"
           background="#FAFAFF"
           annotateMap
-        /> */}
+        />
         <Story
           img={imgData.cover_wiki}
           dept='for reel'

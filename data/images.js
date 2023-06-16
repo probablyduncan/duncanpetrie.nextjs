@@ -480,10 +480,13 @@ export const imgData = {
 
     bigmap: {
         src: 'bigmapW4_small.jpg',
-        color: '#DBE76F'
+        color: '#DBE76F',
+        ratio: 4/5,
     },
     bigmapnames: {
-        src: 'bigmapW4_names.jpg'
+        src: 'bigmapW4_names.jpg',
+        color: '#DBE76F',
+        ratio: 4/5,
     },
 
     // blurs

@@ -80,7 +80,7 @@ export default function Story({ img, dept, title, text, link, route, color, chil
         }
         
         {/* build paragraph rows */}
-        <RoughNotationGroup show={!mobile && hover} >
+        <RoughNotationGroup show={!mobile && route && hover} >
         {text && text.map((p, i) => {
             return (
                 <Paragraph small={!mobile} key={`story-${i}`}>
@@ -102,7 +102,7 @@ export default function Story({ img, dept, title, text, link, route, color, chil
         </RoughNotationGroup>
 
         {/* bottom page link */}
-        {link && 
+        {route && link && 
             <Dept small={!mobile} margin={text ? '40px 0 20px 0' : null} color={mobile || hover ? color : "inherit"}
             >
                 <RoughNotationGroup show={hover}>
