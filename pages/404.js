@@ -21,7 +21,7 @@ export default function FourOhFour() {
             <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
         <div style={{
-            maxWidth: '95vw',
+            maxWidth: '90vw',
             margin: '120px 0 240px 0',
             textAlign: 'center',
         }}>
@@ -97,7 +97,7 @@ function P({ children }) {
     const pRef = useRef();
     const inView = useInView(pRef, { once: true });
 
-    return <motion.div ref={pRef} initial={{opacity: 0}} animate={{opacity: inView ? 1 : 0}}>
+    return <motion.div ref={pRef} initial={{opacity: 1}} animate={{opacity: inView ? 1 : 0}}>
         <Paragraph style={{textAlign: 'center', margin: '0'}}>
             {children}
         </Paragraph>
