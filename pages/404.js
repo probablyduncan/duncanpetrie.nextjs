@@ -1,7 +1,11 @@
 import { Dept, UnderLonk, Paragraph, Title } from "@/components/TextStyles";
+import { ViewportContext } from "@/components/Viewport";
 import Head from "next/head";
+import { useContext } from "react";
 
 export default function FourOhFour() {
+
+    const { mobile } = useContext(ViewportContext);
 
     return (<>
         <Head>
@@ -18,19 +22,22 @@ export default function FourOhFour() {
             <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
         <div style={{
-            maxWidth: '90vw',
-            margin: '120px 0 240px 0',
-            textAlign: 'center',
+            maxWidth: 'calc(90vw - 20px)',
+            margin: `120px 0 240px 0`,
+            textAlign: mobile ? 'left' : 'center',
         }}>
             <Dept color={'orange'}>⚠️ 404 ⚠️</Dept>
             <br />
             <Title>                
-                Hey! Watch it!!
+                Hey! Watch it!
             </Title>
+            <br />
             <P>What&apos;s the big idea, fella?</P>
-            <P>I&apos;m workin here!</P>
-            <P>Get outta here! Go <H>back to the homepage</H>!</P>
-            <BR />
+            <P>I&apos;m still workin&apos; on this page!</P>
+            <P>It&apos;s not ready yet!</P>
+            <P>Get outta here!</P>
+            <P>Go <H>back to the homepage</H>!</P>
+            <BR size={5}/>
             <P>What&apos;s so hard to understand?</P>
             <P><i>Four Oh Four!</i></P>
             <P><i>Page Not Found!</i></P>
@@ -90,7 +97,10 @@ export default function FourOhFour() {
 }
 
 function P({ children }) {
-    return <Paragraph style={{textAlign: 'center', margin: '0'}}>{children}</Paragraph>
+
+    const { mobile } = useContext(ViewportContext);
+
+    return <Paragraph style={{ textAlign: mobile ? 'left' : 'center', margin: mobile ? '0 0 0 8px' : '0'}}>{children}</Paragraph>
 }
 
 function BR({ size = 1 }) {

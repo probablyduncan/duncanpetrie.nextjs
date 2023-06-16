@@ -125,7 +125,7 @@ export default function World({ worldCards }) {
                     <Link href='mailto:duncanpetrie1@gmail.com' style={{color: '#32ae5d'}}>WORLD</Link>
                     <Lonk href='https://instagram.com/probablyduncan' style={{color: '#fad549'}}>BACK</Lonk>
                 </LatoWrapper> */}
-                <div style={{padding: '20px 20px 0'}} >
+                <div style={{padding: '25px 20px 0'}} >
                     <Img img={imgData.bigmap} />
                 </div>
                 <div style={{padding: '80px 24px 0'}}>
