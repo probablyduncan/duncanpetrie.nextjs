@@ -135,9 +135,9 @@ export function FooterSection( props ) {
 //#endregion
 //#region mobile hero
 
-export function MobileHero( props ) {
+export function MobileHero({ img }) {
     return (<MerriweatherWrapper div style={{padding: "0 20px"}}>
-        {props.img && <Img img={props.img} />}
+        {img && <Img img={img} />}
         <div style={{border: "none", margin: "40px 4px 120px 4px", fontSize: "30px"}}>
             <h2 style={{marginBottom: "20px"}} className={style.title}>Hello! I&apos;m<br/><Link className="opacityLink" href="/a/about" style={{textDecoration: "underline", color: "#F47665"}}>Duncan Petrie</Link>.</h2>
             <h2 className={style.title}>This is my<br/>website.</h2>

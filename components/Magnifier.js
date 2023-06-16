@@ -6,8 +6,11 @@ import { getSrc } from "@/lib/imageHelper";
 
 export default function Magnifier({ img, magImg, magWidth, magHeight, magStrength, noBorder }) {
 
+    const width = (magWidth ?? 160);
+    const height = (magHeight ?? 200);
+
     const [hover, setHover] = useState(false);
-    const [pos, setPos] = useState({ x: 0, y: 0 });
+    const [pos, setPos] = useState({ x: -2 * magWidth ?? 160, y: -2 * magHeight ?? 200 });
     const [relPos, setRelPos] = useState({ x: 0, y: 0 });
     
     const updatePos = (e) => {
@@ -20,9 +23,6 @@ export default function Magnifier({ img, magImg, magWidth, magHeight, magStrengt
         
         setRelPos({ x: (e.clientX - ePos.x) / ePos.width, y: (e.clientY - ePos.y) / ePos.height });
     }
-
-    const width = (magWidth ?? 160);
-    const height = (magHeight ?? 200);
 
     // add a bit of space on either side of the background position
     // so that the center of mag is exactly where the mouse is pointing

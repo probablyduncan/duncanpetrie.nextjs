@@ -39,6 +39,13 @@ const extraLinks = [
         cover: {images: 'cover_wiki'},
         tags: ['films'],
     },
+    {
+        id: 'world',
+        title: 'Charting the Wilds',
+        dept: 'mind map',
+        link: '/world',
+        cover: {images: 'bigmap'},
+    },
 ]
 
 export default function Index({ articleData }) {
@@ -73,7 +80,7 @@ export default function Index({ articleData }) {
             style={{display: 'grid', gridTemplateColumns: mobile ? '1fr' : 'repeat(3, 1fr)', gap: '18px', margin: mobile ? '0 0 120px 0' : '120px 0 20vh 0'}}
         >
             {articles.map((ag, ig) =>
-                <div key={`group${ig}`} style={{display: 'flex', flexFlow: 'column nowrap', marginTop: mobile ? '0' : `${((ig + 2) % 3) * 240}px`}}>
+                <div key={`group${ig}`} style={{display: 'flex', flexFlow: 'column nowrap', marginTop: mobile ? '25px' : `${((ig + 2) % 3) * 240}px`}}>
                     {ag.map((a, i) => <IndexCard article={a} key={`${i}-${a.title}`} first={i == 0} />)}
                 </div>
             )}
@@ -120,12 +127,12 @@ function IndexCard({ article, first }) {
             marginTop: mobile ? '0' : `${!first ? (400 + 200 * rand) * (rand > 0.6 ? 2 : 1) : 0}px`,
             y,
             zIndex: mobile ? 'inherit' : '100',
-            opacity: isInView ? 1 : 0, transition: 'opacity 0.5s',
+            opacity: mobile || isInView ? 1 : 0, transition: 'opacity 0.5s',
         }} whileHover={!mobile && {boxShadow: '4px 4px 30px #24262632'}} whileTap={!mobile && {boxShadow: '4px 4px 5px #24262632'}}>
             <Lonk href={article.link ?? `/a/${article.id}`} style={{padding: '18px 18px 12px 18px', display: 'block'}}>
                 {!mobile && imageKey && <Img img={imgData[imageKey]} style={{marginBottom: '12px', boxShadow: 'none', width: '100%'}} />}
-                <Dept color={imageKey ? imgData[imageKey].color : (article.colors ? article.colors[0] : article.color ?? 'cornflowerblue')} small>{article.dept.toUpperCase() }</Dept>
-                <Title small>{article.title}</Title>
+                <Dept color={imageKey ? imgData[imageKey].color : (article.colors ? article.colors[0] : article.color ?? 'cornflowerblue')} small={!mobile}>{article.dept.toUpperCase() }</Dept>
+                <Title small={!mobile}>{article.title}</Title>
             </Lonk>
 
         </motion.div>

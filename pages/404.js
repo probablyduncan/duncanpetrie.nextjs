@@ -1,6 +1,3 @@
-import { motion, useInView } from "framer-motion";
-import { useContext, useRef } from "react";
-import { ViewportContext } from "@/components/Viewport";
 import { Dept, UnderLonk, Paragraph, Title } from "@/components/TextStyles";
 import Head from "next/head";
 
