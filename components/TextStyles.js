@@ -29,34 +29,44 @@ export function FontWrapper({ children, div, className, fontClass, style }) {
     return div ? (<div className={fontClass + ' ' + className} style={style}>{children}</div>) : (<span className={fontClass + ' ' + className} style={style}>{children}</span>);
 }
 
-export function Title({ children, small, ...props }) {
-    return (<h1 className={merriweather.className} style={{
+export function Title({ children, small, style, ...props }) {
+
+    style = Object.assign({
         color: '#242626',
         fontSize: small ? '23px' : '36px',
         lineHeight: small ? '32px' : '40px',
         margin: small ? '0 0 6px 0' : '0 4px 25px 4px'
-    }} {...props}>{children}</h1>);
+    }, style);
+
+    return (<h1 className={merriweather.className} style={style} {...props}>{children}</h1>);
 }
 
-export function Subtitle({ children, small, ...props }) {
-    return (<h1 className={merriweather.className} style={{
+export function Subtitle({ children, small, style, ...props }) {
+
+    style = Object.assign({
         color: '#242626',
         fontSize: small ? '20px' : '30px',
         lineHeight: small ? '37px' : '40px',
         margin: small ? '0 0 6px 0' : '0 4px 25px 4px'
-    }} {...props}>{children}</h1>);
+    }, style);
+
+    return (<h1 className={merriweather.className} style={style} {...props}>{children}</h1>);
 }
 
-export function Dept({ children, small, color, margin, ...props }) {
-    return (<h3 className={lato.className} style={{
+export function Dept({ children, small, style, color, margin, ...props }) {
+
+    style = Object.assign({
         color: color ?? '#242626',
         fontSize: small ? '13px' : '16px',
         margin: margin ?? (small ? '0' : '25px 4px 0 4px')
-    }} {...props} >{children}</h3>);
+    }, style);
+
+    return (<h3 className={lato.className} style={style} {...props} >{children}</h3>);
 }
 
-export function Paragraph({ children, small, ...props }) {
-    return (<p className={garamond.className} style={{
+export function Paragraph({ children, small, style, ...props }) {
+
+    style = Object.assign({
         color: '#444a4a',
         fontSize: small ? '16px' : '20px',
         lineHeight: small ? '30px' : '48px',
@@ -65,17 +75,22 @@ export function Paragraph({ children, small, ...props }) {
         hyphens: small ? 'auto' : 'none',
         msHyphens: small ? 'auto' : 'none',
         WebkitHyphens: small ? 'auto' : 'none',
-    }} {...props}>{children}</p>);
+    }, style);
+
+    return (<p className={garamond.className} style={style} {...props}>{children}</p>);
 }
 
-export function Caption({ children, small, textAlign, color, ...props }) {
-    return (<h4 className={garamond.className} style={{
+export function Caption({ children, small, style, textAlign, color, ...props }) {
+
+    style = Object.assign({
         color: color ?? '#737878',
         fontSize: '18px',
         lineHeight: '27px',
         textAlign: textAlign ?? 'right',
         margin: '12px 4px 0 4px',
-    }} {...props}>{children}</h4>);
+    }, style)
+
+    return (<h4 className={garamond.className} style={style} {...props}>{children}</h4>);
 }
 
 // when hover stops, onHover(null) is called
@@ -95,8 +110,8 @@ export function UnderLonk({ href, action, noUnderline, color, thick, children, o
         <Underline show={!noUnderline && hover} duration={duration} color={color} thickness={thick ? 2 : 1.5} >
             {action ? 
                 <button onClick={action} {...props} style={{color}}
-                    onMouseEnter={() => {setHover(true); onHover(true);}} 
-                    onMouseLeave={() => {setHover(false); onHover(false);}}
+                    onMouseEnter={() => hoverFunc(true)} 
+                    onMouseLeave={() => hoverFunc(false)}
                 >
                     {children}
                 </button>
