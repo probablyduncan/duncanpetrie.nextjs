@@ -69,6 +69,9 @@ export default function World({ worldCards }) {
                 alignItems: 'flex-start',
                 justifyContent: 'flex-start',
             }}>
+
+                {/* split these up 5/8 to map and 3/8 to list */}
+
                 {/* map container */}
                 <div ref={mapRef} style={{
                     width: 'calc(80vh - 70px)',
