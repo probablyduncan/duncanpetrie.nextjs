@@ -70,13 +70,14 @@ export default function World({ worldCards }) {
         // animate cards container
         animate(cardsContainer.current, {
             // animation
-
+            textAlign: 'right',
+            x: -500,
         }, {
             // options
-
+            duration: toCardDelay / 1000, 
+            damping: 20, 
+            stiffness: 20
         })
-
-        // animate text align
 
         // animate backlink
     }
@@ -145,7 +146,12 @@ export default function World({ worldCards }) {
                     <nav style={{
                         margin: '240px 0 '
                     }}>
-                        <CardList cardData={worldCards} onHover={(on, coords) => parseHoverCoords(on ? coords : null)} exitDelay={toCardDelay} delayAction={toCardAnimation} />
+                        <CardList 
+                            cardData={worldCards} 
+                            onHover={(on, coords) => parseHoverCoords(on ? coords : null)} 
+                            exitDelay={toCardDelay} 
+                            delayAction={toCardAnimation} 
+                        />
                     </nav>
 
                 </motion.div>

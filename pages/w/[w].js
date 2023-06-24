@@ -75,7 +75,7 @@ export default function World({ card, cardData }) {
                     justifyContent: 'flex-end',
                 }}>
                     <nav style={{
-                        margin: '40px 0',
+                        margin: '240px 0 40px 0',
                         textAlign: 'right'
                     }}>
                         <div ref={backLinkRef}>
