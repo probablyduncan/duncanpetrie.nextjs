@@ -1,9 +1,9 @@
 import Lonk from "@/components/Lonk";
 import Magnifier from "@/components/Magnifier";
-import { LatoWrapper, Title, Dept, UnderLonk } from "@/components/TextStyles";
+import { LatoWrapper, Title, Dept, UnderLonk, UnderLine } from "@/components/TextStyles";
 import { imgData } from "@/data/images";
 import { getWorldCardData } from "@/lib/dataParser";
-import { motion } from "framer-motion";
+import { AnimatePresence, animate, motion } from "framer-motion";
 import { useContext, useRef, useState } from "react";
 import { RoughNotation } from "react-rough-notation";
 import groupBy from "@/lib/groupBy";
@@ -27,10 +27,15 @@ export default function World({ worldCards }) {
     const { mobile } = useContext(ViewportContext);
     
     const mapRef = useRef();
+    const mapContainer = useRef();
+    const cardsContainer = useRef();
 
     const [hoverCoords, setHoverCoords] = useState();
     const parseHoverCoords = (coords) => {
-        if (!mapRef.current || !coords) return null;
+        if (!mapRef.current || !coords) {
+            setHoverCoords(null);
+            return;
+        };
 
         const height = mapRef.current.clientHeight;
         const width = mapRef.current.clientWidth;
@@ -38,12 +43,42 @@ export default function World({ worldCards }) {
         // for testing
         // coords = [0.55,0.66]
 
-        return [
+        setHoverCoords([
             25 - height * coords[0], 
             25 - width * (1 - coords[1]), 
             25 - height * (1 - coords[0]), 
             25 - width * coords[1],
-        ];
+        ]);
+    }
+
+    // returns animation duration as delay
+    const toCardDelay = 200;
+    const toCardAnimation = () => {
+        console.log('animating exit!');
+        
+        // animate map
+        animate(mapContainer.current, {
+            // animation
+            x: 0 - mapContainer.current.clientWidth - mapContainer.current.offsetLeft
+        }, {
+            // options
+            duration: toCardDelay / 1000, 
+            damping: 20, 
+            stiffness: 20
+        });
+
+        // animate cards container
+        animate(cardsContainer.current, {
+            // animation
+
+        }, {
+            // options
+
+        })
+
+        // animate text align
+
+        // animate backlink
     }
 
     return <>
@@ -66,57 +101,54 @@ export default function World({ worldCards }) {
                 width: '1280px',
                 maxWidth: '95vw',
                 display: 'flex',
-                alignItems: 'flex-start',
                 justifyContent: 'flex-start',
+                alignItems: 'stretch',
             }}>
 
-                {/* split these up 5/8 to map and 3/8 to list */}
-
                 {/* map container */}
-                <div ref={mapRef} style={{
+                <motion.div ref={mapContainer} initial={{
                     width: 'calc(80vh - 70px)',
-                    position: 'fixed',
-                    top: '40px',
                 }}>
-                    <RoughNotation
-                        show={hoverCoords != null}
-                        type="box"
-                        iterations={1}
-                        strokeWidth={2}
-                        color={'#242626'}
-                        animationDuration={200}
-                        padding={hoverCoords}
-                    >
-                        <Magnifier 
-                            img={imgData.bigmap}
-                            magImg={imgData.bigmapnames}
-                            noBorder
-                            magStrength={0.8}
-                            magWidth={200}
-                            magHeight={250}
-                        />
-                    </RoughNotation>
-                </div>
+                    <div ref={mapRef} style={{
+                        position: 'sticky',
+                        top: '40px',
+                    }}>
+                        <RoughNotation
+                            show={hoverCoords != null}
+                            type="box"
+                            iterations={1}
+                            strokeWidth={2}
+                            color={'#242626'}
+                            animationDuration={200}
+                            padding={hoverCoords}
+                        >
+                            <Magnifier 
+                                img={imgData.bigmap}
+                                magImg={imgData.bigmapnames}
+                                noBorder
+                                magStrength={0.8}
+                                magWidth={200}
+                                magHeight={250}
+                            />
+                        </RoughNotation>
+                    </div>
+                </motion.div>
 
                 {/* cards container */}
-                <div style={{
-                    margin: '40px 40px 40px calc(80vh - 40px)',
-                    width: `calc(100% - 80vh)`,
+                <motion.div ref={cardsContainer} initial={{
+                    margin: '40px',
+                    textAlign: 'left'
                 }}>
-                    <LatoWrapper div style={{color: imgData.bigmap.color, position: 'fixed', top: '40px', right: 'calc((100vw - 1280px) / 2)'}}>
-                        <Lonk href={'/'}>
-                            <motion.div whileHover={{x: -10}}>
-                                &lt;&nbsp;&nbsp;HOME
-                            </motion.div>
-                        </Lonk>
-                    </LatoWrapper>
+                    {/* home link */}
+                    <BackLink />
+                    
                     <nav style={{
                         margin: '240px 0 '
                     }}>
-                        <CardList cardData={worldCards} onHover={(coords) => setHoverCoords(parseHoverCoords(coords))} offHover={() => setHoverCoords(null)} />
+                        <CardList cardData={worldCards} onHover={(on, coords) => parseHoverCoords(on ? coords : null)} exitDelay={toCardDelay} delayAction={toCardAnimation} />
                     </nav>
 
-                </div>
+                </motion.div>
             </div>
         ) : (
             <Layout pageName='world' menuLink='/i/all' color={imgData.bigmap.color}>
@@ -132,7 +164,7 @@ export default function World({ worldCards }) {
                     <Img img={imgData.bigmap} />
                 </div>
                 <div style={{padding: '80px 24px 0'}}>
-                    <CardList cardData={worldCards} onHover={(coords) => setHoverCoords(parseHoverCoords(coords))} offHover={() => setHoverCoords(null)} />
+                    <CardList cardData={worldCards} onHover={(on, coords) => parseHoverCoords(on ? coords : null)} />
                 </div>
             </Layout>
         )}
@@ -141,7 +173,7 @@ export default function World({ worldCards }) {
 
 
 
-export function CardList({ cardData, onHover, offHover }) {
+export function CardList({ cardData, onHover = () => {}, exitDelay, delayAction }) {
 
     // group cards
     return Object.entries(groupBy(cardData, 'group')).map(([group, cards]) => 
@@ -153,15 +185,35 @@ export function CardList({ cardData, onHover, offHover }) {
                 // map each card
                 <div key={c.id}>
                     <Title small >
-                        <UnderLonk href={`/w/${c.id}`} color='#242626' thick onHover={ onHover ? (on) => on ? onHover(c.coords) : offHover() : null} >
+                        <UnderLonk href={`/w/${c.id}`} delay={exitDelay} delayAction={delayAction} color='#242626' thick onHover={(on) => onHover(on, c.coords)}>
                             {c.title}
                         </UnderLonk>
                     </Title>
-                    <br />
+                    <br /> 
                 </div>
             )}
             <br />
             <br />
         </div>
+    );
+}
+
+export function BackLink({ text = 'home', href = '/', delay, delayAction, ref }) {
+
+    return (
+        <motion.div ref={ref} whileHover="hover" style={{position: 'fixed', top: '40px', right: 'calc(50vw - 640px)', color: imgData.bigmap.color}}>
+            <LatoWrapper>
+                <Lonk href={href} delay={delay} delayAction={delayAction}>
+                    <motion.div variants={{hover: {color: imgData.bigmapnames.color}}}>
+                        <motion.span style={{display: 'inline-block', marginRight: 5}} variants={{hover: {x: -5}}}>
+                            &lt;
+                        </motion.span>
+                        <motion.span>
+                            {text.toUpperCase()}
+                        </motion.span>
+                    </motion.div>
+                </Lonk>
+            </LatoWrapper>
+        </motion.div>
     );
 }

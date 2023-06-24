@@ -485,7 +485,7 @@ export const imgData = {
     },
     bigmapnames: {
         src: 'bigmapW4_names.jpg',
-        color: '#DBE76F',
+        color: '#E7EFA2',
         ratio: 4/5,
     },
 

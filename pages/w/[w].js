@@ -1,13 +1,11 @@
 import Layout from "@/components/Layout";
 import { getWorldCard, getWorldCardData, getWorldCardIDs } from "@/lib/dataParser";
 import { getMDXComponent } from "mdx-bundler/client";
-import { Caption, Dept, Paragraph, Subtitle, Title, UnderLonk, LatoWrapper } from "@/components/TextStyles";
-import { useContext, useMemo } from "react";
+import { Caption, Dept, Paragraph, Subtitle, Title, UnderLonk } from "@/components/TextStyles";
+import { useContext, useMemo, useRef } from "react";
 import { ViewportContext } from "@/components/Viewport";
-import { useRouter } from 'next/router';
-import Lonk from "@/components/Lonk";
 import Head from "next/head";
-import { CardList } from "../world";
+import { BackLink, CardList } from "../world";
 import { motion } from "framer-motion";
 import { imgData } from "@/data/images";
 
@@ -33,26 +31,21 @@ export async function getStaticProps( {params} ) {
 
 export default function World({ card, cardData }) {
 
-    console.log(cardData);
-
     const { mobile } = useContext(ViewportContext);
     const Content = useMemo(() => getMDXComponent(card.code), [card.code]);
 
-    // const router = useRouter();
-    // const { h } = router.query;
+    const backLinkRef = useRef();
+    const cardListRef = useRef();
+    const articleRef = useRef();
 
-    // // previous page
-    // const backlink = h?.split(',').at(-1);
+    const toMapAnimation = () => {
+        return 200;
+    }
 
-    // function WorldLonk({ href, children }) {
-
-    //     const history = [card.w];
-    //     if (backlink && backlink != href) history.unshift(backlink);
-
-    //     return (<UnderLonk href={`${href}?h=${history}`}>
-    //         {children}
-    //     </UnderLonk>)
-    // }
+    const toCardAnimation = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return 100;
+    }
 
     return !mobile ? (
         <>
@@ -72,38 +65,44 @@ export default function World({ card, cardData }) {
             </Head>
 
             <div style={{
-                maxWidth: '95vw',
-                display: 'flex',
-                alignItems: 'flex-start',
-                justifyContent: 'center',
+                width: '100vw',
+                display: 'grid',
+                gridTemplateColumns: '5fr 8fr',
+                alignItems: 'stretch',
             }}>
-                
-                <article style={{
-                    margin: '240px 80px',
-                    width: '500px',
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
                 }}>
-                    {card.frontmatter.dept && <Dept color={card.frontmatter.color ?? '#FFBA5E'} style={{marginTop: 0}}>{card.frontmatter.dept.toUpperCase()}</Dept>}
-                    <Title>{card.frontmatter.title}</Title>
-                    <Content components={{h1: Title, h2: Subtitle, h3: Dept, h4: Caption, p: Paragraph, a: UnderLonk}} />
-                </article>
-
-                <nav style={{
-                    margin: '40px 0',
-                }}>
-                    <LatoWrapper div style={{color: imgData.bigmap.color, position: 'fixed', top: '40px', right: 'calc((100vw - 1280px) / 2)'}}>
-                        <Lonk href={'/'}>
-                            <motion.div whileHover={{x: -10}}>
-                                &lt;&nbsp;&nbsp;HOME
-                            </motion.div>
-                        </Lonk>
-                    </LatoWrapper>
                     <nav style={{
-                        margin: '240px 0 '
+                        margin: '40px 0',
+                        textAlign: 'right'
                     }}>
-                        <CardList cardData={cardData} />
+                        <div ref={backLinkRef}>
+                            <BackLink href="/world/" text="map" delayAction={toMapAnimation} />
+                        </div>
+                        <div ref={cardListRef} style={{
+                            position: 'sticky',
+                            top: '40px',
+                            padding: '40px 40px 40px 0',
+                            borderRight: '2px solid #242626'
+                        }}>
+                            <CardList cardData={cardData} delayAction={toCardAnimation} />
+                        </div>
                     </nav>
+                </div>
 
-                </nav>
+                <div style={{
+                }}>
+                    <article ref={articleRef} style={{
+                        width: '500px',
+                        margin: '180px 60px',
+                    }}>
+                        {card.frontmatter.dept && <Dept color={card.frontmatter.color ?? '#FFBA5E'} style={{marginTop: 0}}>{card.frontmatter.dept.toUpperCase()}</Dept>}
+                        <Title>{card.frontmatter.title}</Title>
+                        <Content components={{h1: Title, h2: Subtitle, h3: Dept, h4: Caption, p: Paragraph, a: UnderLonk}} />
+                    </article>
+                </div>
 
             </div>
         </>

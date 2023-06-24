@@ -98,7 +98,7 @@ export function UnderLonk({ href, action, noUnderline, color, thick, children, o
 
     const [hover, setHover] = useState(false);
 
-    const duration = children.length * 15 ?? 100;
+    const duration = (children?.length ?? 8) * 15;
     color = color ?? '#6495ed';
 
     const hoverFunc = (on) => {
@@ -107,9 +107,9 @@ export function UnderLonk({ href, action, noUnderline, color, thick, children, o
     }
 
     return (
-        <Underline show={!noUnderline && hover} duration={duration} color={color} thickness={thick ? 2 : 1.5} >
+        <UnderLine show={!noUnderline && hover} duration={duration} color={color} thickness={thick ? 2 : 1.5} >
             {action ? 
-                <button onClick={action} {...props} style={{color}}
+                <button onClick={() => setTimeout(action, props?.delay ?? 0)} {...props} style={{color}}
                     onMouseEnter={() => hoverFunc(true)} 
                     onMouseLeave={() => hoverFunc(false)}
                 >
@@ -123,11 +123,12 @@ export function UnderLonk({ href, action, noUnderline, color, thick, children, o
                     {children}
                 </Lonk>
             }
-        </Underline>
+        </UnderLine>
     );
 }
 
-function Underline({ show, duration, color, children, thickness }) {
+export function UnderLine({ show, duration, color, children, thickness }) {
+
     return (
         <RoughNotation 
             show={show}
@@ -135,7 +136,7 @@ function Underline({ show, duration, color, children, thickness }) {
             strokeWidth={thickness ?? 1.5}
             color={color}
             iterations={1}
-            animationDuration={duration}
+            animationDuration={duration ?? ((children?.length ?? 8) * 15)}
             multiline
         >
             {children}
