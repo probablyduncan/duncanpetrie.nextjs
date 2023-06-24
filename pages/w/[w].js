@@ -67,7 +67,7 @@ export default function World({ card, cardData }) {
             <div style={{
                 width: '100vw',
                 display: 'grid',
-                gridTemplateColumns: '5fr 8fr',
+                gridTemplateColumns: '5fr 2px 8fr',
                 alignItems: 'stretch',
             }}>
                 <div style={{
@@ -84,19 +84,27 @@ export default function World({ card, cardData }) {
                         <div ref={cardListRef} style={{
                             position: 'sticky',
                             top: '40px',
-                            padding: '40px 40px 40px 0',
-                            borderRight: '2px solid #242626'
+                            margin: '40px 40px 40px 0',
                         }}>
                             <CardList cardData={cardData} delayAction={toCardAnimation} />
                         </div>
                     </nav>
                 </div>
 
+                {/* middle border */}
+                <div style={{
+                    width: '2px',
+                    height: 'calc(100vh - 70px)',
+                    top: '40px',
+                    backgroundColor: '#242626',
+                    position: 'sticky',
+                }}></div>
+
                 <div style={{
                 }}>
                     <article ref={articleRef} style={{
                         width: '500px',
-                        margin: '180px 60px',
+                        margin: '240px 60px',
                     }}>
                         {card.frontmatter.dept && <Dept color={card.frontmatter.color ?? '#FFBA5E'} style={{marginTop: 0}}>{card.frontmatter.dept.toUpperCase()}</Dept>}
                         <Title>{card.frontmatter.title}</Title>

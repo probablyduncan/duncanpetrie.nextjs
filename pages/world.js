@@ -53,9 +53,11 @@ export default function World({ worldCards }) {
 
     // returns animation duration as delay
     const toCardDelay = 200;
-    const toCardAnimation = () => {
-        console.log('animating exit!');
-        
+    const [exiting, startExiting] = useState(false);
+    const toCardAnimation = () => {    
+
+        startExiting(true);
+
         // animate map
         animate(mapContainer.current, {
             // animation
@@ -151,6 +153,7 @@ export default function World({ worldCards }) {
                             onHover={(on, coords) => parseHoverCoords(on ? coords : null)} 
                             exitDelay={toCardDelay} 
                             delayAction={toCardAnimation} 
+                            exiting={exiting}
                         />
                     </nav>
 
@@ -179,7 +182,7 @@ export default function World({ worldCards }) {
 
 
 
-export function CardList({ cardData, onHover = () => {}, exitDelay, delayAction }) {
+export function CardList({ cardData, onHover = () => {}, exitDelay, delayAction, exiting }) {
 
     // group cards
     return Object.entries(groupBy(cardData, 'group')).map(([group, cards]) => 
@@ -191,7 +194,7 @@ export function CardList({ cardData, onHover = () => {}, exitDelay, delayAction 
                 // map each card
                 <div key={c.id}>
                     <Title small >
-                        <UnderLonk href={`/w/${c.id}`} delay={exitDelay} delayAction={delayAction} color='#242626' thick onHover={(on) => onHover(on, c.coords)}>
+                        <UnderLonk noUnderline={exiting} href={`/w/${c.id}`} delay={exitDelay} delayAction={delayAction} color='#242626' thick onHover={(on) => onHover(on, c.coords)}>
                             {c.title}
                         </UnderLonk>
                     </Title>
