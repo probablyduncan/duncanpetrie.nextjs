@@ -57,6 +57,7 @@ export default function World({ worldCards }) {
     const toCardAnimation = () => {    
 
         startExiting(true);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
 
         // animate map
         animate(mapContainer.current, {
@@ -161,14 +162,6 @@ export default function World({ worldCards }) {
             </div>
         ) : (
             <Layout pageName='world' menuLink='/i/all' color={imgData.bigmap.color}>
-                {/* <LatoWrapper div className={"opacityLink"} style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    padding: '20px 24px'
-                }}>
-                    <Link href='mailto:duncanpetrie1@gmail.com' style={{color: '#32ae5d'}}>WORLD</Link>
-                    <Lonk href='https://instagram.com/probablyduncan' style={{color: '#fad549'}}>BACK</Lonk>
-                </LatoWrapper> */}
                 <div style={{padding: '25px 20px 0'}} >
                     <Img img={imgData.bigmap} />
                 </div>
@@ -182,7 +175,7 @@ export default function World({ worldCards }) {
 
 
 
-export function CardList({ cardData, onHover = () => {}, exitDelay, delayAction, exiting }) {
+export function CardList({ cardData, selected = "", onHover = () => {}, exitDelay, delayAction, exiting }) {
 
     // group cards
     return Object.entries(groupBy(cardData, 'group')).map(([group, cards]) => 
@@ -194,9 +187,15 @@ export function CardList({ cardData, onHover = () => {}, exitDelay, delayAction,
                 // map each card
                 <div key={c.id}>
                     <Title small >
-                        <UnderLonk noUnderline={exiting} href={`/w/${c.id}`} delay={exitDelay} delayAction={delayAction} color='#242626' thick onHover={(on) => onHover(on, c.coords)}>
-                            {c.title}
-                        </UnderLonk>
+                        {c.id == selected ? (
+                            <UnderLine show={true} thickness={2} >
+                                {c.title}
+                            </UnderLine>
+                        ) : (
+                            <UnderLonk noUnderline={exiting} href={`/w/${c.id}`} delay={exitDelay} delayAction={delayAction} color='#242626' thick onHover={(on) => onHover(on, c.coords)}>
+                                {c.title}
+                            </UnderLonk>
+                        )}
                     </Title>
                     <br /> 
                 </div>

@@ -1,9 +1,8 @@
 import { Lato, Merriweather, EB_Garamond, Cinzel_Decorative } from "@next/font/google";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { RoughNotation } from "react-rough-notation";
 import Lonk from "./Lonk";
 import { motion } from "framer-motion";
-import { ViewportContext } from "./Viewport";
 
 /**
  * font wrappers
@@ -25,7 +24,11 @@ export function CinzelWrapper({ children, div, ...props }) {
     return <FontWrapper fontClass={cinzel.className} {...props} div={div}>{children}</FontWrapper>;
 }
 
-export function FontWrapper({ children, div, className, fontClass, style }) {
+export function ComicSansWrapper({ children, div, ...props }) {
+    return <>&nbsp;<span style={{fontFamily: '"Comic Sans MS", "Comic Sans", cursive', fontWeight: 'bold'}}>{children}</span>&nbsp;</>
+}
+
+export function FontWrapper({ children, div, className = '', fontClass = '', style }) {
     return div ? (<div className={fontClass + ' ' + className} style={style}>{children}</div>) : (<span className={fontClass + ' ' + className} style={style}>{children}</span>);
 }
 
