@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import { getWorldCard, getWorldCardData, getWorldCardIDs } from "@/lib/dataParser";
 import { getMDXComponent } from "mdx-bundler/client";
 import { Caption, ComicSansWrapper, Dept, Paragraph, Subtitle, Title, UnderLonk, UnorderedList } from "@/components/TextStyles";
-import { useContext, useMemo, useRef } from "react";
+import { useContext, useMemo, useRef, useState } from "react";
 import { ViewportContext } from "@/components/Viewport";
 import Head from "next/head";
 import { BackLink, CardList } from "../world";
@@ -40,9 +40,12 @@ export default function World({ card, cardData }) {
     const articleRef = useRef();
     const borderRef = useRef();
 
+    const [exiting, startExiting] = useState(false);
+    const { scrollY } = useScroll();
     const toMapAnimation = () => {
 
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        startExiting(true);
+        toCardAnimation();
 
         animate(cardListRef.current, {
             // animation
@@ -66,12 +69,8 @@ export default function World({ card, cardData }) {
             stiffness: 20
         });
 
-        animate(borderRef.current, { display: 'none' });
-
         return 200;
     }
-
-    const { scrollY } = useScroll();
 
     const toCardAnimation = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -129,19 +128,20 @@ export default function World({ card, cardData }) {
                             position: 'sticky',
                             top: '40px',
                         }}>
-                            <CardList cardData={cardData} delayAction={toCardAnimation} selected={card.w} />
+                            <CardList cardData={cardData} delayAction={toCardAnimation} selected={exiting ? null : card.w} />
                         </div>
                     </nav>
                 </div>
 
                 {/* middle border */}
-                <motion.div ref={borderRef} initial={{
+                {!exiting && <motion.div ref={borderRef} initial={{
                     width: '2px',
                     height: 'calc(100vh - 70px)',
                     top: '40px',
                     backgroundColor: '#242626',
                     position: 'sticky',
-                }}></motion.div>
+                    opacity: 0
+                }} animate={{opacity: 1}}></motion.div>}
 
                 <div style={{
                 }}>
