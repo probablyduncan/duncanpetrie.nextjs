@@ -76,6 +76,18 @@ export default function World({ card, cardData }) {
         return 100;
     }
 
+    function WorldImg({ imgKey, src, caption }) {
+    
+        let img = imgKey in imgData ? imgData[imgKey] : {src, caption}
+        
+        return (<>
+            <Img img={img} noBorder />
+            {img.caption && <Caption>{img.caption}</Caption>}
+        </>);
+    }
+    
+    const WorldLink = ({ children, ...props }) => (<UnderLonk delayAction={toCardAnimation} {...props}>{children}</UnderLonk>);
+
     return !mobile ? (
         <>
             <Head>
@@ -137,7 +149,7 @@ export default function World({ card, cardData }) {
                     }}>
                         {card.frontmatter.dept && <Dept color={card.frontmatter.color ?? '#FFBA5E'} style={{marginTop: 0}}>{card.frontmatter.dept.toUpperCase()}</Dept>}
                         <Title>{card.frontmatter.title}</Title>
-                        <Content components={{h1: Title, h2: Subtitle, h3: Dept, h4: Caption, p: Paragraph, a: UnderLonk, ul: UnorderedList}} />
+                        <Content components={{h1: Title, h2: Subtitle, h3: Dept, h4: Caption, p: Paragraph, a: WorldLink, ul: UnorderedList}} />
                     </article>
                 </div>
 
@@ -153,13 +165,4 @@ export default function World({ card, cardData }) {
             </article>
         </Layout>
     )
-}
-
-export function WorldImg({ imgKey, src, caption }) {
-    
-    let img = imgKey in imgData ? imgData[imgKey] : {src, caption}
-    
-    return (<>
-        <Img img={img} noBorder />
-    </>);
 }

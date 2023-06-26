@@ -8,7 +8,7 @@ export default function Lonk({href, children, delay, delayAction, ...props}) {
     // delay link redirect
     const delayHref = (e) => {
 
-        if (!delay && !delayAction) return;
+        if (!delayAction && !delay) return;
 
         // prevent redirect
         e.preventDefault();

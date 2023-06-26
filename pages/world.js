@@ -81,7 +81,9 @@ export default function World({ worldCards }) {
             duration: toCardDelay / 1000, 
             damping: 20, 
             stiffness: 20
-        })
+        });
+
+        return toCardDelay;
     }
 
     return <>
@@ -146,7 +148,6 @@ export default function World({ worldCards }) {
                         <CardList 
                             cardData={worldCards} 
                             onHover={(on, coords) => parseHoverCoords(on ? coords : null)} 
-                            exitDelay={toCardDelay} 
                             delayAction={toCardAnimation} 
                             exiting={exiting}
                         />
