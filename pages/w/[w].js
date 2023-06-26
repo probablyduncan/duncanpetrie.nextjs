@@ -6,7 +6,7 @@ import { useContext, useMemo, useRef } from "react";
 import { ViewportContext } from "@/components/Viewport";
 import Head from "next/head";
 import { BackLink, CardList } from "../world";
-import { motion } from "framer-motion";
+import { animate, motion } from "framer-motion";
 import { imgData } from "@/data/images";
 import Img from "@/components/Img";
 
@@ -38,8 +38,36 @@ export default function World({ card, cardData }) {
     const backLinkRef = useRef();
     const cardListRef = useRef();
     const articleRef = useRef();
+    const borderRef = useRef();
 
     const toMapAnimation = () => {
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        animate(cardListRef.current, {
+            // animation
+            textAlign: 'left',
+            margin: '240px 40px 180px',
+            x: window.innerWidth / 2 + window.innerHeight * 0.8 - cardListRef.current.offsetLeft - 670
+        }, {
+            // options
+            duration: 0.2, 
+            damping: 20, 
+            stiffness: 20
+        });
+
+        animate(articleRef.current, {
+            // animation
+            x: window.innerWidth * 5/8 + 2
+        }, {
+            // options
+            duration: 0.2,
+            damping: 20,
+            stiffness: 20
+        });
+
+        animate(borderRef.current, { display: 'none' });
+
         return 200;
     }
 
@@ -93,13 +121,13 @@ export default function World({ card, cardData }) {
                 </div>
 
                 {/* middle border */}
-                <div style={{
+                <motion.div ref={borderRef} initial={{
                     width: '2px',
                     height: 'calc(100vh - 70px)',
                     top: '40px',
                     backgroundColor: '#242626',
                     position: 'sticky',
-                }}></div>
+                }}></motion.div>
 
                 <div style={{
                 }}>

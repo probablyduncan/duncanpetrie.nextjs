@@ -110,8 +110,9 @@ export default function World({ worldCards }) {
 
                 {/* map container */}
                 <motion.div ref={mapContainer} initial={{
-                    width: 'calc(80vh - 70px)',
-                }}>
+                    width: 'calc(80vh - 70px)', x: 0// `calc(70px - 80vh - (50vw - 640px))`
+                }} // animate={{x: 0}} transition={{duration: toCardDelay / 1000, damping: 20, stiffness: 20}}
+                >
                     <div ref={mapRef} style={{
                         position: 'sticky',
                         top: '40px',
