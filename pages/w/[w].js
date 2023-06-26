@@ -6,7 +6,7 @@ import { useContext, useMemo, useRef } from "react";
 import { ViewportContext } from "@/components/Viewport";
 import Head from "next/head";
 import { BackLink, CardList } from "../world";
-import { animate, motion } from "framer-motion";
+import { animate, motion, useScroll } from "framer-motion";
 import { imgData } from "@/data/images";
 import Img from "@/components/Img";
 
@@ -71,9 +71,11 @@ export default function World({ card, cardData }) {
         return 200;
     }
 
+    const { scrollY } = useScroll();
+
     const toCardAnimation = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        return 100;
+        return Math.min(scrollY.get(), 100);
     }
 
     function WorldImg({ imgKey, src, caption }) {
@@ -161,7 +163,7 @@ export default function World({ card, cardData }) {
             <article style={{padding: '120px 25px 0'}}>
                 {card.frontmatter.dept && <Dept color={card.frontmatter.color ?? '#FFBA5E'} style={{marginTop: 0}}>{card.frontmatter.dept.toUpperCase()}</Dept>}
                 <Title>{card.frontmatter.title}</Title>
-                <Content components={{h1: Title, h2: Subtitle, h3: Dept, h4: Caption, p: Paragraph, a: UnderLonk}} />
+                <Content components={{h1: Title, h2: Subtitle, h3: Dept, h4: Caption, p: Paragraph, a: UnderLonk, ul: UnorderedList}} />
             </article>
         </Layout>
     )
