@@ -10,7 +10,7 @@ export default function Magnifier({ img, magImg, magWidth, magHeight, magStrengt
     const height = (magHeight ?? 200);
 
     const [hover, setHover] = useState(false);
-    const [pos, setPos] = useState({ x: -2 * magWidth ?? 160, y: -2 * magHeight ?? 200 });
+    const [pos, setPos] = useState({ x: -2 * width, y: -2 * height });
     const [relPos, setRelPos] = useState({ x: 0, y: 0 });
     
     const updatePos = (e) => {
