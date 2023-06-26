@@ -1,13 +1,14 @@
 import Layout from "@/components/Layout";
 import { getWorldCard, getWorldCardData, getWorldCardIDs } from "@/lib/dataParser";
 import { getMDXComponent } from "mdx-bundler/client";
-import { Caption, ComicSansWrapper, Dept, Paragraph, Subtitle, Title, UnderLonk } from "@/components/TextStyles";
+import { Caption, ComicSansWrapper, Dept, Paragraph, Subtitle, Title, UnderLonk, UnorderedList } from "@/components/TextStyles";
 import { useContext, useMemo, useRef } from "react";
 import { ViewportContext } from "@/components/Viewport";
 import Head from "next/head";
 import { BackLink, CardList } from "../world";
 import { motion } from "framer-motion";
 import { imgData } from "@/data/images";
+import Img from "@/components/Img";
 
 export async function getStaticPaths() {
     const paths = await getWorldCardIDs();
@@ -32,7 +33,7 @@ export async function getStaticProps( {params} ) {
 export default function World({ card, cardData }) {
 
     const { mobile } = useContext(ViewportContext);
-    const Content = useMemo(() => getMDXComponent(card.code, {ComicSans: ComicSansWrapper}), [card.code]);
+    const Content = useMemo(() => getMDXComponent(card.code, {Img: WorldImg, ComicSans: ComicSansWrapper}), [card.code]);
 
     const backLinkRef = useRef();
     const cardListRef = useRef();
@@ -67,22 +68,24 @@ export default function World({ card, cardData }) {
             <div style={{
                 width: '100vw',
                 display: 'grid',
-                gridTemplateColumns: '5fr 2px 8fr',
+                gridTemplateColumns: '3fr 2px 5fr',
                 alignItems: 'stretch',
             }}>
                 <div style={{
                     display: 'flex',
-                    justifyContent: 'flex-end',
+                    justifyContent: 'flex-end'
                 }}>
                     <nav style={{
-                        margin: '200px 0',
-                        textAlign: 'right'
+                        margin: '0 0 50vh',
+                        textAlign: 'right',
                     }}>
                         <div ref={backLinkRef}>
                             <BackLink href="/world/" text="map" delayAction={toMapAnimation} />
                         </div>
                         <div ref={cardListRef} style={{
-                            margin: '40px',
+                            margin: '40px 40px -60px',
+                            position: 'sticky',
+                            top: '40px',
                         }}>
                             <CardList cardData={cardData} delayAction={toCardAnimation} selected={card.w} />
                         </div>
@@ -102,13 +105,11 @@ export default function World({ card, cardData }) {
                 }}>
                     <article ref={articleRef} style={{
                         width: '500px',
-                        margin: '240px 60px',
-                        position: 'sticky',
-                        top: '80px',
+                        margin: '200px 60px',
                     }}>
                         {card.frontmatter.dept && <Dept color={card.frontmatter.color ?? '#FFBA5E'} style={{marginTop: 0}}>{card.frontmatter.dept.toUpperCase()}</Dept>}
                         <Title>{card.frontmatter.title}</Title>
-                        <Content components={{h1: Title, h2: Subtitle, h3: Dept, h4: Caption, p: Paragraph, a: UnderLonk}} />
+                        <Content components={{h1: Title, h2: Subtitle, h3: Dept, h4: Caption, p: Paragraph, a: UnderLonk, ul: UnorderedList}} />
                     </article>
                 </div>
 
@@ -124,4 +125,13 @@ export default function World({ card, cardData }) {
             </article>
         </Layout>
     )
+}
+
+export function WorldImg({ imgKey, src, caption }) {
+    
+    let img = imgKey in imgData ? imgData[imgKey] : {src, caption}
+    
+    return (<>
+        <Img img={img} noBorder />
+    </>);
 }

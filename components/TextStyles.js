@@ -25,7 +25,7 @@ export function CinzelWrapper({ children, div, ...props }) {
 }
 
 export function ComicSansWrapper({ children, div, ...props }) {
-    return <>&nbsp;<span style={{fontFamily: '"Comic Sans MS", "Comic Sans", cursive', fontWeight: 'bold'}}>{children}</span>&nbsp;</>
+    return <>&nbsp;<span style={{fontFamily: '"Comic Sans MS", "Apple Chancery", "Comic Sans", "Bradley Hand", cursive', fontWeight: 'bold'}}>{children}</span>&nbsp;</>
 }
 
 export function FontWrapper({ children, div, className = '', fontClass = '', style }) {
@@ -81,6 +81,22 @@ export function Paragraph({ children, small, style, ...props }) {
     }, style);
 
     return (<p className={garamond.className} style={style} {...props}>{children}</p>);
+}
+
+export function UnorderedList({ children, small, style, ...props }) {
+
+    style = Object.assign({
+        color: '#444a4a',
+        fontSize: small ? '16px' : '20px',
+        lineHeight: small ? '30px' : '48px',
+        textAlign: small ? 'justify' : 'left',
+        margin: small ? '0 10px 15px 0' : '0 4px 25px 4px',
+        hyphens: small ? 'auto' : 'none',
+        msHyphens: small ? 'auto' : 'none',
+        WebkitHyphens: small ? 'auto' : 'none',
+    }, style);
+
+    return (<ul className={garamond.className} style={style} {...props}>{children}</ul>)
 }
 
 export function Caption({ children, small, style, textAlign, color, ...props }) {

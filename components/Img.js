@@ -1,6 +1,9 @@
+import { imgData } from "@/data/images";
 import { getCaption, getSrc } from "@/lib/imageHelper";
 
 export default function Img({img, eager, noBorder, ...props}) {
+
+    if (!img || !'src' in img) return;
 
     if (noBorder) {
         if (props.style) {

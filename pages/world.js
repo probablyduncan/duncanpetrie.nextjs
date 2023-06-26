@@ -41,7 +41,7 @@ export default function World({ worldCards }) {
         const width = mapRef.current.clientWidth;
 
         // for testing
-        // coords = [0.55,0.66]
+        // coords = [0.425,0.425]
 
         setHoverCoords([
             25 - height * coords[0], 
@@ -74,15 +74,14 @@ export default function World({ worldCards }) {
         animate(cardsContainer.current, {
             // animation
             textAlign: 'right',
-            x: -500,
+            margin: '40px',
+            x: (3/8 * (window.innerWidth - 2)) - cardsContainer.current.offsetLeft - cardsContainer.current.clientWidth - 40
         }, {
             // options
             duration: toCardDelay / 1000, 
             damping: 20, 
             stiffness: 20
         })
-
-        // animate backlink
     }
 
     return <>
@@ -139,16 +138,10 @@ export default function World({ worldCards }) {
                 </motion.div>
 
                 {/* cards container */}
-                <motion.div ref={cardsContainer} initial={{
-                    margin: '40px',
+                <motion.nav ref={cardsContainer} initial={{
+                    margin: '240px 40px 180px',
                     textAlign: 'left'
                 }}>
-                    {/* home link */}
-                    <BackLink />
-                    
-                    <nav style={{
-                        margin: '240px 0 '
-                    }}>
                         <CardList 
                             cardData={worldCards} 
                             onHover={(on, coords) => parseHoverCoords(on ? coords : null)} 
@@ -156,9 +149,11 @@ export default function World({ worldCards }) {
                             delayAction={toCardAnimation} 
                             exiting={exiting}
                         />
-                    </nav>
 
-                </motion.div>
+                </motion.nav>
+                
+                {/* home link */}
+                <BackLink />
             </div>
         ) : (
             <Layout pageName='world' menuLink='/i/all' color={imgData.bigmap.color}>
@@ -188,9 +183,17 @@ export function CardList({ cardData, selected = "", onHover = () => {}, exitDela
                 <div key={c.id}>
                     <Title small >
                         {c.id == selected ? (
-                            <UnderLine show={true} thickness={2} >
+                            <RoughNotation
+                                show={true}
+                                type="box"
+                                iterations={2}
+                                strokeWidth={2}
+                                color={imgData.bigmap.color}
+                                animationDuration={300}
+                                padding={8}
+                            >
                                 {c.title}
-                            </UnderLine>
+                            </RoughNotation>
                         ) : (
                             <UnderLonk noUnderline={exiting} href={`/w/${c.id}`} delay={exitDelay} delayAction={delayAction} color='#242626' thick onHover={(on) => onHover(on, c.coords)}>
                                 {c.title}
