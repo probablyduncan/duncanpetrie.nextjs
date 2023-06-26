@@ -140,11 +140,9 @@ export default function World({ card, cardData }) {
                     top: '40px',
                     backgroundColor: '#242626',
                     position: 'sticky',
-                    opacity: 0
-                }} animate={{opacity: 1}}></motion.div>}
+                }}></motion.div>}
 
-                <div style={{
-                }}>
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                     <article ref={articleRef} style={{
                         width: '500px',
                         margin: '200px 60px',
@@ -153,7 +151,7 @@ export default function World({ card, cardData }) {
                         <Title>{card.frontmatter.title}</Title>
                         <Content components={{h1: Title, h2: Subtitle, h3: Dept, h4: Caption, p: Paragraph, a: WorldLink, ul: UnorderedList}} />
                     </article>
-                </div>
+                </motion.div>
 
             </div>
         </>
