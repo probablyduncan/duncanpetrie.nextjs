@@ -12,10 +12,12 @@ const defaultLinks = [
     {text: 'photography', link: '/i/photography'},
     {text: 'writing', link: '/i/writing'},
     {text: 'short films', link: '/i/films'},
-    {text: 'websites of yore', link: '/a/sites'},
+    // {text: 'websites of yore', link: '/a/sites'},
     {text: 'world', link: '/world'},
     {text: 'about', link: '/a/about'},
-    {text: 'instagram', link: 'https://instagram.com/probablyduncan/'}
+    {text: 'cv', link: '/resume.pdf'},
+    {text: 'linkedin', link: 'https://www.linkedin.com/in/probablyduncan/'},
+    {text: 'instagram', link: 'https://instagram.com/probablyduncan/'},
 ];
 
 export function NewsNav( {homelink, links} ) {

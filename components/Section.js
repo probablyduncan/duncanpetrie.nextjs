@@ -117,7 +117,7 @@ export function FeatureSection( props ) {
 //#endregion
 //#region footer
 
-export function FooterSection( props ) {
+export function FooterSection({ pagenum }) {
 
     // maybe click on page number and get a site index? a list of page numbers? maybe the corner turns up and we can turn the page or whatever?
 
@@ -128,7 +128,7 @@ export function FooterSection( props ) {
             <span className={style.cmyk + " " + style.y}></span>
             <span className={style.cmyk + " " + style.k}></span>
         </div>
-        <LatoWrapper><button className={style.pagenum}><Link href="/i">{props.pagenum ?? "A1"}</Link></button></LatoWrapper>
+        <LatoWrapper><button className={style.pagenum}><Link title='index' href="/i/all">{pagenum ?? "A1"}</Link></button></LatoWrapper>
     </footer>)
 }
 
