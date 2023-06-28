@@ -1,13 +1,24 @@
 import { Dept, UnderLonk, Paragraph, Title } from "@/components/TextStyles";
 import { ViewportContext } from "@/components/Viewport";
 import Head from "next/head";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 
-export default function FourOhFour() {
-
+export default function FourOhFour( props ) {
+    
     const { mobile } = useContext(ViewportContext);
+    const [isWorldPage, setIsWorldPage] = useState(false);
 
-    return (<>
+    // custom tags
+    const P = ({ children }) => (<Paragraph style={{ textAlign: mobile ? 'left' : 'center', margin: mobile ? '0 0 0 8px' : '0'}}>{children}</Paragraph>);
+    const BR = ({ size = 1 }) => (<><P>...</P><div style={{marginBottom: `${80 * size}px`}}></div></>);
+    const H = ({ children }) => (<UnderLonk href={isWorldPage ? '/w/' : '/'}>{children}</UnderLonk>);
+    const B = ({ children }) => (<UnderLonk action={() => history.back()}>{children}</UnderLonk>);
+
+    useEffect(() => {
+        setIsWorldPage((window?.location?.href ?? '').includes('/w/'))
+    }, [setIsWorldPage])
+
+    return mobile != undefined && (<>
         <Head>
             <title>{`404? Uh oh. Somebody's lost.`}</title>
             <meta name="author" content="Duncan Petrie" />
@@ -36,7 +47,7 @@ export default function FourOhFour() {
             <P>I&apos;m still workin&apos; on this page!</P>
             <P>It&apos;s not ready yet!</P>
             <P>Get outta here!</P>
-            <P>Go <H>back to the homepage</H>!</P>
+            <P>Go <H>back to the {isWorldPage ? 'map' : 'home'} page</H>!</P>
             <BR size={5}/>
             <P>What&apos;s so hard to understand?</P>
             <P><i>Four Oh Four!</i></P>
@@ -94,27 +105,4 @@ export default function FourOhFour() {
             <BR size={2} />
         </div>
     </>);
-}
-
-function P({ children }) {
-
-    const { mobile } = useContext(ViewportContext);
-
-    return <Paragraph style={{ textAlign: mobile ? 'left' : 'center', margin: mobile ? '0 0 0 8px' : '0'}}>{children}</Paragraph>
-}
-
-function BR({ size = 1 }) {
-    return <><P>...</P><div style={{marginBottom: `${80 * size}px`}}></div></>
-}
-
-function H({ children }) {
-    return <UnderLonk href={'/'}>
-        {children}
-    </UnderLonk>
-}
-
-function B({ children }) {
-    return <UnderLonk action={() => history.back()}>
-        {children}
-    </UnderLonk>
 }

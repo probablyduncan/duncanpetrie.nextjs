@@ -32,7 +32,7 @@ export default function Lonk({href, children, delay, delayAction, ...props}) {
                 target="_blank" 
                 rel="noreferrer"
                 alt={href}
-                title={href}
+                title={`${href}`}
                 {...props}
             >{children}</a>
         ) : (

@@ -125,17 +125,21 @@ export function UnderLonk({ href, action, noUnderline, color, thick, children, o
         if (onHover) onHover(on);
     }
 
+    const style = Object.assign({
+        color,
+    }, props?.style ?? {});
+
     return (
-        <UnderLine show={!noUnderline && hover} duration={duration} color={color} thickness={thick ? 2 : 1.5} >
+        <UnderLine show={!noUnderline && hover} duration={duration} color={style.color} thickness={thick ? 2 : 1.5} >
             {action ? 
-                <button onClick={() => setTimeout(action, props?.delay ?? 0)} {...props} style={{color}}
+                <button onClick={() => setTimeout(action, props?.delay ?? 0)} {...props} style={style}
                     onMouseEnter={() => hoverFunc(true)} 
                     onMouseLeave={() => hoverFunc(false)}
                 >
                     {children}
                 </button>
             :
-                <Lonk href={href} {...props} style={{color}} 
+                <Lonk href={href} {...props} style={style} 
                     onMouseEnter={() => hoverFunc(true)} 
                     onMouseLeave={() => hoverFunc(false)}
                 >

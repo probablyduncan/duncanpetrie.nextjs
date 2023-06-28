@@ -9,6 +9,7 @@ import { BackLink, CardList } from "../world";
 import { animate, motion, useScroll } from "framer-motion";
 import { imgData } from "@/data/images";
 import Img from "@/components/Img";
+import { useRand } from "@/lib/rand";
 
 export async function getStaticPaths() {
     const paths = await getWorldCardIDs();
@@ -87,12 +88,79 @@ export default function World({ card, cardData }) {
         </>);
     }
     
-    const WorldLink = ({ children, ...props }) => (<UnderLonk delayAction={toCardAnimation} {...props}>{children}</UnderLonk>);
+    const WorldLink = ({ children, ...props }) => {
+        
+        // if card exists or is external, show full link. if card has inProgress, show red link. if card doesn't have a mdx file, just display text
+        const valid = props.href.includes('/') || (
+            cardData.map(w => w.id).includes(props.href) ? 
+                cardData.filter(w => !w.inProgress).map(w => w.id).includes(props.href)
+                 : null
+            );
+        
+        const [cursor, setCursor] = useState('🚫');
+        const cursors = ['⛔', '🚫', '🚷', '🚳', '📵', '🔞', ];
+        // const cursors = ['⚠️', '⚠️', '⚠️', '☢️', '☣️', ];
+
+        switch (valid) {
+            case true:
+                return (
+                    <UnderLonk 
+                        delayAction={toCardAnimation} 
+                        title={`${cardData.find(w => w.id == props.href)?.title ?? (props.href.charAt(0).toUpperCase() + props.href.slice(1))} ➯`}
+                        {...props} 
+                    >
+                        {children}
+                    </UnderLonk>
+                );
+            case false:
+                return (
+                    <motion.span 
+                        title={'I\'m workin\' on it!'} 
+                        whileHover={{color: '#e83d3f'}}
+                        onMouseLeave={() => setCursor(cursors[Math.floor(Math.random() * cursors.length)])}
+                        style={{
+                            color: '#eeac3f' ?? 'darksalmon', 
+                            // https://www.emojicursor.app/ custom cursor
+                            cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>${cursor}</text></svg>") 16 16,auto`,
+                        }}
+                    >
+                        {children}
+                    </motion.span>
+                );
+            case null:
+                return (
+                    <span>{children}</span>
+                )
+        }
+        
+        return valid ? (
+            <UnderLonk 
+                delayAction={toCardAnimation} 
+                title={`${cardData.find(w => w.id == props.href)?.title ?? (props.href.charAt(0).toUpperCase() + props.href.slice(1))} ➯`}
+                {...props} 
+            >
+                {children}
+            </UnderLonk>
+        ) : (
+            <motion.span 
+                title={'I\'m workin\' on it!'} 
+                whileHover={{color: '#e83d3f'}}
+                onMouseLeave={() => setCursor(cursors[Math.floor(Math.random() * cursors.length)])}
+                style={{
+                    color: '#eeac3f' ?? 'darksalmon', 
+                    // https://www.emojicursor.app/ custom cursor
+                    cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>${cursor}</text></svg>") 16 16,auto`,
+                }}
+            >
+                {children}
+            </motion.span>
+        );
+    }
 
     return !mobile ? (
         <>
             <Head>
-                <title>{`${card.frontmatter.title ?? card.w ?? "World"} - DuncanPetrie.com`}</title>
+                <title>{`${card.frontmatter.title} - Yon - DuncanPetrie.com`}</title>
                 <meta name="author" content="Duncan Petrie" />
                 <meta name="description" content="Abstract/Impressionist Photography | On the hunt for plants and birds and rocks and things" />
                 <meta name="keywords" content="Duncan, Petrie, Photography, Abstract, Impressionist, Impressionism, Wildlife, Wisconsin, Milwaukee, Falmouth, Lake Michigan, water, blur, icm, intentional, camera, movement, probablyduncan" />
@@ -114,7 +182,7 @@ export default function World({ card, cardData }) {
             }}>
                 <div style={{
                     display: 'flex',
-                    justifyContent: 'flex-end'
+                    justifyContent: 'flex-end',
                 }}>
                     <nav style={{
                         margin: '0 0 50vh',
@@ -125,8 +193,8 @@ export default function World({ card, cardData }) {
                         </div>
                         <div ref={cardListRef} style={{
                             margin: '40px 40px -60px',
-                            position: 'sticky',
-                            top: '40px',
+                            // position: 'sticky',
+                            // top: '40px',
                         }}>
                             <CardList cardData={cardData} delayAction={toCardAnimation} selected={exiting ? null : card.w} />
                         </div>
@@ -142,13 +210,15 @@ export default function World({ card, cardData }) {
                     position: 'sticky',
                 }}></motion.div>}
 
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                <motion.div initial={{ opacity: 0, }} animate={{ opacity: 1 }}>
                     <article ref={articleRef} style={{
                         width: '500px',
                         margin: '200px 60px',
+                        position: 'sticky',
+                        top: '200px',
                     }}>
                         {card.frontmatter.dept && <Dept color={card.frontmatter.color ?? '#FFBA5E'} style={{marginTop: 0}}>{card.frontmatter.dept.toUpperCase()}</Dept>}
-                        <Title>{card.frontmatter.title}</Title>
+                        <Title style={{marginBottom: '35px'}}>{card.frontmatter.title}</Title>
                         <Content components={{h1: Title, h2: Subtitle, h3: Dept, h4: Caption, p: Paragraph, a: WorldLink, ul: UnorderedList}} />
                     </article>
                 </motion.div>

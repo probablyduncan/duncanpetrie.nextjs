@@ -175,10 +175,10 @@ export default function World({ worldCards }) {
 export function CardList({ cardData, selected = "", onHover = () => {}, exitDelay, delayAction, exiting }) {
 
     // group cards
-    return Object.entries(groupBy(cardData, 'group')).map(([group, cards]) => 
+    return Object.entries(groupBy(cardData.filter(w => w.group && !w.inProgress), 'group')).map(([group, cards]) => 
         // map each group
         <div key={group}>
-            <Dept small color={cards[0].color}>{group.toUpperCase()}</Dept>
+            <Dept small color={cards[0].color}>{group?.toUpperCase()}</Dept>
             <br />
             {cards.map(c => 
                 // map each card
