@@ -11,7 +11,7 @@ export default function FourOhFour( props ) {
     // custom tags
     const P = ({ children }) => (<Paragraph style={{ textAlign: mobile ? 'left' : 'center', margin: mobile ? '0 0 0 8px' : '0'}}>{children}</Paragraph>);
     const BR = ({ size = 1 }) => (<><P>...</P><div style={{marginBottom: `${80 * size}px`}}></div></>);
-    const H = ({ children }) => (<UnderLonk href={isWorldPage ? '/w/' : '/'}>{children}</UnderLonk>);
+    const H = ({ children }) => (<UnderLonk href={isWorldPage ? '/world' : '/'}>{children}</UnderLonk>);
     const B = ({ children }) => (<UnderLonk action={() => history.back()}>{children}</UnderLonk>);
 
     useEffect(() => {
