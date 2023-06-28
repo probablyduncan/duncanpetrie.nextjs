@@ -47,13 +47,10 @@ export default function World({ card, cardData }) {
         startExiting(true);
         toCardAnimation();
 
-        console.log('list offset', cardListRef.current.offsetLeft);
-        console.log('space left of main', (window.innerWidth - 1280) / 2);
-
         animate(cardListRef.current, {
             // animation
             textAlign: 'left',
-            margin: '240px 40px 180px',
+            y: 240,
             x: (window.innerHeight * 0.8) - 70
         }, {
             // options

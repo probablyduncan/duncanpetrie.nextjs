@@ -62,7 +62,7 @@ export default function World({ worldCards }) {
         // animate map
         animate(mapContainer.current, {
             // animation
-            x: 0 - mapContainer.current.clientWidth - mapContainer.current.offsetLeft
+            x: 0 - mapContainer.current.clientWidth - (window.innerWidth - 1280) / 2
         }, {
             // options
             duration: toCardDelay / 1000, 
