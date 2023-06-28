@@ -9,7 +9,6 @@ import { BackLink, CardList } from "../world";
 import { animate, motion, useScroll } from "framer-motion";
 import { imgData } from "@/data/images";
 import Img from "@/components/Img";
-import { useRand } from "@/lib/rand";
 
 export async function getStaticPaths() {
     const paths = await getWorldCardIDs();
@@ -48,11 +47,14 @@ export default function World({ card, cardData }) {
         startExiting(true);
         toCardAnimation();
 
+        console.log('list offset', cardListRef.current.offsetLeft);
+        console.log('space left of main', (window.innerWidth - 1280) / 2);
+
         animate(cardListRef.current, {
             // animation
             textAlign: 'left',
             margin: '240px 40px 180px',
-            x: window.innerWidth / 2 + window.innerHeight * 0.8 - cardListRef.current.offsetLeft - 670
+            x: (window.innerHeight * 0.8) - 70
         }, {
             // options
             duration: 0.2, 
@@ -62,7 +64,7 @@ export default function World({ card, cardData }) {
 
         animate(articleRef.current, {
             // animation
-            x: window.innerWidth * 5/8 + 2
+            x: window.innerWidth
         }, {
             // options
             duration: 0.2,
@@ -89,6 +91,10 @@ export default function World({ card, cardData }) {
     }
     
     const WorldLink = ({ children, ...props }) => {
+
+        // https://emojipedia.org/
+        const cursors = ['⛔', '🚫', '🚷', '🚳', '📵', '🔞', ];
+        // const cursors = ['⚠️', '⚠️', '⚠️', '☢️', '☣️', ];
         
         // if card exists or is external, show full link. if card has inProgress, show red link. if card doesn't have a mdx file, just display text
         const valid = props.href.includes('/') || (
@@ -98,8 +104,6 @@ export default function World({ card, cardData }) {
             );
         
         const [cursor, setCursor] = useState('🚫');
-        const cursors = ['⛔', '🚫', '🚷', '🚳', '📵', '🔞', ];
-        // const cursors = ['⚠️', '⚠️', '⚠️', '☢️', '☣️', ];
 
         switch (valid) {
             case true:
@@ -160,7 +164,7 @@ export default function World({ card, cardData }) {
     return !mobile ? (
         <>
             <Head>
-                <title>{`${card.frontmatter.title} - Yon - DuncanPetrie.com`}</title>
+                <title>{`${card.frontmatter.title} - World - DuncanPetrie.com`}</title>
                 <meta name="author" content="Duncan Petrie" />
                 <meta name="description" content="Abstract/Impressionist Photography | On the hunt for plants and birds and rocks and things" />
                 <meta name="keywords" content="Duncan, Petrie, Photography, Abstract, Impressionist, Impressionism, Wildlife, Wisconsin, Milwaukee, Falmouth, Lake Michigan, water, blur, icm, intentional, camera, movement, probablyduncan" />
@@ -174,11 +178,13 @@ export default function World({ card, cardData }) {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
 
-            <div style={{
-                width: '100vw',
-                display: 'grid',
-                gridTemplateColumns: '3fr 2px 5fr',
-                alignItems: 'stretch',
+            <main style={{
+                width: '1280px',
+                maxWidth: '95vw',
+                display: 'flex',
+                justifyContent: 'flex-start',
+                alignItems: 'stretch', 
+                marginTop: '40px',
             }}>
                 <div style={{
                     display: 'flex',
@@ -192,7 +198,10 @@ export default function World({ card, cardData }) {
                             <BackLink href="/world/" text="map" delayAction={toMapAnimation} />
                         </div>
                         <div ref={cardListRef} style={{
-                            margin: '40px 40px -60px',
+                            width: '270px',
+                            margin: '0 40px -60px',
+                            position: 'sticky',
+                            top: '40px',
                         }}>
                             <CardList cardData={cardData} delayAction={toCardAnimation} selected={exiting ? null : card.w} />
                         </div>
@@ -219,7 +228,7 @@ export default function World({ card, cardData }) {
                     </article>
                 </motion.div>
 
-            </div>
+            </main>
         </>
     ) : (
         <Layout title={card.frontmatter.title ?? card.w ?? "World"} pageName={'back to map'} color='#DBE76F' menuLink='/world' menuName={'back to map'}>

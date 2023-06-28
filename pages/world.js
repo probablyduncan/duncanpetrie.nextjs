@@ -74,8 +74,8 @@ export default function World({ worldCards }) {
         animate(cardsContainer.current, {
             // animation
             textAlign: 'right',
-            margin: '40px',
-            x: (3/8 * (window.innerWidth - 2)) - cardsContainer.current.offsetLeft - cardsContainer.current.clientWidth - 40
+            y: -240,
+            x: 110 - (window.innerHeight * 0.8)
         }, {
             // options
             duration: toCardDelay / 1000, 
@@ -102,20 +102,23 @@ export default function World({ worldCards }) {
             <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
         {!mobile ? (
-            <div style={{
+            <main style={{
                 width: '1280px',
                 maxWidth: '95vw',
+                minHeight: 'calc(100vh - 40px)',
                 display: 'flex',
                 justifyContent: 'flex-start',
-                alignItems: 'stretch',
+                alignItems: 'stretch', 
+                marginTop: '40px',
             }}>
 
                 {/* map container */}
                 <motion.div ref={mapContainer} initial={{
-                    width: 'calc(80vh - 70px)', x: 0// `calc(70px - 80vh - (50vw - 640px))`
-                }} // animate={{x: 0}} transition={{duration: toCardDelay / 1000, damping: 20, stiffness: 20}}
+                    opacity: 0,
+                }} animate={{opacity: 1}}
                 >
                     <div ref={mapRef} style={{
+                        width: 'calc(80vh - 70px)', 
                         position: 'sticky',
                         top: '40px',
                     }}>
@@ -141,8 +144,10 @@ export default function World({ worldCards }) {
                 </motion.div>
 
                 {/* cards container */}
-                <motion.nav ref={cardsContainer} initial={{
+                <motion.nav ref={cardsContainer} style={{
+                    width: '270px',
                     margin: '240px 40px 180px',
+                }} initial={{
                     textAlign: 'left'
                 }}>
                         <CardList 
@@ -156,7 +161,7 @@ export default function World({ worldCards }) {
                 
                 {/* home link */}
                 <BackLink />
-            </div>
+            </main>
         ) : (
             <Layout pageName='world' menuLink='/i/all' color={imgData.bigmap.color}>
                 <div style={{padding: '25px 20px 0'}} >
