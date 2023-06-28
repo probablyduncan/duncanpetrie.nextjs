@@ -219,7 +219,7 @@ export default function World({ card, cardData }) {
                         width: '500px',
                         margin: '200px 60px',
                     }}>
-                        {card.frontmatter.dept && <Dept color={card.frontmatter.color ?? '#FFBA5E'} style={{marginTop: 0}}>{card.frontmatter.dept.toUpperCase()}</Dept>}
+                        <Dept color={card.frontmatter.color ?? '#FFBA5E'} style={{marginTop: 0}}>{card.frontmatter.dept?.toUpperCase()}&nbsp;</Dept>
                         <Title style={{marginBottom: '35px'}}>{card.frontmatter.title}</Title>
                         <Content components={{h1: Title, h2: Subtitle, h3: Dept, h4: Caption, p: Paragraph, a: WorldLink, ul: UnorderedList}} />
                     </article>
