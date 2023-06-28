@@ -193,8 +193,6 @@ export default function World({ card, cardData }) {
                         </div>
                         <div ref={cardListRef} style={{
                             margin: '40px 40px -60px',
-                            // position: 'sticky',
-                            // top: '40px',
                         }}>
                             <CardList cardData={cardData} delayAction={toCardAnimation} selected={exiting ? null : card.w} />
                         </div>
@@ -214,8 +212,6 @@ export default function World({ card, cardData }) {
                     <article ref={articleRef} style={{
                         width: '500px',
                         margin: '200px 60px',
-                        position: 'sticky',
-                        top: '200px',
                     }}>
                         {card.frontmatter.dept && <Dept color={card.frontmatter.color ?? '#FFBA5E'} style={{marginTop: 0}}>{card.frontmatter.dept.toUpperCase()}</Dept>}
                         <Title style={{marginBottom: '35px'}}>{card.frontmatter.title}</Title>
