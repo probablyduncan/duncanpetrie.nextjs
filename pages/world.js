@@ -75,7 +75,7 @@ export default function World({ worldCards }) {
             // animation
             textAlign: 'right',
             y: -240,
-            x: 110 - (window.innerHeight * 0.8)
+            x: 110 - (window.innerHeight * 0.8) + 5
         }, {
             // options
             duration: toCardDelay / 1000, 
