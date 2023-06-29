@@ -1,7 +1,7 @@
 import Layout from "@/components/Layout";
 import { getWorldCard, getWorldCardData, getWorldCardIDs } from "@/lib/dataParser";
 import { getMDXComponent } from "mdx-bundler/client";
-import { Caption, ComicSansWrapper, Dept, LinkHeading1, LinkHeading2, LinkHeading3, Paragraph, Title, UnderLonk, UnorderedList } from "@/components/TextStyles";
+import { Caption, ComicSansWrapper, Dept, LinkHeading1, LinkHeading2, LinkHeading3, Paragraph, Title, UnderLonk, UnorderedList, Subtitle, Heading1, Heading2, Heading3 } from "@/components/TextStyles";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { ViewportContext } from "@/components/Viewport";
 import Head from "next/head";
@@ -246,6 +246,7 @@ export default function World({ card, cardData }) {
                     <article ref={articleRef} style={{
                         width: '500px',
                         margin: '200px 60px',
+                        overflow: 'hidden'
                     }}>
                         <Dept color={card.frontmatter.color ?? '#FFBA5E'} style={{marginTop: 0}}>{card.frontmatter.dept?.toUpperCase()}&nbsp;</Dept>
                         <LinkHeading1 pageOnly>{card.frontmatter.title}</LinkHeading1>
@@ -261,7 +262,7 @@ export default function World({ card, cardData }) {
             <article style={{padding: '120px 25px 0'}}>
                 {card.frontmatter.dept && <Dept color={card.frontmatter.color ?? '#FFBA5E'} style={{marginTop: 0}}>{card.frontmatter.dept.toUpperCase()}</Dept>}
                 <Title>{card.frontmatter.title}</Title>
-                <Content components={{h1: LinkHeading1, h2: LinkHeading2, h3: LinkHeading3, h4: Caption, p: Paragraph, a: MobileWorldLink, ul: UnorderedList}} />
+                <Content components={{h1: Heading1, h2: Heading2, h3: Heading3, h4: Caption, p: Paragraph, a: MobileWorldLink, ul: UnorderedList}} />
             </article>
         </Layout>
     )

@@ -189,6 +189,9 @@ export function LightboxButton({ action, hoverColor, children }) {
     </motion.button>);
 }
 
+export const Heading1 = ( props ) => (<Title {...props} />);
+export const Heading2 = ( props ) => (<Title small style={{margin: '0 4px 25px'}} {...props} />);
+export const Heading3 = ( props ) => (<Paragraph style={{margin: `0 4px 15px`, fontWeight: 'bold'}} {...props} />);
 export const LinkHeading1 = ( props ) => (<Title><LinkHeadingTemplate {...props} /></Title>);
 export const LinkHeading2 = ( props ) => (<Title small style={{margin: '0 4px 25px'}}><LinkHeadingTemplate {...props} /></Title>);
 export const LinkHeading3 = ( props ) => (<Paragraph style={{margin: `0 4px 15px`}}><LinkHeadingTemplate {...props} /></Paragraph>);
