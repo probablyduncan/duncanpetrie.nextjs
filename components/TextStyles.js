@@ -230,7 +230,7 @@ export function LinkHeadingTemplate ({ children, go = true, pageOnly }) {
 
     return (
         <motion.strong whileHover="hover" id={id} style={{
-            paddingTop: `${top}px`, marginTop: `-${top}px`,
+            paddingTop: `${top}px`, marginTop: `-${top}px`, whiteSpace: 'nowrap',
             // display: 'inline-block', width: 'calc(100% + 80px)', // maybe necessary for longer titles?
         }}>
             <button onClick={copyLink} title="Copy Link">
