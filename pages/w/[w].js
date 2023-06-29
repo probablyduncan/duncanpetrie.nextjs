@@ -100,6 +100,20 @@ export default function World({ card, cardData }) {
 
     //#region world link and world image stuff
 
+    const processWorldLinkHref = (text = '', href = '') => {
+        
+        const a = {text: text.toLowerCase(), href: href.toLowerCase()};
+
+        // if no href is supplied, infer from link text
+        // this defaults to link text, uses link href if exists, and processes # in href with link text accordingly
+        return (
+            a.href.startsWith('#') || a.href.endsWith('#')) ? 
+                a.href.replace('#', `#${a.text.replace(' ', '-')}#`).replace(/^#|#$/, '') 
+            : 
+                (a.href || a.text.replace(' ', '')
+        );
+    }
+
     /**
      * This is for only showing a link to another world card if it has a corresponding mdx file
      */
@@ -111,10 +125,7 @@ export default function World({ card, cardData }) {
         
         const [cursor, setCursor] = useState('🚫');
 
-        // if no href is supplied, infer from link text
-        const link = {text: children?.toLowerCase(), href: props.href?.toLowerCase() ?? ''};
-        // this defaults to link text, uses link href if exists, and processes # in href with link text accordingly
-        const href = (link.href.startsWith('#') || link.href.endsWith('#')) ? link.href.replace('#', `#${link.text.replace(' ', '-')}#`).replace(/^#|#$/, '') : (link.href || link.text.replace(' ', ''));
+        const href = processWorldLinkHref(children, props.href);
         const page = href.split('#')[0];
 
         return href.includes('/') || cardData.map(w => w.id).includes(page)  ? (
@@ -151,12 +162,14 @@ export default function World({ card, cardData }) {
     /**
      * This is for only showing a link to another world card if it has a corresponding mdx file
      */
-    const MobileWorldLink = ({ children, ...props }) => (
-        props.href.includes('/') || cardData.map(w => w.id).includes(props.href.split('#')[0]) ? 
-            <UnderLonk {...props}>{children}</UnderLonk>
+    const MobileWorldLink = ({ children, ...props }) => {
+        const href = processWorldLinkHref(children, props.href);
+        const page = href.split('#')[0];
+        return href.includes('/') || cardData.filter(w => !w.inProgress).map(w => w.id).includes(page) ? 
+            <UnderLonk href={href}>{children}</UnderLonk>
         : 
             <>{children}</>
-    );
+    };
 
     /**
      * this just adds the caption to the bottom of the image
@@ -212,8 +225,8 @@ export default function World({ card, cardData }) {
                         <div ref={cardListRef} style={{
                             width: '270px',
                             margin: '0 40px -60px',
-                            position: 'sticky',
-                            top: '40px',
+                            // position: 'sticky',
+                            // top: '40px',
                         }}>
                             <CardList cardData={cardData} delayAction={toCardAnimation} selected={exiting ? null : card.w} />
                         </div>
