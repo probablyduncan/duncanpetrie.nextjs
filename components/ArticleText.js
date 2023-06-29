@@ -1,5 +1,5 @@
 import { useContext, useRef } from "react";
-import { Caption, Dept, Paragraph, Subtitle, Title } from "./TextStyles";
+import { Caption, Dept, LinkHeading3, Paragraph, Subtitle, Title } from "./TextStyles";
 import { motion, useInView, useScroll, useSpring, useTransform } from "framer-motion";
 import { ArticleContext } from "@/pages/a/[a]";
 import { ViewportContext } from "./Viewport";
@@ -9,7 +9,7 @@ export function ArticleTitle({ children, ...props }) {
 }
 
 export function ArticleSubtitle({ children, ...props }) {
-    return <ArticleSlideIn><HeadingLink name={children}><Title {...props}>{children}</Title></HeadingLink></ArticleSlideIn>
+    return <ArticleSlideIn><LinkHeading3 go >{children}</LinkHeading3></ArticleSlideIn>
 }
 
 export function ArticleDept({ children, ...props }) {

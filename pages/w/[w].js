@@ -1,14 +1,15 @@
 import Layout from "@/components/Layout";
 import { getWorldCard, getWorldCardData, getWorldCardIDs } from "@/lib/dataParser";
 import { getMDXComponent } from "mdx-bundler/client";
-import { Caption, ComicSansWrapper, Dept, Paragraph, Subtitle, Title, UnderLonk, UnorderedList } from "@/components/TextStyles";
-import { useContext, useMemo, useRef, useState } from "react";
+import { Caption, ComicSansWrapper, Dept, LinkHeading1, LinkHeading2, LinkHeading3, Paragraph, Title, UnderLonk, UnorderedList } from "@/components/TextStyles";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { ViewportContext } from "@/components/Viewport";
 import Head from "next/head";
 import { BackLink, CardList } from "../world";
 import { animate, motion, useScroll } from "framer-motion";
 import { imgData } from "@/data/images";
 import Img from "@/components/Img";
+import { useRouter } from "next/router";
 
 export async function getStaticPaths() {
     const paths = await getWorldCardIDs();
@@ -40,6 +41,24 @@ export default function World({ card, cardData }) {
     const articleRef = useRef();
     const borderRef = useRef();
 
+    //#region  *currently disabled*  flash selected header on page load
+    // const router = useRouter();
+    // useEffect(() => {
+        
+    //     const e = document.getElementById(router.asPath.split('#').at(-1))?.children[0];
+    //     if (e) {
+    //         e.style.borderRadius = '5px';
+    //         e.style.padding = '2px 4px';
+    //         e.style.margin = '-4px -6px';
+    //         e.style.border = '2px solid ${imgData.bigmap.color}';
+    //         animate(e, {border: [null, `2px solid ${imgData.bigmap.color}`, '2px solid #fff']}, {duration: 2});
+    //     }
+
+    // }, [router.asPath])
+    //#endregion
+
+    //#region  animations on leaving page
+    
     const [exiting, startExiting] = useState(false);
     const { scrollY } = useScroll();
     const toMapAnimation = () => {
@@ -77,6 +96,71 @@ export default function World({ card, cardData }) {
         return Math.min(scrollY.get(), 100);
     }
 
+    //#endregion
+
+    //#region world link and world image stuff
+
+    /**
+     * This is for only showing a link to another world card if it has a corresponding mdx file
+     */
+    const WorldLink = ({ children, ...props }) => {
+
+        // https://emojipedia.org/
+        const cursors = ['⛔', '🚫', '🚷', '🚳', '📵', '🔞', ];
+        // const cursors = ['⚠️', '⚠️', '⚠️', '☢️', '☣️', ];
+        
+        const [cursor, setCursor] = useState('🚫');
+
+        // if no href is supplied, infer from link text
+        const link = {text: children?.toLowerCase(), href: props.href?.toLowerCase() ?? ''};
+        // this defaults to link text, uses link href if exists, and processes # in href with link text accordingly
+        const href = (link.href.startsWith('#') || link.href.endsWith('#')) ? link.href.replace('#', `#${link.text.replace(' ', '-')}#`).replace(/^#|#$/, '') : (link.href || link.text.replace(' ', ''));
+        const page = href.split('#')[0];
+
+        return href.includes('/') || cardData.map(w => w.id).includes(page)  ? (
+            !cardData.filter(w => w.inProgress).map(w => w.id).includes(page) ? (
+                // should be displayed in full
+                <UnderLonk 
+                    delayAction={toCardAnimation} 
+                    title={`${cardData.find(w => w.id == page)?.title ?? (page.charAt(0).toUpperCase() + page.slice(1))} ➯`}
+                    href={href}
+                >
+                    {children}
+                </UnderLonk>
+            ) : (
+                // under construction
+                <motion.span 
+                    title={'I\'m still workin\' on it!'} 
+                    whileHover={{color: '#e83d3f'}}
+                    onMouseLeave={() => setCursor(cursors[Math.floor(Math.random() * cursors.length)])}
+                    style={{
+                        color: '#eeac3f' ?? 'darksalmon', 
+                        // https://www.emojicursor.app/ custom cursor
+                        cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>${cursor}</text></svg>") 16 16,auto`,
+                    }}
+                >
+                    {children}
+                </motion.span>
+            )
+        ) : (
+            // link does not have a corresponding mdx file
+            <>{children}</>
+        )
+    }
+
+    /**
+     * This is for only showing a link to another world card if it has a corresponding mdx file
+     */
+    const MobileWorldLink = ({ children, ...props }) => (
+        props.href.includes('/') || cardData.map(w => w.id).includes(props.href.split('#')[0]) ? 
+            <UnderLonk {...props}>{children}</UnderLonk>
+        : 
+            <>{children}</>
+    );
+
+    /**
+     * this just adds the caption to the bottom of the image
+     */
     function WorldImg({ imgKey, src, caption }) {
     
         let img = imgKey in imgData ? imgData[imgKey] : {src, caption}
@@ -86,77 +170,8 @@ export default function World({ card, cardData }) {
             {img.caption && <Caption>{img.caption}</Caption>}
         </>);
     }
-    
-    const WorldLink = ({ children, ...props }) => {
 
-        // https://emojipedia.org/
-        const cursors = ['⛔', '🚫', '🚷', '🚳', '📵', '🔞', ];
-        // const cursors = ['⚠️', '⚠️', '⚠️', '☢️', '☣️', ];
-        
-        // if card exists or is external, show full link. if card has inProgress, show red link. if card doesn't have a mdx file, just display text
-        const valid = props.href.includes('/') || (
-            cardData.map(w => w.id).includes(props.href) ? 
-                cardData.filter(w => !w.inProgress).map(w => w.id).includes(props.href)
-                 : null
-            );
-        
-        const [cursor, setCursor] = useState('🚫');
-
-        switch (valid) {
-            case true:
-                return (
-                    <UnderLonk 
-                        delayAction={toCardAnimation} 
-                        title={`${cardData.find(w => w.id == props.href)?.title ?? (props.href.charAt(0).toUpperCase() + props.href.slice(1))} ➯`}
-                        {...props} 
-                    >
-                        {children}
-                    </UnderLonk>
-                );
-            case false:
-                return (
-                    <motion.span 
-                        title={'I\'m workin\' on it!'} 
-                        whileHover={{color: '#e83d3f'}}
-                        onMouseLeave={() => setCursor(cursors[Math.floor(Math.random() * cursors.length)])}
-                        style={{
-                            color: '#eeac3f' ?? 'darksalmon', 
-                            // https://www.emojicursor.app/ custom cursor
-                            cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>${cursor}</text></svg>") 16 16,auto`,
-                        }}
-                    >
-                        {children}
-                    </motion.span>
-                );
-            case null:
-                return (
-                    <span>{children}</span>
-                )
-        }
-        
-        return valid ? (
-            <UnderLonk 
-                delayAction={toCardAnimation} 
-                title={`${cardData.find(w => w.id == props.href)?.title ?? (props.href.charAt(0).toUpperCase() + props.href.slice(1))} ➯`}
-                {...props} 
-            >
-                {children}
-            </UnderLonk>
-        ) : (
-            <motion.span 
-                title={'I\'m workin\' on it!'} 
-                whileHover={{color: '#e83d3f'}}
-                onMouseLeave={() => setCursor(cursors[Math.floor(Math.random() * cursors.length)])}
-                style={{
-                    color: '#eeac3f' ?? 'darksalmon', 
-                    // https://www.emojicursor.app/ custom cursor
-                    cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>${cursor}</text></svg>") 16 16,auto`,
-                }}
-            >
-                {children}
-            </motion.span>
-        );
-    }
+    //#endregion
 
     return !mobile ? (
         <>
@@ -220,8 +235,8 @@ export default function World({ card, cardData }) {
                         margin: '200px 60px',
                     }}>
                         <Dept color={card.frontmatter.color ?? '#FFBA5E'} style={{marginTop: 0}}>{card.frontmatter.dept?.toUpperCase()}&nbsp;</Dept>
-                        <Title style={{marginBottom: '35px'}}>{card.frontmatter.title}</Title>
-                        <Content components={{h1: Title, h2: Subtitle, h3: Dept, h4: Caption, p: Paragraph, a: WorldLink, ul: UnorderedList}} />
+                        <LinkHeading1 pageOnly>{card.frontmatter.title}</LinkHeading1>
+                        <Content components={{h1: LinkHeading1, h2: LinkHeading2, h3: LinkHeading3, h4: Caption, p: Paragraph, a: WorldLink, ul: UnorderedList}} />
                     </article>
                 </motion.div>
 
@@ -233,7 +248,7 @@ export default function World({ card, cardData }) {
             <article style={{padding: '120px 25px 0'}}>
                 {card.frontmatter.dept && <Dept color={card.frontmatter.color ?? '#FFBA5E'} style={{marginTop: 0}}>{card.frontmatter.dept.toUpperCase()}</Dept>}
                 <Title>{card.frontmatter.title}</Title>
-                <Content components={{h1: Title, h2: Subtitle, h3: Dept, h4: Caption, p: Paragraph, a: UnderLonk, ul: UnorderedList}} />
+                <Content components={{h1: LinkHeading1, h2: LinkHeading2, h3: LinkHeading3, h4: Caption, p: Paragraph, a: MobileWorldLink, ul: UnorderedList}} />
             </article>
         </Layout>
     )

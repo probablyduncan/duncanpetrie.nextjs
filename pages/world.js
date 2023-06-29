@@ -223,8 +223,8 @@ export function BackLink({ text = 'home', href = '/', delay, delayAction, ref })
             <LatoWrapper>
                 <Lonk href={href} delay={delay} delayAction={delayAction}>
                     <motion.div variants={{hover: {color: imgData.bigmapnames.color}}}>
-                        <motion.span style={{display: 'inline-block', marginRight: 5}} variants={{hover: {x: -5}}}>
-                            &lt;
+                        <motion.span style={{display: 'inline-block', marginRight: 8}} variants={{hover: {x: -4}}}>
+                            ⮘
                         </motion.span>
                         <motion.span>
                             {text.toUpperCase()}

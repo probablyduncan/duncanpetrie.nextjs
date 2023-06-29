@@ -1,8 +1,8 @@
 import { Lato, Merriweather, EB_Garamond, Cinzel_Decorative } from "@next/font/google";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { RoughNotation } from "react-rough-notation";
 import Lonk from "./Lonk";
-import { motion } from "framer-motion";
+import { animate, motion } from "framer-motion";
 
 /**
  * font wrappers
@@ -25,7 +25,7 @@ export function CinzelWrapper({ children, div, ...props }) {
 }
 
 export function ComicSansWrapper({ children, div, ...props }) {
-    return <>&nbsp;<span style={{fontFamily: '"Comic Sans MS", "Apple Chancery", "Comic Sans", "Bradley Hand", cursive', fontWeight: 'bold'}}>{children}</span>&nbsp;</>
+    return <>&nbsp;<span style={{fontFamily: '"Comic Sans MS", "Comic Sans", "Bradley Hand", "Apple Chancery", cursive', fontWeight: 'bold'}}>{children}</span>&nbsp;</>
 }
 
 export function FontWrapper({ children, div, className = '', fontClass = '', style }) {
@@ -38,7 +38,7 @@ export function Title({ children, small, style, ...props }) {
         color: '#242626',
         fontSize: small ? '23px' : '36px',
         lineHeight: small ? '32px' : '40px',
-        margin: small ? '0 0 6px 0' : '0 4px 25px 4px'
+        margin: small ? '0 0 6px 0' : '0 4px 35px'
     }, style);
 
     return (<h1 className={merriweather.className} style={style} {...props}>{children}</h1>);
@@ -50,7 +50,7 @@ export function Subtitle({ children, small, style, ...props }) {
         color: '#242626',
         fontSize: small ? '20px' : '30px',
         lineHeight: small ? '37px' : '40px',
-        margin: small ? '0 0 6px 0' : '0 4px 25px 4px'
+        margin: small ? '0 0 6px 0' : '0 4px 25px'
     }, style);
 
     return (<h1 className={merriweather.className} style={style} {...props}>{children}</h1>);
@@ -61,7 +61,7 @@ export function Dept({ children, small, style, color, margin, ...props }) {
     style = Object.assign({
         color: color ?? '#242626',
         fontSize: small ? '13px' : '16px',
-        margin: margin ?? (small ? '0' : '25px 4px 0 4px')
+        margin: margin ?? (small ? '0' : '25px 4px 0')
     }, style);
 
     return (<h3 className={lato.className} style={style} {...props} >{children}</h3>);
@@ -74,7 +74,7 @@ export function Paragraph({ children, small, style, ...props }) {
         fontSize: small ? '16px' : '20px',
         lineHeight: small ? '30px' : '48px',
         textAlign: small ? 'justify' : 'left',
-        margin: small ? '0 10px 15px 0' : '0 4px 25px 4px',
+        margin: small ? '0 10px 15px 0' : '0 4px 25px',
         hyphens: small ? 'auto' : 'none',
         msHyphens: small ? 'auto' : 'none',
         WebkitHyphens: small ? 'auto' : 'none',
@@ -90,7 +90,7 @@ export function UnorderedList({ children, small, style, ...props }) {
         fontSize: small ? '16px' : '20px',
         lineHeight: small ? '30px' : '48px',
         textAlign: small ? 'justify' : 'left',
-        margin: small ? '0 10px 15px 0' : '0 4px 25px 4px',
+        margin: small ? '0 10px 15px 0' : '0 4px 25px',
         hyphens: small ? 'auto' : 'none',
         msHyphens: small ? 'auto' : 'none',
         WebkitHyphens: small ? 'auto' : 'none',
@@ -106,7 +106,7 @@ export function Caption({ children, small, style, textAlign, color, ...props }) 
         fontSize: '18px',
         lineHeight: '27px',
         textAlign: textAlign ?? 'right',
-        margin: '12px 4px 0 4px',
+        margin: '12px 4px 0',
     }, style)
 
     return (<h4 className={garamond.className} style={style} {...props}>{children}</h4>);
@@ -187,4 +187,61 @@ export function LightboxButton({ action, hoverColor, children }) {
     >
         {children}                              
     </motion.button>);
+}
+
+export const LinkHeading1 = ( props ) => (<Title><LinkHeadingTemplate {...props} /></Title>);
+export const LinkHeading2 = ( props ) => (<Title small style={{margin: '0 4px 25px'}}><LinkHeadingTemplate {...props} /></Title>);
+export const LinkHeading3 = ( props ) => (<Paragraph style={{margin: `0 4px 15px`}}><LinkHeadingTemplate {...props} /></Paragraph>);
+
+export function LinkHeadingTemplate ({ children, go = true, pageOnly }) {
+
+    // ensure only text is put into the id
+    const proccessChildren = (c) => {
+        if (!c) return 'uh oh'
+        if (typeof c == typeof '') return(c);
+        else {
+            if (c.length > 0) return c.map(c => proccessChildren(c.props?.children)).join('');
+            else return proccessChildren(c.props?.children);
+        }
+    }
+
+    const id = pageOnly ? '' : `${proccessChildren(children).toLowerCase().replaceAll(' ', '-')}`;
+    const copiedRef = useRef();
+    const top = 35; // heading scrollto padding
+
+    const copyLink = () => {
+
+        // set link to be current url minus any other selector plus this heading's selector
+        const link = window.location.href.split('#')[0] + '#' + id;
+
+        // copy link to clipboard
+        navigator.clipboard.writeText(id ? link : link.replace('#', ''));
+        
+        // scroll to heading
+        if (go) window.location.href = link;
+        
+        // animate 'link copied' text
+        animate(copiedRef.current, {x: 0, opacity: 0.3 });
+        setTimeout(() => {
+            animate(copiedRef.current, {x: -20, opacity: 0});
+        }, 800);
+
+    }
+
+    return (
+        <motion.strong whileHover="hover" id={id} style={{
+            paddingTop: `${top}px`, marginTop: `-${top}px`,
+            // display: 'inline-block', width: 'calc(100% + 80px)', // maybe necessary for longer titles?
+        }}>
+            <button onClick={copyLink} title="Copy Link">
+                {children}
+            </button>
+            <motion.span style={{display: "inline-block", opacity: 0, x: -6}} variants={{hover: {x: 0, opacity: 0.3}}}>
+                &nbsp;&nbsp;#&nbsp;&nbsp;
+            </motion.span>
+            <motion.span ref={copiedRef} style={{display: 'inline-block', opacity: 0, x: -20}}>
+                link copied
+            </motion.span>
+        </motion.strong>
+    );
 }
