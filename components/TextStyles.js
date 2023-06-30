@@ -1,8 +1,9 @@
 import { Lato, Merriweather, EB_Garamond, Cinzel_Decorative } from "@next/font/google";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { RoughNotation } from "react-rough-notation";
 import Lonk from "./Lonk";
 import { animate, motion } from "framer-motion";
+import { ViewportContext } from "./Viewport";
 
 /**
  * font wrappers
@@ -190,13 +191,15 @@ export function LightboxButton({ action, hoverColor, children }) {
 }
 
 export const Heading1 = ( props ) => (<Title {...props} />);
-export const Heading2 = ( props ) => (<Title small style={{margin: '0 4px 25px'}} {...props} />);
+export const Heading2 = ( props ) => (<><br /><Title small style={{margin: '0 4px 25px'}} {...props} /></>);
 export const Heading3 = ( props ) => (<Paragraph style={{margin: `0 4px 15px`, fontWeight: 'bold'}} {...props} />);
 export const LinkHeading1 = ( props ) => (<Title><LinkHeadingTemplate {...props} /></Title>);
-export const LinkHeading2 = ( props ) => (<Title small style={{margin: '0 4px 25px'}}><LinkHeadingTemplate {...props} /></Title>);
+export const LinkHeading2 = ( props ) => (<><br /><Title small style={{margin: '0 4px 25px'}}><LinkHeadingTemplate {...props} /></Title></>);
 export const LinkHeading3 = ( props ) => (<Paragraph style={{margin: `0 4px 15px`}}><LinkHeadingTemplate {...props} /></Paragraph>);
 
 export function LinkHeadingTemplate ({ children, go = true, pageOnly }) {
+
+    const {mobile} = useContext(ViewportContext);
 
     // ensure only text is put into the id
     const proccessChildren = (c) => {
@@ -234,7 +237,7 @@ export function LinkHeadingTemplate ({ children, go = true, pageOnly }) {
     return (
         <motion.strong whileHover="hover" id={id} style={{
             paddingTop: `${top}px`, marginTop: `-${top}px`, whiteSpace: 'nowrap',
-            // display: 'inline-block', width: 'calc(100% + 80px)', // maybe necessary for longer titles?
+            display: !mobile ? 'inline-block' : 'inline', width: !mobile ? 'calc(100% + 80px)' : 'auto', // maybe necessary for longer titles?
         }}>
             <button onClick={copyLink} title="Copy Link">
                 {children}

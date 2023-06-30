@@ -1,7 +1,7 @@
 import Layout from "@/components/Layout";
 import { getWorldCard, getWorldCardData, getWorldCardIDs } from "@/lib/dataParser";
 import { getMDXComponent } from "mdx-bundler/client";
-import { Caption, ComicSansWrapper, Dept, LinkHeading1, LinkHeading2, LinkHeading3, Paragraph, Title, UnderLonk, UnorderedList, Subtitle, Heading1, Heading2, Heading3 } from "@/components/TextStyles";
+import { Caption, ComicSansWrapper, Dept, LinkHeading1, LinkHeading2, LinkHeading3, Paragraph, Title, UnderLonk, UnorderedList, Heading1, Heading2, Heading3 } from "@/components/TextStyles";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { ViewportContext } from "@/components/Viewport";
 import Head from "next/head";
@@ -129,33 +129,28 @@ export default function World({ card, cardData }) {
         const page = href.split('#')[0];
 
         return href.includes('/') || cardData.map(w => w.id).includes(page)  ? (
-            !cardData.filter(w => w.inProgress).map(w => w.id).includes(page) ? (
-                // should be displayed in full
-                <UnderLonk 
-                    delayAction={toCardAnimation} 
-                    title={`${cardData.find(w => w.id == page)?.title ?? (page.charAt(0).toUpperCase() + page.slice(1))} ➯`}
-                    href={href}
-                >
-                    {children}
-                </UnderLonk>
-            ) : (
-                // under construction
-                <motion.span 
-                    title={'I\'m still workin\' on it!'} 
-                    whileHover={{color: '#e83d3f'}}
-                    onMouseLeave={() => setCursor(cursors[Math.floor(Math.random() * cursors.length)])}
-                    style={{
-                        color: '#eeac3f' ?? 'darksalmon', 
-                        // https://www.emojicursor.app/ custom cursor
-                        cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>${cursor}</text></svg>") 16 16,auto`,
-                    }}
-                >
-                    {children}
-                </motion.span>
-            )
+            // should be displayed in full
+            <UnderLonk 
+                delayAction={toCardAnimation} 
+                title={`${cardData.find(w => w.id == page)?.title ?? (page.charAt(0).toUpperCase() + page.slice(1))} ➯`}
+                href={href}
+            >
+                {children}
+            </UnderLonk>
         ) : (
-            // link does not have a corresponding mdx file
-            <>{children}</>
+            // under construction
+            <motion.span 
+                title={'I\'m still workin\' on it!'} 
+                whileHover={{color: '#e83d3f'}}
+                onMouseLeave={() => setCursor(cursors[Math.floor(Math.random() * cursors.length)])}
+                style={{
+                    color: '#eeac3f' ?? 'darksalmon', 
+                    // https://www.emojicursor.app/ custom cursor
+                    cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>${cursor}</text></svg>") 16 16,auto`,
+                }}
+            >
+                {children}
+            </motion.span>
         )
     }
 
@@ -178,10 +173,13 @@ export default function World({ card, cardData }) {
     
         let img = imgKey in imgData ? imgData[imgKey] : {src, caption}
         
-        return (<>
+        return (<div style={{
+            margin: '40px 0',
+            width: mobile ? '100%' : 'calc(100% + 80px)'
+        }}>
             <Img img={img} noBorder />
-            {img.caption && <Caption>{img.caption}</Caption>}
-        </>);
+            {img.caption && <Caption textAlign={'left'}>{img.caption}</Caption>}
+        </div>);
     }
 
     //#endregion
@@ -246,7 +244,6 @@ export default function World({ card, cardData }) {
                     <article ref={articleRef} style={{
                         width: '500px',
                         margin: '200px 60px',
-                        overflow: 'hidden'
                     }}>
                         <Dept color={card.frontmatter.color ?? '#FFBA5E'} style={{marginTop: 0}}>{card.frontmatter.dept?.toUpperCase()}&nbsp;</Dept>
                         <LinkHeading1 pageOnly>{card.frontmatter.title}</LinkHeading1>
@@ -259,10 +256,10 @@ export default function World({ card, cardData }) {
     ) : (
         <Layout title={card.frontmatter.title ?? card.w ?? "World"} pageName={'back to map'} color='#DBE76F' menuLink='/world' menuName={'back to map'}>
             
-            <article style={{padding: '120px 25px 0'}}>
+            <article style={{padding: '120px 25px 0', overflow: 'hidden'}}>
                 {card.frontmatter.dept && <Dept color={card.frontmatter.color ?? '#FFBA5E'} style={{marginTop: 0}}>{card.frontmatter.dept.toUpperCase()}</Dept>}
                 <Title>{card.frontmatter.title}</Title>
-                <Content components={{h1: Heading1, h2: Heading2, h3: Heading3, h4: Caption, p: Paragraph, a: MobileWorldLink, ul: UnorderedList}} />
+                <Content components={{h1: Heading1, h2: Heading2, h3: Heading3, h4: Caption, p: Paragraph, a: MobileWorldLink, ul: UnorderedList, blockquote: 'span'}} />
             </article>
         </Layout>
     )
