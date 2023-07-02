@@ -34,7 +34,7 @@ export async function getStaticProps( {params} ) {
 export default function World({ card, cardData }) {
 
     const { mobile } = useContext(ViewportContext);
-    const Content = useMemo(() => getMDXComponent(card.code, {Img: WorldImg, ComicSans: ComicSansWrapper}), [card.code]);
+    const Content = useMemo(() => getMDXComponent(card.code, {Img: WorldImg, ComicSans: ComicSansWrapper}), [WorldImg, card.code]);
 
     const backLinkRef = useRef();
     const cardListRef = useRef();
@@ -120,8 +120,7 @@ export default function World({ card, cardData }) {
     const WorldLink = ({ children, ...props }) => {
 
         // https://emojipedia.org/
-        const cursors = ['⛔', '🚫', '🚷', '🚳', '📵', '🔞', ];
-        // const cursors = ['⚠️', '⚠️', '⚠️', '☢️', '☣️', ];
+        const cursors = [ '⛔', '🚫', '🚷', '🚳', '📵', '☣️', '☢️', '⚠️', '😡', '😬', '😲', ];
         
         const [cursor, setCursor] = useState('🚫');
 
