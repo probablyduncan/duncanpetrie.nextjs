@@ -165,7 +165,7 @@ export default function World({ worldCards }) {
         ) : (
             <Layout pageName='world' menuLink='/i/all' color={imgData.bigmap.color}>
                 <div style={{padding: '25px 20px 0'}} >
-                    <Img img={imgData.bigmap} />
+                    <Img img={imgData.bigmapnames} />
                 </div>
                 <div style={{padding: '80px 24px 0'}}>
                     <CardList cardData={worldCards} onHover={(on, coords) => parseHoverCoords(on ? coords : null)} />

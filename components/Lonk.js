@@ -8,7 +8,8 @@ export default function Lonk({href, children, delay, delayAction, ...props}) {
     // delay link redirect
     const delayHref = (e) => {
 
-        if (!delayAction && !delay) return;
+        // if ctrlKey, opening in new tab, so ignore delay/action
+        if ((!delayAction && !delay) || e.ctrlKey) return;
 
         // prevent redirect
         e.preventDefault();

@@ -43,8 +43,17 @@ const extraLinks = [
         id: 'world',
         title: 'Charting the Wilds',
         dept: 'mind map',
+        tags: ['writing','world'],
         link: '/world',
         cover: {images: 'bigmap'},
+    },
+    {
+        id: 'stars',
+        title: 'A Necklace of Stars',
+        dept: 'on yon',
+        link: '/w/stars',
+        tags: ['writing','world'],
+        cover: {images: 'heartland6'},
     },
 ]
 

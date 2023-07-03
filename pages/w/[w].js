@@ -102,7 +102,7 @@ export default function World({ card, cardData }) {
 
     const processWorldLinkHref = (text = '', href = '') => {
         
-        const a = {text: text.toLowerCase(), href: href.toLowerCase()};
+        const a = {text: text.toLowerCase(), href: href};
 
         // if no href is supplied, infer from link text
         // this defaults to link text, uses link href if exists, and processes # in href with link text accordingly
