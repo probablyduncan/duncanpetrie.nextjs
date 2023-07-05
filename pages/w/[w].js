@@ -34,7 +34,7 @@ export async function getStaticProps( {params} ) {
 export default function World({ card, cardData }) {
 
     const { mobile } = useContext(ViewportContext);
-    const Content = useMemo(() => getMDXComponent(card.code, {Img: WorldImg, ComicSans: ComicSansWrapper}), [WorldImg, card.code]);
+    const Content = useMemo(() => getMDXComponent(card.code, {Img: WorldImg, ComicSans: ComicSansWrapper}), [card.code]);
 
     const backLinkRef = useRef();
     const cardListRef = useRef();
@@ -106,11 +106,11 @@ export default function World({ card, cardData }) {
 
         // if no href is supplied, infer from link text
         // this defaults to link text, uses link href if exists, and processes # in href with link text accordingly
-        return (
+        return href == '#' ? `${card.w}#${text?.toLowerCase().replaceAll(' ', '-')}` : (
             a.href.startsWith('#') || a.href.endsWith('#')) ? 
-                a.href.replace('#', `#${a.text.replace(' ', '-')}#`).replace(/^#|#$/, '') 
+                a.href.replace('#', `#${a.text?.toLowerCase().replaceAll(' ', '-')}#`).replace(/^#|#$/, '') 
             : 
-                (a.href || a.text.replace(' ', '')
+                (a.href || a.text?.toLowerCase().replace(' ', '')
         );
     }
 
@@ -125,12 +125,16 @@ export default function World({ card, cardData }) {
         const [cursor, setCursor] = useState('🚫');
 
         const href = processWorldLinkHref(children, props.href);
+        console.log(href);
         const page = href.split('#')[0];
+
+        // if this is a link to another header on this page, no need to do card animation
+        const isSamePage = card.w == page;
 
         return href.includes('/') || cardData.map(w => w.id).includes(page)  ? (
             // should be displayed in full
             <UnderLonk 
-                delayAction={toCardAnimation} 
+                delayAction={() => {if (!isSamePage) toCardAnimation()}} 
                 title={`${cardData.find(w => w.id == page)?.title ?? (page.charAt(0).toUpperCase() + page.slice(1))} ➯`}
                 href={href}
             >
