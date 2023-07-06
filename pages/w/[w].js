@@ -106,7 +106,10 @@ export default function World({ card, cardData }) {
 
         // if no href is supplied, infer from link text
         // this defaults to link text, uses link href if exists, and processes # in href with link text accordingly
-        return href == '#' ? `${card.w}#${text?.toLowerCase().replaceAll(' ', '-')}` : (
+        
+        return href == '#' ? 
+            `${card.w}#${text?.toLowerCase().replaceAll(' ', '-')}` // if the link is just '#', then use text as #heading link on this page
+        :(
             a.href.startsWith('#') || a.href.endsWith('#')) ? 
                 a.href.replace('#', `#${a.text?.toLowerCase().replaceAll(' ', '-')}#`).replace(/^#|#$/, '') 
             : 
@@ -125,7 +128,6 @@ export default function World({ card, cardData }) {
         const [cursor, setCursor] = useState('🚫');
 
         const href = processWorldLinkHref(children, props.href);
-        console.log(href);
         const page = href.split('#')[0];
 
         // if this is a link to another header on this page, no need to do card animation
@@ -163,7 +165,7 @@ export default function World({ card, cardData }) {
     const MobileWorldLink = ({ children, ...props }) => {
         const href = processWorldLinkHref(children, props.href);
         const page = href.split('#')[0];
-        return href.includes('/') || cardData.filter(w => !w.inProgress).map(w => w.id).includes(page) ? 
+        return href.includes('/') || cardData.map(w => w.id).includes(page) ? 
             <UnderLonk href={href}>{children}</UnderLonk>
         : 
             <>{children}</>
@@ -245,7 +247,7 @@ export default function World({ card, cardData }) {
 
                 <motion.div initial={{ opacity: 0, }} animate={{ opacity: 1 }}>
                     <article ref={articleRef} style={{
-                        width: '500px',
+                        width: '600px',
                         margin: '200px 60px',
                     }}>
                         <Dept color={card.frontmatter.color ?? '#FFBA5E'} style={{marginTop: 0}}>{card.frontmatter.dept?.toUpperCase()}&nbsp;</Dept>

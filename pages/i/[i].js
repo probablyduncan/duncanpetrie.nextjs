@@ -55,6 +55,13 @@ const extraLinks = [
         tags: ['writing','world'],
         cover: {images: 'heartland6'},
     },
+    {
+        id: 'zigglewomping',
+        title: 'Zigglewomping',
+        dept: 'on yon',
+        link: '/w/zigglewomping',
+        tags: ['writing', 'world'],
+    }
 ]
 
 export default function Index({ articleData }) {
