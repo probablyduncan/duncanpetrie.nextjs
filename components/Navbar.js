@@ -33,12 +33,45 @@ export function NewsNav( {homelink, links} ) {
 
     links = links ?? defaultLinks;
 
+    const logoBackgroundStyle = {
+        WebkitBackgroundClip: 'text', 
+        WebkitTextFillColor: 'transparent',
+    }
+    const logoColor = {
+        background: 'linear-gradient(130deg, rgba(255,75,75,1) 0%, rgba(255,176,83,1) 100%)', ...logoBackgroundStyle
+    }
+    const logoColorReverse = {
+        background: 'linear-gradient(130deg, rgba(255,176,83,1) 0%, rgba(255,75,75,1) 100%)', ...logoBackgroundStyle
+    }
+    const logoBlack = {
+        background: 'linear-gradient(120deg, rgba(36,38,38,1) 0%, rgba(36,38,38,1) 100%)', ...logoBackgroundStyle
+    }
+
     return (<>
-        <header className={style.logoWrapper}>
+        <header style={{
+            position: 'fixed',
+            top: '12px',
+            right: '0',
+            left: '0',
+            textAlign: 'center',
+            zIndex: '0',
+            userSelect: 'none',
+        }}>
             <CinzelWrapper>
-                <h1 className={style.logo}>
-                    <Lonk href={"/"}>{logo}</Lonk>
-                </h1>
+                <motion.h1 
+                    style={{fontSize: '52px'}}
+                >
+                    <Lonk href={"/"}>
+                        <motion.span
+                            whileHover={logoColor}
+                            initial={logoColor} 
+                            animate={{
+                                ...logoBlack,
+                                transition: {duration: 0.4, delay: 1}
+                            }}
+                        >&nbsp;{logo}&nbsp;</motion.span>
+                    </Lonk>
+                </motion.h1>
             </CinzelWrapper>
         </header>
 
@@ -100,11 +133,11 @@ export function Navlink({text, href}) {
     return (<RoughNotationGroup show={hover}>
         <RoughNotation
             type={"circle"}
-            strokeWidth={1.5}
+            strokeWidth={2}
             padding={[4,8]}
             iterations={1}
             animationDuration={text.length * 30}
-            color={"#0e0862"}
+            color={'rgb(255,176,83)'}
         >
             <LatoWrapper>
                 <h3 

@@ -32,7 +32,7 @@ export default function FrontPage( props ) {
         }}
         storyRight={{
           dept: "PROFILE",
-          color: "#faa659",
+          color: "#FFB053",
           title: "Hello! I'm Duncan Petrie",
           text: [
             "I'm a photographer, writer, and full stack web developer based in London.",
