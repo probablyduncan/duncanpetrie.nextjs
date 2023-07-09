@@ -9,6 +9,7 @@ import { motion, useInView, useScroll, useSpring, useTransform } from "framer-mo
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import Img from "@/components/Img";
 import { ViewportContext } from "@/components/Viewport";
+import { colors } from "@/data/colors";
 
 export async function getStaticProps() {
     
@@ -138,16 +139,16 @@ function IndexCard({ article, first }) {
             marginLeft: mobile ? '0' : `${20 * rand}%`,
             breakInside: 'avoid',
             userSelect: 'none',
-            boxShadow: !mobile && '4px 4px 20px #24262618',
-            backgroundColor: '#fff',
+            boxShadow: !mobile && `4px 4px 20px ${colors.black}18`,
+            backgroundColor: colors.white,
             marginTop: mobile ? '0' : `${!first ? (400 + 200 * rand) * (rand > 0.6 ? 2 : 1) : 0}px`,
             y,
             zIndex: mobile ? 'inherit' : '100',
             opacity: mobile || isInView ? 1 : 0, transition: 'opacity 0.5s',
-        }} whileHover={!mobile && {boxShadow: '4px 4px 30px #24262632'}} whileTap={!mobile && {boxShadow: '4px 4px 5px #24262632'}}>
+        }} whileHover={!mobile && {boxShadow: `4px 4px 30px ${colors.black}32`}} whileTap={!mobile && {boxShadow: `4px 4px 5px ${colors.black}32`}}>
             <Lonk href={article.link ?? `/a/${article.id}`} style={{padding: '18px 18px 12px 18px', display: 'block'}}>
                 {!mobile && imageKey && <Img img={imgData[imageKey]} style={{marginBottom: '12px', boxShadow: 'none', width: '100%'}} />}
-                <Dept color={imageKey ? imgData[imageKey].color : (article.colors ? article.colors[0] : article.color ?? 'cornflowerblue')} small={!mobile}>{article.dept.toUpperCase() }</Dept>
+                <Dept color={imageKey ? imgData[imageKey].color : (article.colors ? article.colors[0] : article.color ?? colors.cornflowerBlue)} small={!mobile}>{article.dept.toUpperCase() }</Dept>
                 <Title small={!mobile}>{article.title}</Title>
             </Lonk>
 

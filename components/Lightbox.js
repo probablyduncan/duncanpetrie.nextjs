@@ -5,6 +5,7 @@ import { AnimatePresence, animate, motion, useInView, useMotionValueEvent, useSc
 import Img from "./Img";
 import { getCaption, getNextIndex } from "@/lib/imageHelper";
 import { imgData } from "@/data/images";
+import { colors } from "@/data/colors";
 
 /**
  * @param {number} index of image key in lightbox keys array
@@ -116,7 +117,7 @@ export default function Lightbox({ index }) {
                     display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
                     flexFlow: isTall ? 'column' : 'row',
                     
-                    backgroundColor: '#fafaff',
+                    backgroundColor: colors.light,
                 }}
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ ease: "easeOut", duration: 0.1 }}
             >
@@ -182,12 +183,12 @@ export function LightboxLinkedImg({ imgKey, noCaptions, noBorder, margin, restri
             style={{
                 display: 'block', 
                 width: !noBorder ? 'calc(100% - 4px)' : '100%',
-                boxShadow: !noBorder ? '4px 4px #242626' : '0px 0px 0px #2426260f',
+                boxShadow: !noBorder ? `4px 4px ${colors.black}` : `0px 0px 0px ${colors.black}0f`,
                 cursor: lightboxKeys[0] ? 'zoom-in' : 'auto',
                 margin
             }} 
-            whileHover={lightboxKeys[0] && (noBorder ? {boxShadow: '4px 4px 15px #2426260f'} : {boxShadow: '6px 6px #242626'})}
-            whileTap={lightboxKeys[0] && (noBorder ? {boxShadow: '4px 4px 5px #2426260f'} : {boxShadow: '4px 4px #242626'})}
+            whileHover={lightboxKeys[0] && (noBorder ? {boxShadow: `4px 4px 15px ${colors.black}0f`} : {boxShadow: `6px 6px ${colors.black}`})}
+            whileTap={lightboxKeys[0] && (noBorder ? {boxShadow: `4px 4px 5px ${colors.black}0f`} : {boxShadow: `4px 4px ${colors.black}`})}
             onClick={lightboxKeys[0] && openLightbox} 
         >
             <Img img={imgObject} style={{boxShadow: 'inherit', width: '100%'}}/>
@@ -220,11 +221,11 @@ export function LightboxLinkedSlideshow({ imgKeys, noCaptions, noBorder, margin,
         const buttonElement = prev ? arrowLeft.current : arrowRight.current;
         
         // start animation
-        animate(buttonElement, {backgroundColor: '#efefef'}, {duration: 0.1});
+        animate(buttonElement, {color: colors.light, backgroundColor: colors.grey}, {duration: 0.1});
         
         // end animation
         setTimeout(() => {
-            animate(buttonElement, {backgroundColor: '#ffffffff'}, {duration: 0.2});
+            animate(buttonElement, {color: colors.grey, backgroundColor: colors.white}, {duration: 0.2});
         }, 200);
     };
 
@@ -273,14 +274,15 @@ export function LightboxLinkedSlideshow({ imgKeys, noCaptions, noBorder, margin,
         style: {
             fontFamily: 'inherit',
             fontSize: '16px',
-            color: '#898989',
+            color: colors.grey,
             margin: '15px 6px 0 6px',
             padding: '0px 6px 2px',
             borderRadius: '20%',
-            backgroundColor: '#ffffffff',
+            backgroundColor: colors.white,
         },
         whileHover: {
-            backgroundColor: '#efefef',
+            color: colors.light,
+            backgroundColor: colors.grey,
             transition: {duration: 0.2}
         },
     }
@@ -297,12 +299,12 @@ export function LightboxLinkedSlideshow({ imgKeys, noCaptions, noBorder, margin,
                 style={{
                     display: 'block', 
                     width: !noBorder ? 'calc(100% - 4px)' : '100%',
-                    boxShadow: !noBorder ? '4px 4px #242626' : '0px 0px 0px #2426260f',
+                    boxShadow: !noBorder ? `4px 4px ${colors.black}` : `0px 0px 0px ${colors.black}0f`,
                     cursor: lightboxKeys[0] ? 'zoom-in' : 'auto',
                     margin
                 }} 
-                whileHover={lightboxKeys[0] && (noBorder ? {boxShadow: '4px 4px 15px #2426260f'} : {boxShadow: '6px 6px #242626'})}
-                whileTap={lightboxKeys[0] && (noBorder ? {boxShadow: '4px 4px 5px #2426260f'} : {boxShadow: '4px 4px #242626'})}
+                whileHover={lightboxKeys[0] && (noBorder ? {boxShadow: `4px 4px 15px ${colors.black}0f`} : {boxShadow: `6px 6px ${colors.black}`})}
+                whileTap={lightboxKeys[0] && (noBorder ? {boxShadow: `4px 4px 5px ${colors.black}0f`} : {boxShadow: `4px 4px ${colors.black}`})}
                 onClick={lightboxKeys[0] && openLightbox}
             >
                 <Img img={imgData[imgKeys[slide]]} style={{boxShadow: 'inherit', width: '100%'}}/>
@@ -321,7 +323,7 @@ export function LightboxLinkedSlideshow({ imgKeys, noCaptions, noBorder, margin,
                         <span style={{
                             fontSize: '12px', 
                             marginBottom: '5px', 
-                            color: imgData[imgKeys[slide]].color ?? 'cornflowerblue'
+                            color: imgData[imgKeys[slide]].color ?? colors.cornflowerBlue
                         }}>
                             {slide + 1 + "/" + imgKeys.length}
                         </span>

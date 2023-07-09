@@ -7,6 +7,8 @@ import Img from './Img';
 import Head from "next/head";
 import { getSrc } from '@/lib/imageHelper';
 import { LatoWrapper, MerriweatherWrapper } from './TextStyles';
+import { color } from 'framer-motion';
+import { colors } from '@/data/colors';
 
 //#region default
 
@@ -70,7 +72,7 @@ export function SlideshowSection( props ) {
                 <Story { ...props.storyLeft } />
                 <LatoWrapper className={style.slideshowArrows} div>
                     <button ref={arrowLeft} onClick={() => setImg(img > 0 ? img - 1 : props.images.length - 1)}>&lt;</button>
-                    <span>{img + 1 + "/" + props.images.length}</span>
+                    <span style={{color: colors.jubileeBlue}}>{img + 1 + "/" + props.images.length}</span>
                     <button ref={arrowRight} onClick={() => setImg(img < props.images.length - 1 ? img + 1 : 0)}>&gt;</button>
                 </LatoWrapper>
             </div>
@@ -139,7 +141,7 @@ export function MobileHero({ img }) {
     return (<MerriweatherWrapper div style={{padding: "0 20px"}}>
         {img && <Img img={img} />}
         <div style={{border: "none", margin: "40px 4px 120px 4px", fontSize: "30px"}}>
-            <h2 style={{marginBottom: "20px"}} className={style.title}>Hello! I&apos;m<br/><Link className="opacityLink" href="/a/about" style={{textDecoration: "underline", color: "#F47665"}}>Duncan Petrie</Link>.</h2>
+            <h2 style={{marginBottom: "20px"}} className={style.title}>Hello! I&apos;m<br/><Link className="opacityLink" href="/a/about" style={{textDecoration: "underline", color: colors.surrogateRed}}>Duncan Petrie</Link>.</h2>
             <h2 className={style.title}>This is my<br/>website.</h2>
         </div>
     </MerriweatherWrapper>);

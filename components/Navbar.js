@@ -5,6 +5,7 @@ import { RoughNotation, RoughNotationGroup } from "react-rough-notation";
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { CinzelWrapper, GaramondWrapper, LatoWrapper } from './TextStyles';
+import { colors, printColors } from '@/data/colors';
 
 const logo = 'The Daily DunCAn';
 const linkSpacer = '/';
@@ -27,6 +28,8 @@ export function NewsNav( {homelink, links} ) {
     useEffect(() => {
         var d = new Date();
         setDate(d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }));
+
+        printColors();
     }, []);
 
     const [emailHover, setEmailHover] = useState(false);
@@ -38,13 +41,13 @@ export function NewsNav( {homelink, links} ) {
         WebkitTextFillColor: 'transparent',
     }
     const logoColor = {
-        background: 'linear-gradient(130deg, rgba(255,75,75,1) 0%, rgba(255,176,83,1) 100%)', ...logoBackgroundStyle
+        background: `linear-gradient(130deg, ${colors.red} 0%, ${colors.yellow} 100%)`, ...logoBackgroundStyle
     }
     const logoColorReverse = {
-        background: 'linear-gradient(130deg, rgba(255,176,83,1) 0%, rgba(255,75,75,1) 100%)', ...logoBackgroundStyle
+        background: `linear-gradient(130deg, ${colors.yellow} 0%, ${colors.red} 100%)`, ...logoBackgroundStyle
     }
     const logoBlack = {
-        background: 'linear-gradient(120deg, rgba(36,38,38,1) 0%, rgba(36,38,38,1) 100%)', ...logoBackgroundStyle
+        background: `linear-gradient(120deg, ${colors.black} 0%, ${colors.black} 100%)`, ...logoBackgroundStyle
     }
 
     return (<>
@@ -107,7 +110,7 @@ export function NewsNav( {homelink, links} ) {
                         padding={10}
                         iterations={1}
                         animationDuration={200}
-                        color={'rgb(255, 248, 172)'}
+                        color={colors.highlight}
                     >
                         <a 
                             className={style.sidelink} 
@@ -137,7 +140,7 @@ export function Navlink({text, href}) {
             padding={[4,8]}
             iterations={1}
             animationDuration={text.length * 30}
-            color={'rgb(255,176,83)'}
+            color={colors.rellow}
         >
             <LatoWrapper>
                 <h3 
@@ -160,8 +163,8 @@ export function MobileTopNav({ }) {
         justifyContent: 'space-between',
         padding: '20px 24px'
     }}>
-        <Link href='mailto:duncanpetrie1@gmail.com' style={{color: '#32ae5d'}}>EMAIL ME</Link>
-        <Lonk href='https://instagram.com/probablyduncan' style={{color: '#fad549'}}>INSTAGRAM</Lonk>
+        <Link href='mailto:duncanpetrie1@gmail.com' style={{color: colors.surrogateGreen}}>EMAIL ME</Link>
+        <Lonk href='https://instagram.com/probablyduncan' style={{color: colors.surrogateYellow}}>INSTAGRAM</Lonk>
     </LatoWrapper>;
 }
 
@@ -184,7 +187,7 @@ export function SimpleNav( props ) {
     const color = useTransform(
         scrollY,
         [350, 450],
-        ['#242626', props.galleryColor ?? '#6495ed']
+        [colors.black, props.galleryColor ?? colors.cornflowerBlue]
     )
 
     const galleryName = props.galleryName === true || !props.galleryName ? 'GALLERY' : props.galleryName.toUpperCase();
@@ -210,7 +213,7 @@ function Menurl({ pageName = "menu", menuName = "menu", color, menuFunction, men
             <motion.span
                 whileHover={{ x: spread ? -8 : 8 }} 
                 whileTap={{x : spread ? -16 : 16 }}
-                style={{color : color ?? "#6495ed"}} 
+                style={{color : color ?? colors.cornflowerBlue}} 
                 onHoverStart={() => setHover(true)}
                 onHoverEnd={() => setHover(false)}
             >
@@ -222,7 +225,7 @@ function Menurl({ pageName = "menu", menuName = "menu", color, menuFunction, men
             <motion.button  
                 whileHover={{ x: spread ? -8 : 8 }} 
                 whileTap={{x : spread ? -16 : 16 }}
-                style={{color : color ?? "#6495ed"}} 
+                style={{color : color ?? colors.cornflowerBlue}} 
                 onClick={menuFunction}
                 onHoverStart={() => setHover(true)}
                 onHoverEnd={() => setHover(false)}

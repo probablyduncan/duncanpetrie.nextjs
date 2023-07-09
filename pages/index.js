@@ -5,6 +5,7 @@ import { ViewportContext } from '@/components/Viewport';
 import { useContext } from 'react';
 import { MobileTopNav } from '@/components/Navbar';
 import { imgData } from '@/data/images';
+import { colors } from '@/data/colors';
 
 export default function FrontPage( props ) {
 
@@ -21,7 +22,7 @@ export default function FrontPage( props ) {
         ]}
         storyLeft={{
           dept: "ON YEARNING",
-          color: "#74aec5",
+          color: colors.jubileeBlue,
           title: "Lingermyth",
           text: [
             "Gradually, we grew out of our past, explained away halos and beasts and cities of clouds. History, after all, is written by those that live in the present.",
@@ -163,7 +164,7 @@ export default function FrontPage( props ) {
           dept='mind map'
           title='Charting the Wilds'
           route="/world"
-          background="#FAFAFF"
+          background={colors.light}
           annotateMap
         />
         <Story
@@ -176,7 +177,7 @@ export default function FrontPage( props ) {
           ]}
           link="youtube"
           route="https://youtu.be/JRXZAaDxGCQ"
-          background='#fafaff'
+          background={colors.light}
         />
         <Story 
           img={imgData.diss}

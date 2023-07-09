@@ -1,3 +1,5 @@
+import { colors } from "./colors";
+
 export const imgData = {
 
     //#region MYTH
@@ -480,12 +482,12 @@ export const imgData = {
 
     bigmap: {
         src: 'bigmapW4_small.jpg',
-        color: '#DBE76F',
+        color: colors.mapGreen,
         ratio: 4/5,
     },
     bigmapnames: {
         src: 'bigmapW4_names.jpg',
-        color: '#E7EFA2',
+        color: colors.mapLightGreen,
         ratio: 4/5,
     },
 

@@ -10,6 +10,7 @@ import { animate, motion, useScroll } from "framer-motion";
 import { imgData } from "@/data/images";
 import Img from "@/components/Img";
 import { useRouter } from "next/router";
+import { colors } from "@/data/colors";
 
 export async function getStaticPaths() {
     const paths = await getWorldCardIDs();
@@ -146,10 +147,10 @@ export default function World({ card, cardData }) {
             // under construction
             <motion.span 
                 title={'I\'m still workin\' on it!'} 
-                whileHover={{color: '#e83d3f'}}
+                whileHover={{color: colors.errorRed}}
                 onMouseLeave={() => setCursor(cursors[Math.floor(Math.random() * cursors.length)])}
                 style={{
-                    color: '#eeac3f' ?? 'darksalmon', 
+                    color: colors.errorYellow, 
                     // https://www.emojicursor.app/ custom cursor
                     cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>${cursor}</text></svg>") 16 16,auto`,
                 }}
@@ -241,7 +242,7 @@ export default function World({ card, cardData }) {
                     width: '2px',
                     height: 'calc(100vh - 70px)',
                     top: '40px',
-                    backgroundColor: '#242626',
+                    backgroundColor: colors.black,
                     position: 'sticky',
                 }}></motion.div>}
 
@@ -250,7 +251,7 @@ export default function World({ card, cardData }) {
                         width: '600px',
                         margin: '200px 60px',
                     }}>
-                        <Dept color={card.frontmatter.color ?? '#FFBA5E'} style={{marginTop: 0}}>{card.frontmatter.dept?.toUpperCase()}&nbsp;</Dept>
+                        <Dept color={card.frontmatter.color ?? colors.yellow} style={{marginTop: 0}}>{card.frontmatter.dept?.toUpperCase()}&nbsp;</Dept>
                         <LinkHeading1 pageOnly>{card.frontmatter.title}</LinkHeading1>
                         <Content components={{h1: LinkHeading1, h2: LinkHeading2, h3: LinkHeading3, h4: Caption, p: Paragraph, a: WorldLink, ul: UnorderedList}} />
                     </article>
@@ -259,10 +260,10 @@ export default function World({ card, cardData }) {
             </main>
         </>
     ) : (
-        <Layout title={card.frontmatter.title ?? card.w ?? "World"} pageName={'back to map'} color='#DBE76F' menuLink='/world' menuName={'back to map'}>
+        <Layout title={card.frontmatter.title ?? card.w ?? "World"} pageName={'back to map'} color={colors.mapGreen} menuLink='/world' menuName={'back to map'}>
             
             <article style={{padding: '120px 25px 0', overflow: 'hidden'}}>
-                {card.frontmatter.dept && <Dept color={card.frontmatter.color ?? '#FFBA5E'} style={{marginTop: 0}}>{card.frontmatter.dept.toUpperCase()}</Dept>}
+                {card.frontmatter.dept && <Dept color={card.frontmatter.color ?? colors.yellow} style={{marginTop: 0}}>{card.frontmatter.dept.toUpperCase()}</Dept>}
                 <Title>{card.frontmatter.title}</Title>
                 <Content components={{h1: Heading1, h2: Heading2, h3: Heading3, h4: Caption, p: Paragraph, a: MobileWorldLink, ul: UnorderedList, blockquote: 'span'}} />
             </article>

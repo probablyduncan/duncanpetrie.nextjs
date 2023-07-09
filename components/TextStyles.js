@@ -4,6 +4,7 @@ import { RoughNotation } from "react-rough-notation";
 import Lonk from "./Lonk";
 import { animate, motion } from "framer-motion";
 import { ViewportContext } from "./Viewport";
+import { colors } from "@/data/colors";
 
 /**
  * font wrappers
@@ -36,7 +37,7 @@ export function FontWrapper({ children, div, className = '', fontClass = '', sty
 export function Title({ children, small, style, ...props }) {
 
     style = Object.assign({
-        color: '#242626',
+        color: colors.black,
         fontSize: small ? '23px' : '36px',
         lineHeight: small ? '32px' : '40px',
         margin: small ? '0 0 6px 0' : '0 4px 35px'
@@ -48,7 +49,7 @@ export function Title({ children, small, style, ...props }) {
 export function Subtitle({ children, small, style, ...props }) {
 
     style = Object.assign({
-        color: '#242626',
+        color: colors.black,
         fontSize: small ? '20px' : '30px',
         lineHeight: small ? '37px' : '40px',
         margin: small ? '0 0 6px 0' : '0 4px 25px'
@@ -60,7 +61,7 @@ export function Subtitle({ children, small, style, ...props }) {
 export function Dept({ children, small, style, color, margin, ...props }) {
 
     style = Object.assign({
-        color: color ?? '#242626',
+        color: color ?? colors.black,
         fontSize: small ? '13px' : '16px',
         margin: margin ?? (small ? '0' : '25px 4px 0')
     }, style);
@@ -71,7 +72,7 @@ export function Dept({ children, small, style, color, margin, ...props }) {
 export function Paragraph({ children, small, style, ...props }) {
 
     style = Object.assign({
-        color: '#444a4a',
+        color: colors.slate,
         fontSize: small ? '16px' : '20px',
         lineHeight: small ? '30px' : '48px',
         textAlign: small ? 'justify' : 'left',
@@ -87,7 +88,7 @@ export function Paragraph({ children, small, style, ...props }) {
 export function UnorderedList({ children, small, style, ...props }) {
 
     style = Object.assign({
-        color: '#444a4a',
+        color: colors.slate,
         fontSize: small ? '16px' : '20px',
         lineHeight: small ? '30px' : '48px',
         textAlign: small ? 'justify' : 'left',
@@ -103,7 +104,7 @@ export function UnorderedList({ children, small, style, ...props }) {
 export function Caption({ children, small, style, textAlign, color, ...props }) {
 
     style = Object.assign({
-        color: color ?? '#737878',
+        color: color ?? colors.caption,
         fontSize: '18px',
         lineHeight: '27px',
         textAlign: textAlign ?? 'right',
@@ -119,7 +120,7 @@ export function UnderLonk({ href, action, noUnderline, color, thick, children, o
     const [hover, setHover] = useState(false);
 
     const duration = (children?.length ?? 8) * 15;
-    color = color ?? '#6495ed';
+    color = color ?? colors.cornflowerBlue;
 
     const hoverFunc = (on) => {
         setHover(on);
@@ -170,7 +171,7 @@ export function UnderLine({ show, duration, color, children, thickness }) {
 
 export function LightboxText({ color, children, noSelect }) {
     return (<h4 className={garamond.className} style={{
-        color: color ?? '#737878',
+        color: color ?? colors.caption,
         fontSize: '18px',
         lineHeight: '27px',
         textAlign: 'right',
@@ -182,8 +183,8 @@ export function LightboxText({ color, children, noSelect }) {
 
 export function LightboxButton({ action, hoverColor, children }) {
     return (<motion.button 
-        whileHover={{color: hoverColor ?? '#242626'}} 
-        initial={{color: '#737878', userSelect: 'inherit'}} 
+        whileHover={{color: hoverColor ?? colors.black}} 
+        initial={{color: colors.caption, userSelect: 'inherit'}} 
         onClick={action}
     >
         {children}                              

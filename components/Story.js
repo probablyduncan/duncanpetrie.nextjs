@@ -5,6 +5,7 @@ import { RoughNotation, RoughNotationGroup } from "react-rough-notation";
 import { ViewportContext } from "./Viewport";
 import { Paragraph, Title, Dept } from "@/components/TextStyles";
 import Img from "./Img";
+import { colors } from "@/data/colors";
 
 export default function Story({ img, dept, title, text, link, route, color, children, background, annotateMap }) {
 
@@ -12,7 +13,7 @@ export default function Story({ img, dept, title, text, link, route, color, chil
     const [hover, toggleHover] = useState(false);
 
     const className = mobile ? style.mobileStory + " " + style.story : style.story;
-    color = color ?? (img != null ? img.color : "#121212");
+    color = color ?? (img != null ? img.color : colors.yellow);
     title = title ? (title.constructor === Array ? title.flatMap(x => [x, <br key={x}/>]) : title) : false;
     text = text ? (text.constructor === Array ? text : [text]) : false;
     
@@ -43,7 +44,7 @@ export default function Story({ img, dept, title, text, link, route, color, chil
                         type="box"
                         iterations={1}
                         strokeWidth={2}
-                        color={'#242626'}
+                        color={colors.black}
                         animationDuration={200}
                         padding={mapCircles[Math.floor(Math.random() * mapCircles.length)]}
                     >
@@ -91,7 +92,7 @@ export default function Story({ img, dept, title, text, link, route, color, chil
                         strokeWidth={1}
                         animationDuration={p.length * 2.5}
                         animationDelay={1000 + i * 100}
-                        color={'rgb(255, 248, 172)'}
+                        color={colors.highlight}
                         multiline={true}
                     >
                         {p}

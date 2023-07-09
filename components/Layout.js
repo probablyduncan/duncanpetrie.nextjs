@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useContext } from "react";
 import { ViewportContext } from "./Viewport";
 import {NewsNav, MobileNav, SimpleNav} from "./Navbar";
+import { colors } from "@/data/colors";
 
 export default function Layout({ title, children, newsNav, color, pageName, menuName, menuLink, galleryAction, galleryName, galleryColor }) {
 
@@ -29,7 +30,7 @@ export default function Layout({ title, children, newsNav, color, pageName, menu
         {!mobile && !newsNav && <SimpleNav color={color} pageName={pageName} menuName={menuName} menuLink={menuLink} galleryAction={galleryAction} galleryName={galleryName} galleryColor={galleryColor} />}
         <main className={!mobile ? 'content ' : 'mobileContent '} style={{
             paddingTop: !newsNav || mobile ? 'inherit' : '20px', 
-            backgroundColor: newsNav ? '#fff' : 'unset',
+            backgroundColor: newsNav ? colors.white : 'unset',
         }}>
             {children}
             {mobile && <MobileNav color={color} pageName={pageName} menuName={menuName} menuLink={menuLink} />}
@@ -61,7 +62,7 @@ function Loading({ loadOnDefined }) {
         top: '0', left: '0',
         width: '100vw', height: '100vh',
 
-        backgroundColor: 'white',
+        backgroundColor: colors.white,
         transition: 'opacity 1s',
         opacity: loadOnDefined == undefined ? '1' : '0',
 

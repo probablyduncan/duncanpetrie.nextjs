@@ -11,6 +11,7 @@ import { ViewportContext } from "@/components/Viewport";
 import Img from "@/components/Img";
 import Head from "next/head";
 import Layout from "@/components/Layout";
+import { colors } from "@/data/colors";
 
 export async function getStaticProps() {
     
@@ -127,7 +128,7 @@ export default function World({ worldCards }) {
                             type="box"
                             iterations={1}
                             strokeWidth={2}
-                            color={'#242626'}
+                            color={colors.black}
                             animationDuration={200}
                             padding={hoverCoords}
                         >
@@ -202,7 +203,7 @@ export function CardList({ cardData, selected = "", onHover = () => {}, exitDela
                                 {c.title}
                             </RoughNotation>
                         ) : (
-                            <UnderLonk noUnderline={exiting} href={`/w/${c.id}`} delay={exitDelay} delayAction={delayAction} color='#242626' thick onHover={(on) => onHover(on, c.coords)}>
+                            <UnderLonk noUnderline={exiting} href={`/w/${c.id}`} delay={exitDelay} delayAction={delayAction} color={colors.black} thick onHover={(on) => onHover(on, c.coords)}>
                                 {c.title}
                             </UnderLonk>
                         )}
