@@ -10,7 +10,7 @@ import groupBy from "@/lib/groupBy";
 import { ViewportContext } from "@/components/Viewport";
 import Img from "@/components/Img";
 import Head from "next/head";
-import Layout from "@/components/Layout";
+import Layout, { HeadData } from "@/components/Layout";
 import { colors } from "@/data/colors";
 
 export async function getStaticProps() {
@@ -88,20 +88,7 @@ export default function World({ worldCards }) {
     }
 
     return <>
-        <Head>
-            <title>{`World - DuncanPetrie.com`}</title>
-            <meta name="author" content="Duncan Petrie" />
-            <meta name="description" content="Abstract/Impressionist Photography | On the hunt for plants and birds and rocks and things" />
-            <meta name="keywords" content="Duncan, Petrie, Photography, Abstract, Impressionist, Impressionism, Wildlife, Wisconsin, Milwaukee, Falmouth, Lake Michigan, water, blur, icm, intentional, camera, movement, probablyduncan" />
-
-            <link rel="icon" href="/favicon-32.png" sizes="32x32" />
-            <link rel="icon" href="/favicon-128.png" sizes="128x128" />
-            <link rel="icon" href="/favicon-180.png" sizes="180x180" />
-            <link rel="icon" href="/favicon-192.png" sizes="192x192" />
-            
-            <meta charSet="UTF-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
-        </Head>
+        <HeadData title={'Springtide - '} />
         {!mobile ? (
             <main style={{
                 width: '1280px',

@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import Layout, { HeadData } from "@/components/Layout";
 import { getWorldCard, getWorldCardData, getWorldCardIDs } from "@/lib/dataParser";
 import { getMDXComponent } from "mdx-bundler/client";
 import { Caption, ComicSansWrapper, Dept, LinkHeading1, LinkHeading2, LinkHeading3, Paragraph, Title, UnderLonk, UnorderedList, Heading1, Heading2, Heading3 } from "@/components/TextStyles";
@@ -192,20 +192,7 @@ export default function World({ card, cardData }) {
 
     return !mobile ? (
         <>
-            <Head>
-                <title>{`${card.frontmatter.title} - World - DuncanPetrie.com`}</title>
-                <meta name="author" content="Duncan Petrie" />
-                <meta name="description" content="Abstract/Impressionist Photography | On the hunt for plants and birds and rocks and things" />
-                <meta name="keywords" content="Duncan, Petrie, Photography, Abstract, Impressionist, Impressionism, Wildlife, Wisconsin, Milwaukee, Falmouth, Lake Michigan, water, blur, icm, intentional, camera, movement, probablyduncan" />
-
-                <link rel="icon" href="/favicon-32.png" sizes="32x32" />
-                <link rel="icon" href="/favicon-128.png" sizes="128x128" />
-                <link rel="icon" href="/favicon-180.png" sizes="180x180" />
-                <link rel="icon" href="/favicon-192.png" sizes="192x192" />
-                
-                <meta charSet="UTF-8" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-            </Head>
+            <HeadData title={`${card.frontmatter.title} - Springtide - `} />
 
             <main style={{
                 width: '1280px',
@@ -251,7 +238,6 @@ export default function World({ card, cardData }) {
                         width: '600px',
                         margin: '200px 60px',
                     }}>
-                        <Dept color={card.frontmatter.color ?? colors.yellow} style={{marginTop: 0}}>{card.frontmatter.dept?.toUpperCase()}&nbsp;</Dept>
                         <LinkHeading1 pageOnly>{card.frontmatter.title}</LinkHeading1>
                         <Content components={{h1: LinkHeading1, h2: LinkHeading2, h3: LinkHeading3, h4: Caption, p: Paragraph, a: WorldLink, ul: UnorderedList}} />
                     </article>
