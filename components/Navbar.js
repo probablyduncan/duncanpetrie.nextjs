@@ -5,7 +5,7 @@ import { RoughNotation, RoughNotationGroup } from "react-rough-notation";
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { CinzelWrapper, GaramondWrapper, LatoWrapper } from './TextStyles';
-import { colors, printColors } from '@/data/colors';
+import { colors, getGradientBackgroundCSS, gradients } from '@/data/colors';
 
 const logo = 'The Daily DunCAn';
 const linkSpacer = '/';
@@ -28,27 +28,11 @@ export function NewsNav( {homelink, links} ) {
     useEffect(() => {
         var d = new Date();
         setDate(d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }));
-
-        printColors();
     }, []);
 
     const [emailHover, setEmailHover] = useState(false);
 
     links = links ?? defaultLinks;
-
-    const logoBackgroundStyle = {
-        WebkitBackgroundClip: 'text', 
-        WebkitTextFillColor: 'transparent',
-    }
-    const logoColor = {
-        background: `linear-gradient(130deg, ${colors.red} 0%, ${colors.yellow} 100%)`, ...logoBackgroundStyle
-    }
-    const logoColorReverse = {
-        background: `linear-gradient(130deg, ${colors.yellow} 0%, ${colors.red} 100%)`, ...logoBackgroundStyle
-    }
-    const logoBlack = {
-        background: `linear-gradient(120deg, ${colors.black} 0%, ${colors.black} 100%)`, ...logoBackgroundStyle
-    }
 
     return (<>
         <header style={{
@@ -66,10 +50,10 @@ export function NewsNav( {homelink, links} ) {
                 >
                     <Lonk href={"/"}>
                         <motion.span
-                            whileHover={logoColor}
-                            initial={logoColor} 
+                            whileHover={getGradientBackgroundCSS(...gradients.redYellow)}
+                            initial={getGradientBackgroundCSS(...gradients.redYellow)}
                             animate={{
-                                ...logoBlack,
+                                ...getGradientBackgroundCSS(...gradients.black),
                                 transition: {duration: 0.4, delay: 1}
                             }}
                         >&nbsp;{logo}&nbsp;</motion.span>

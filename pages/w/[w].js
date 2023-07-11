@@ -37,26 +37,8 @@ export default function World({ card, cardData }) {
     const { mobile } = useContext(ViewportContext);
     const Content = useMemo(() => getMDXComponent(card.code, {Img: WorldImg, ComicSans: ComicSansWrapper}), [card.code]);
 
-    const backLinkRef = useRef();
     const cardListRef = useRef();
     const articleRef = useRef();
-    const borderRef = useRef();
-
-    //#region  *currently disabled*  flash selected header on page load
-    // const router = useRouter();
-    // useEffect(() => {
-        
-    //     const e = document.getElementById(router.asPath.split('#').at(-1))?.children[0];
-    //     if (e) {
-    //         e.style.borderRadius = '5px';
-    //         e.style.padding = '2px 4px';
-    //         e.style.margin = '-4px -6px';
-    //         e.style.border = '2px solid ${imgData.bigmap.color}';
-    //         animate(e, {border: [null, `2px solid ${imgData.bigmap.color}`, '2px solid #fff']}, {duration: 2});
-    //     }
-
-    // }, [router.asPath])
-    //#endregion
 
     //#region  animations on leaving page
     
@@ -202,6 +184,8 @@ export default function World({ card, cardData }) {
                 alignItems: 'stretch', 
                 marginTop: '40px',
             }}>
+
+                {/* card list */}
                 <div style={{
                     display: 'flex',
                     justifyContent: 'flex-end',
@@ -210,7 +194,7 @@ export default function World({ card, cardData }) {
                         margin: '0 0 50vh',
                         textAlign: 'right',
                     }}>
-                        <div ref={backLinkRef}>
+                        <div>
                             <BackLink href="/world/" text="map" delayAction={toMapAnimation} />
                         </div>
                         <div ref={cardListRef} style={{
@@ -225,7 +209,7 @@ export default function World({ card, cardData }) {
                 </div>
 
                 {/* middle border */}
-                {!exiting && <motion.div ref={borderRef} initial={{
+                {!exiting && <motion.div initial={{
                     width: '2px',
                     height: 'calc(100vh - 70px)',
                     top: '40px',
