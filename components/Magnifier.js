@@ -41,6 +41,7 @@ export default function Magnifier({ img, magImg, magWidth, magHeight, magStrengt
                 width: width + 'px',
                 height: height + 'px',
                 backgroundColor: 'white',
+                backgroundImage: `url(${getSrc(img)})`,
                 backgroundImage: `url(${getSrc(magImg)})`,
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: (1200 * (magStrength ?? 1)) + '%',
