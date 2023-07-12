@@ -107,7 +107,7 @@ export default function World({ worldCards }) {
                     <RoughNotation
                         type={"circle"}
                         strokeWidth={2}
-                        padding={[5,10]}
+                        padding={[8,8]}
                         iterations={1}
                         animationDuration={120}
                         color={colors.rellow}
