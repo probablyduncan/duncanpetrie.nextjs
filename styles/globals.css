@@ -96,3 +96,10 @@ button {
   text-decoration: none;
   background-color:rgb(255, 248, 172);
 }
+
+
+a:focus, button:focus {
+  padding: 5px;
+  margin: -5px;
+  border-radius: 5px;
+}

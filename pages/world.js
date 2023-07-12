@@ -31,6 +31,8 @@ export default function World({ worldCards }) {
     const mapContainer = useRef();
     const cardsContainer = useRef();
 
+    const [homeLinkHover, setHomeLinkHover] = useState();
+
     const [hoverCoords, setHoverCoords] = useState();
     const parseHoverCoords = (coords) => {
         if (!mapRef.current || !coords) {
@@ -101,7 +103,19 @@ export default function World({ worldCards }) {
             }}>
                 
                 {/* home link */}
-                <BackLink />
+                <Lonk href={'/'} style={{ position: 'fixed', top: '40px', right: 'calc(50vw - 640px)', color: colors.black, padding: '5px', margin: '-5px', borderRadius: '5px' }} onMouseEnter={() => setHomeLinkHover(true)} onMouseLeave={() => setHomeLinkHover(false)} >
+                    <RoughNotation
+                        type={"circle"}
+                        strokeWidth={2}
+                        padding={[5,10]}
+                        iterations={1}
+                        animationDuration={120}
+                        color={colors.rellow}
+                        show={homeLinkHover}
+                    >
+                        <LatoWrapper>HOME</LatoWrapper>
+                    </RoughNotation>
+                </Lonk>
 
                 {/* map container */}
                 <motion.div ref={mapContainer} initial={{

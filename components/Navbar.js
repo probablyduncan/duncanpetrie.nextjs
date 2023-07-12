@@ -1,9 +1,9 @@
 import Lonk from './Lonk';
 import style from './navbar.module.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { RoughNotation, RoughNotationGroup } from "react-rough-notation";
 import Link from 'next/link';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { animate, motion, useScroll, useTransform } from 'framer-motion';
 import { CinzelWrapper, GaramondWrapper, LatoWrapper } from './TextStyles';
 import { colors, getGradientBackgroundCSS, gradients } from '@/data/colors';
 
@@ -34,6 +34,17 @@ export function NewsNav( {homelink, links} ) {
 
     links = links ?? defaultLinks;
 
+    const logoSpan = useRef();
+    const logoStyle = (on) => {
+        
+        // we have to do this on HoverStart/HoverEnd because otherwise the animation delay is used, which is weird with hover
+        const gradient = on ? gradients.redYellow : gradients.black;
+        animate(logoSpan.current, {
+            ...getGradientBackgroundCSS(...gradient), 
+            scale: (on ? 1.005 : 1),
+        }, {duration: 0.3, ease: 'easeInOut'});
+    }
+
     return (<>
         <header style={{
             position: 'fixed',
@@ -49,20 +60,36 @@ export function NewsNav( {homelink, links} ) {
                     style={{fontSize: '52px'}}
                 >
                     <Lonk href={"/"}>
-                        <motion.span
-                            whileHover={getGradientBackgroundCSS(...gradients.redYellow)}
-                            initial={getGradientBackgroundCSS(...gradients.redYellow)}
+                        <motion.div ref={logoSpan}
+                            // whileHover={getGradientBackgroundCSS(...gradients.redYellow)}
+                            onHoverStart={() => logoStyle(true)}
+                            onHoverEnd={() => logoStyle(false)}
+                            initial={{...getGradientBackgroundCSS(...gradients.redYellow), display: 'inline-block'}}
                             animate={{
                                 ...getGradientBackgroundCSS(...gradients.black),
                                 transition: {duration: 0.4, delay: 1}
                             }}
-                        >&nbsp;{logo}&nbsp;</motion.span>
+                        >&nbsp;{logo}&nbsp;</motion.div>
                     </Lonk>
                 </motion.h1>
             </CinzelWrapper>
         </header>
 
-        <nav className={style.navbar}>
+        <nav style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr auto 1fr',
+        
+            position: 'sticky',
+            top: '-2px',
+            zIndex: 3,
+        
+            marginTop: '90px',
+            padding: '8px 0',
+        
+            borderTop: `2px solid ${colors.grey}`,
+            borderBottom: `2px solid ${colors.black}`,
+            backgroundColor: colors.white,
+        }}>
 
             {/* either date or link back to home */}
             <GaramondWrapper className={style.links}>
@@ -117,7 +144,7 @@ export function Navlink({text, href}) {
 
     const [hover, toggleHover] = useState(false);
 
-    return (<RoughNotationGroup show={hover}>
+    return (
         <RoughNotation
             type={"circle"}
             strokeWidth={2}
@@ -125,10 +152,14 @@ export function Navlink({text, href}) {
             iterations={1}
             animationDuration={text.length * 30}
             color={colors.rellow}
+            show={hover}
         >
             <LatoWrapper>
                 <h3 
-                    className={style.link} 
+                    style={{
+                        fontSize: '16px',
+                        margin: '0 5px',
+                    }}
                     onMouseEnter={() => toggleHover(true)} 
                     onMouseLeave={() => toggleHover(false)}
                 >
@@ -138,7 +169,7 @@ export function Navlink({text, href}) {
                 </h3>
             </LatoWrapper>
         </RoughNotation>
-    </RoughNotationGroup>);
+    );
 }
 
 export function MobileTopNav({ }) {

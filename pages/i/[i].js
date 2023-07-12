@@ -51,7 +51,7 @@ const extraLinks = [
     {
         id: 'stars',
         title: 'A Necklace of Stars',
-        dept: 'on yon',
+        dept: 'springtide',
         link: '/w/stars',
         tags: ['writing','world'],
         cover: {images: 'heartland6'},
@@ -59,9 +59,18 @@ const extraLinks = [
     {
         id: 'zigglewomping',
         title: 'Zigglewomping',
-        dept: 'on yon',
+        dept: 'springtide',
         link: '/w/zigglewomping',
         tags: ['writing', 'world'],
+        colors: [colors.surrogateRed],
+    },
+    {
+        id: 'baron',
+        title: 'The Baron of Inselberg',
+        dept: 'springtide',
+        link: '/w/baron',
+        tags: ['writing', 'world'],
+        colors: [colors.lightBlue],
     }
 ]
 
