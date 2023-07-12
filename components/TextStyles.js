@@ -241,14 +241,14 @@ export function LinkHeadingTemplate ({ children, go = true, pageOnly }) {
             display: !mobile ? 'inline-block' : 'inline', width: !mobile ? 'calc(100% + 80px)' : 'auto', // maybe necessary for longer titles?
         }}>
             {children}
-            <motion.span style={{display: "inline-block", opacity: 0, x: -6}} variants={{hover: {x: 0, opacity: 0.3}}}>
+            <motion.span aria-hidden="true" style={{display: "inline-block", opacity: 0, x: -6}} variants={{hover: {x: 0, opacity: 0.3}}}>
                 &nbsp;&nbsp;
                 <motion.button style={{margin: '-5px', padding: '5px'}} whileHover={{rotate: 180}} onClick={copyLink} title="Copy Link">
                     #
                 </motion.button>
                 &nbsp;&nbsp;
             </motion.span>
-            <motion.span ref={copiedRef} style={{display: 'inline-block', opacity: 0, x: -20, userSelect: 'none', pointerEvents: 'none'}}>
+            <motion.span aria-hidden="true" ref={copiedRef} style={{display: 'inline-block', opacity: 0, x: -20, userSelect: 'none', pointerEvents: 'none'}}>
                 link copied
             </motion.span>
         </motion.strong>

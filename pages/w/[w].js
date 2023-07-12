@@ -176,7 +176,7 @@ export default function World({ card, cardData }) {
         <>
             <HeadData title={`${card.frontmatter.title} - Springtide - `} />
 
-            <main style={{
+            <div style={{
                 width: '1280px',
                 maxWidth: '95vw',
                 display: 'flex',
@@ -186,11 +186,11 @@ export default function World({ card, cardData }) {
             }}>
 
                 {/* card list */}
-                <div style={{
+                <nav style={{
                     display: 'flex',
                     justifyContent: 'flex-end',
                 }}>
-                    <nav style={{
+                    <div style={{
                         margin: '0 0 50vh',
                         textAlign: 'right',
                     }}>
@@ -205,11 +205,11 @@ export default function World({ card, cardData }) {
                         }}>
                             <CardList cardData={cardData} delayAction={toCardAnimation} selected={exiting ? null : card.w} />
                         </div>
-                    </nav>
-                </div>
+                    </div>
+                </nav>
 
                 {/* middle border */}
-                {!exiting && <motion.div initial={{
+                {!exiting && <motion.div aria-hidden="true" initial={{
                     width: '2px',
                     height: 'calc(100vh - 70px)',
                     top: '40px',
@@ -218,16 +218,20 @@ export default function World({ card, cardData }) {
                 }}></motion.div>}
 
                 <motion.div initial={{ opacity: 0, }} animate={{ opacity: 1 }}>
-                    <article ref={articleRef} style={{
+                    <main ref={articleRef} style={{
                         width: '600px',
                         margin: '200px 60px',
                     }}>
-                        <LinkHeading1 pageOnly>{card.frontmatter.title}</LinkHeading1>
-                        <Content components={{h1: LinkHeading1, h2: LinkHeading2, h3: LinkHeading3, h4: Caption, p: Paragraph, a: WorldLink, ul: UnorderedList}} />
-                    </article>
+                        <header>
+                            <LinkHeading1 pageOnly>{card.frontmatter.title}</LinkHeading1>
+                        </header>
+                        <article>
+                            <Content components={{h1: LinkHeading1, h2: LinkHeading2, h3: LinkHeading3, h4: Caption, p: Paragraph, a: WorldLink, ul: UnorderedList}} />
+                        </article>
+                    </main>
                 </motion.div>
 
-            </main>
+            </div>
         </>
     ) : (
         <Layout title={card.frontmatter.title ?? card.w ?? "World"} pageName={'back to map'} color={colors.mapGreen} menuLink='/world' menuName={'back to map'}>

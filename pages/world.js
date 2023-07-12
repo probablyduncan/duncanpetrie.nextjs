@@ -99,6 +99,9 @@ export default function World({ worldCards }) {
                 alignItems: 'stretch', 
                 marginTop: '40px',
             }}>
+                
+                {/* home link */}
+                <BackLink />
 
                 {/* map container */}
                 <motion.div ref={mapContainer} initial={{
@@ -146,9 +149,6 @@ export default function World({ worldCards }) {
                         />
 
                 </motion.nav>
-                
-                {/* home link */}
-                <BackLink />
             </main>
         ) : (
             <Layout pageName='world' menuLink='/i/all' color={imgData.bigmap.color}>
@@ -211,8 +211,8 @@ export function BackLink({ text = 'home', href = '/', delay, delayAction, ref })
             <LatoWrapper>
                 <Lonk href={href} delay={delay} delayAction={delayAction}>
                     <motion.div variants={{hover: {color: imgData.bigmapnames.color}}}>
-                        <motion.span style={{display: 'inline-block', marginRight: 8}} variants={{hover: {x: -4}}}>
-                            ⮘
+                        <motion.span  aria-hidden="true" style={{display: 'inline-block', marginRight: 8, rotate: 180, y: 2}} variants={{hover: {x: -4}}}>
+                            ➱
                         </motion.span>
                         <motion.span>
                             {text.toUpperCase()}
