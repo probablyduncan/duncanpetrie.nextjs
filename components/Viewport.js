@@ -50,8 +50,6 @@ export function ViewportProvider({ children }) {
 
     useEffect(() => {
 
-        showDialog();
-
         const dialogKeyHandler = (e) => {
             // if (e.code === "ArrowLeft") previousImage();
             // if (e.code === "ArrowRight") nextImage();
@@ -63,10 +61,10 @@ export function ViewportProvider({ children }) {
         }
         
         window.addEventListener('keydown', dialogKeyHandler);
-        window.addEventListener('scroll', hideDialog);
+        window.addEventListener('wheel', hideDialog);
         return () => { 
             window.removeEventListener("keydown", dialogKeyHandler) 
-            window.addEventListener('scroll', hideDialog);
+            window.addEventListener('wheel', hideDialog);
 
         };
 
