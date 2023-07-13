@@ -61,24 +61,13 @@ export function ViewportProvider({ children }) {
                 showDialog();
             }
         }
-
-        const dialogTouchHandler = (e) => {
-            if (e.touches.length == 1) hideDialog();
-        }
         
-        // this handles escaping from the dialog, as well as changing images
         window.addEventListener('keydown', dialogKeyHandler);
-
-        // this handles escaping on mouse scroll
         window.addEventListener('wheel', hideDialog);
-
-        // this handles escaping on touch scroll, but NOT on zoom
-        window.addEventListener('touchmove', dialogTouchHandler);
 
         return () => { 
             window.removeEventListener('keydown', dialogKeyHandler);
             window.removeEventListener('wheel', hideDialog);
-            window.removeEventListener('touchmove', dialogTouchHandler);
         };
 
     }, []);
@@ -95,7 +84,7 @@ export function ViewportProvider({ children }) {
                 boxShadow: `inset 0 0 8px ${colors.black}55`,
                 ...getGradientBackgroundCSS(...gradients.purpleGreen),
             }}>
-                <GaramondWrapper style={{fontWeight: 'semi-bold'}} onClick={hideDialog}>Close.</GaramondWrapper>
+                <GaramondWrapper style={{fontWeight: 'semi-bold'}}><button onClick={hideDialog}>Close.</button></GaramondWrapper>
             </motion.dialog>
             {children}
         </ViewportContext.Provider>
