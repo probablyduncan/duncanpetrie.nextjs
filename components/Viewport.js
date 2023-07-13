@@ -50,6 +50,8 @@ export function ViewportProvider({ children }) {
 
     useEffect(() => {
 
+        showDialog();
+
         const dialogKeyHandler = (e) => {
             // if (e.code === "ArrowLeft") previousImage();
             // if (e.code === "ArrowRight") nextImage();
