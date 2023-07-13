@@ -1,5 +1,5 @@
 import { Dept, UnderLonk, Paragraph, Title } from "@/components/TextStyles";
-import { ViewportContext } from "@/components/Viewport";
+import { ViewportContext } from "@/pages/_app";
 import Head from "next/head";
 import { useContext, useEffect, useState } from "react";
 

@@ -2,7 +2,7 @@ import { useContext, useRef } from "react";
 import { Caption, Dept, LinkHeading3, Paragraph, Subtitle, Title } from "./TextStyles";
 import { motion, useInView, useScroll, useSpring, useTransform } from "framer-motion";
 import { ArticleContext } from "@/pages/a/[a]";
-import { ViewportContext } from "./Viewport";
+import { ViewportContext } from "@/pages/_app";
 
 export function ArticleTitle({ children, ...props }) {
     return <ArticleSlideIn><Title {...props}>{children}</Title></ArticleSlideIn>

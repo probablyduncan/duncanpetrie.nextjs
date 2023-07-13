@@ -1,11 +1,11 @@
-import { useEffect, useState, createContext, useRef } from "react";
-import { Paragraph } from "./TextStyles";
-import { useMotionValueEvent, useScroll } from "framer-motion";
-import { colors } from "@/data/colors";
+import { useEffect, useState, useRef } from "react";
+import { GaramondWrapper } from "./TextStyles";
+import { motion } from "framer-motion";
+import { colors, getGradientBackgroundCSS, gradients } from "@/data/colors";
+import { ViewportContext } from "@/pages/_app";
 
 // modeled after https://blog.logrocket.com/developing-responsive-layouts-with-react-hooks/
-
-export const ViewportContext = createContext();
+// ViewportContext lives in _app.js so I can fest-refresh here
 
 export function ViewportProvider({ children }) {
 
@@ -30,51 +30,62 @@ export function ViewportProvider({ children }) {
         }
     }, []);
 
-    const dialogRef = useRef();
-    const showHideDialog = (show) => {
-        if (!dialogRef.current) return;
-        
-        document.body.style.backgroundColor = show ? colors.offWhite : colors.white
-        
-        if (show) dialogRef.current.showModal();
-        else dialogRef.current.close();
-    }
 
-    const { scrollY } = useScroll();
-    useMotionValueEvent(scrollY, 'change', () => showHideDialog(false));
+    const dialogRef = useRef();
+
+    const showDialog = () => {
+        
+        if (!dialogRef.current) return;
+
+        document.body.style.backgroundColor = colors.offWhite;
+        dialogRef.current.showModal();
+    }
+    const hideDialog = () => {
+        
+        if (!dialogRef.current) return;
+
+        document.body.style.backgroundColor = colors.white;
+        dialogRef.current.close();
+    }
 
     useEffect(() => {
 
-        showHideDialog(true);
+        showDialog();
 
         const dialogKeyHandler = (e) => {
-            // if (e.code === "ArrowLeft") next(true);
-            // if (e.code === "ArrowRight") next();
+            // if (e.code === "ArrowLeft") previousImage();
+            // if (e.code === "ArrowRight") nextImage();
             if (e.code === "Escape") {
-                showHideDialog(false)
-            } else if (e.code === "KeyP") {
-                showHideDialog(true);
+                hideDialog();
+            } else if (e.code === "Backquote") {
+                showDialog();
             }
         }
         
-        window.addEventListener("keydown", dialogKeyHandler);
-        // window.addEventListener('scroll', dialogScrollHandler);
-        // window.addEventListener('touchmove', () => showHideDialog());
-        
-        return () => {
-            window.removeEventListener("keydown", dialogKeyHandler)
-            // window.removeEventListener('scroll', dialogScrollHandler);
-            // window.removeEventListener('touchmove', () => showHideDialog());
+        window.addEventListener('keydown', dialogKeyHandler);
+        window.addEventListener('scroll', hideDialog);
+        return () => { 
+            window.removeEventListener("keydown", dialogKeyHandler) 
+            window.addEventListener('scroll', hideDialog);
+
         };
 
-    }, [])
+    }, []);
 
     // return the context provider with mobile bool
     return (
         <ViewportContext.Provider value={{mobile}}>
-            <dialog ref={dialogRef} style={{zIndex: 1000}}>
-                <Paragraph>Heyyy.</Paragraph>
-            </dialog>
+            <motion.dialog ref={dialogRef} style={{
+                zIndex: 1000, 
+                color: colors.black, 
+                padding: '8px 12px',
+                border: `2px solid ${colors.black}`, 
+                borderRadius: '20px',
+                boxShadow: `inset 0 0 8px ${colors.black}55`,
+                ...getGradientBackgroundCSS(...gradients.purpleGreen),
+            }}>
+                <GaramondWrapper style={{fontWeight: 'semi-bold'}}>Hello.</GaramondWrapper>
+            </motion.dialog>
             {children}
         </ViewportContext.Provider>
     );

@@ -2,7 +2,7 @@ import Lonk from "./Lonk";
 import style from "./section.module.css"
 import { useContext, useState } from "react";
 import { RoughNotation, RoughNotationGroup } from "react-rough-notation";
-import { ViewportContext } from "./Viewport";
+import { ViewportContext } from "@/pages/_app";
 import { Paragraph, Title, Dept } from "@/components/TextStyles";
 import Img from "./Img";
 import { colors } from "@/data/colors";

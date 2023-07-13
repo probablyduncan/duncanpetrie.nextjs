@@ -8,7 +8,7 @@ import { Dept, Title } from "@/components/TextStyles";
 import { motion, useInView, useScroll, useSpring, useTransform } from "framer-motion";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import Img from "@/components/Img";
-import { ViewportContext } from "@/components/Viewport";
+import { ViewportContext } from "@/pages/_app";
 import { colors } from "@/data/colors";
 
 export async function getStaticProps() {

@@ -5,7 +5,7 @@ import { RoughNotation, RoughNotationGroup } from "react-rough-notation";
 import Link from 'next/link';
 import { animate, motion, useScroll, useTransform } from 'framer-motion';
 import { CinzelWrapper, GaramondWrapper, LatoWrapper } from './TextStyles';
-import { colors, getGradientBackgroundCSS, gradients } from '@/data/colors';
+import { colors, getGradientTextCSS, gradients } from '@/data/colors';
 
 const logo = 'The Daily DunCAn';
 const linkSpacer = '/';
@@ -40,7 +40,7 @@ export function NewsNav( {homelink, links} ) {
         // we have to do this on HoverStart/HoverEnd because otherwise the animation delay is used, which is weird with hover
         const gradient = on ? gradients.redYellow : gradients.black;
         animate(logoSpan.current, {
-            ...getGradientBackgroundCSS(...gradient), 
+            ...getGradientTextCSS(...gradient), 
             scale: (on ? 1.005 : 1),
         }, {duration: 0.3, ease: 'easeInOut'});
     }
@@ -61,12 +61,11 @@ export function NewsNav( {homelink, links} ) {
                 >
                     <Lonk href={"/"}>
                         <motion.div ref={logoSpan}
-                            // whileHover={getGradientBackgroundCSS(...gradients.redYellow)}
                             onHoverStart={() => logoStyle(true)}
                             onHoverEnd={() => logoStyle(false)}
-                            initial={{...getGradientBackgroundCSS(...gradients.redYellow), display: 'inline-block'}}
+                            initial={{...getGradientTextCSS(...gradients.redYellow), display: 'inline-block'}}
                             animate={{
-                                ...getGradientBackgroundCSS(...gradients.black),
+                                ...getGradientTextCSS(...gradients.black),
                                 transition: {duration: 0.4, delay: 1}
                             }}
                         >&nbsp;{logo}&nbsp;</motion.div>

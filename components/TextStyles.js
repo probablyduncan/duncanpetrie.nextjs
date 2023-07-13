@@ -3,7 +3,7 @@ import { useContext, useRef, useState } from "react";
 import { RoughNotation } from "react-rough-notation";
 import Lonk from "./Lonk";
 import { animate, motion } from "framer-motion";
-import { ViewportContext } from "./Viewport";
+import { ViewportContext } from "@/pages/_app";
 import { colors } from "@/data/colors";
 
 /**

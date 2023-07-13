@@ -7,7 +7,7 @@ import { AnimatePresence, animate, motion } from "framer-motion";
 import { useContext, useRef, useState } from "react";
 import { RoughNotation } from "react-rough-notation";
 import groupBy from "@/lib/groupBy";
-import { ViewportContext } from "@/components/Viewport";
+import { ViewportContext } from "@/pages/_app";
 import Img from "@/components/Img";
 import Head from "next/head";
 import Layout, { HeadData } from "@/components/Layout";

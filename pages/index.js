@@ -1,7 +1,7 @@
 import Layout from '@/components/Layout';
 import Section, {FeatureSection, FooterSection, MagnifierSection, SlideshowSection, MobileHero} from '@/components/Section';
 import Story from '@/components/Story';
-import { ViewportContext } from '@/components/Viewport';
+import { ViewportContext } from "@/pages/_app";
 import { useContext } from 'react';
 import { MobileTopNav } from '@/components/Navbar';
 import { imgData } from '@/data/images';

@@ -1,6 +1,8 @@
 import { ViewportProvider } from '@/components/Viewport';
 import '@/styles/globals.css'
-import React from 'react';
+import React, { createContext } from 'react';
+
+export const ViewportContext = createContext();
 
 export default function App({ Component, pageProps }) {
   

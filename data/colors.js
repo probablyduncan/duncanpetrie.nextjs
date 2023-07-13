@@ -44,11 +44,12 @@ export const gradients = {
 /**
  * Examples: 
  * 
- * - \<tag style={getGradientBackgroundCSS(colors.red, colors.yellow)} />
- * - \<tag style={{p: 1, ...getGradientBackgroundCSS(...gradients.redYellow) }} />
+ * - \<tag style={getGradientTextCSS(colors.red, colors.yellow)} />
+ * - \<tag style={{p: 1, ...getGradientTextCSS(...gradients.redYellow) }} />
  */
-export const getGradientBackgroundCSS = ( c1, c2, deg ) => { return {background: `linear-gradient(${deg ?? 130}deg, ${c1 ?? colors.black} 0%, ${c2 ?? colors.clear} 100%)`, ...extraGradientBackgroundStyle,} }
-export const extraGradientBackgroundStyle = { WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', }
+export const getGradientBackgroundCSS = ( c1, c2, deg ) => { return {background: `linear-gradient(${deg ?? 130}deg, ${c1 ?? colors.black} 0%, ${c2 ?? colors.clear} 100%)`} }
+export const getGradientTextCSS = ( c1, c2, deg ) => { return {background: `linear-gradient(${deg ?? 130}deg, ${c1 ?? colors.black} 0%, ${c2 ?? colors.clear} 100%)`, ...gradientTextExtraStyle,} }
+export const gradientTextExtraStyle = { WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', }
 
 
 

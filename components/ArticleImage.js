@@ -1,7 +1,7 @@
 import { useContext, useRef } from "react";
 import { imgData } from "@/data/images";
 import { motion, useInView, useScroll, useSpring, useTransform } from "framer-motion";
-import { ViewportContext } from "./Viewport";
+import { ViewportContext } from "@/pages/_app";
 import { LightboxLinkedImg, LightboxLinkedSlideshow } from "./Lightbox";
 import { ArticleContext } from "@/pages/a/[a]";
 import { Caption } from "./TextStyles";

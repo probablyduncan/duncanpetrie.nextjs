@@ -3,7 +3,7 @@ import { getWorldCard, getWorldCardData, getWorldCardIDs } from "@/lib/dataParse
 import { getMDXComponent } from "mdx-bundler/client";
 import { Caption, ComicSansWrapper, Dept, LinkHeading1, LinkHeading2, LinkHeading3, Paragraph, Title, UnderLonk, UnorderedList, Heading1, Heading2, Heading3 } from "@/components/TextStyles";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
-import { ViewportContext } from "@/components/Viewport";
+import { ViewportContext } from "@/pages/_app";
 import Head from "next/head";
 import { BackLink, CardList } from "../world";
 import { animate, motion, useScroll } from "framer-motion";

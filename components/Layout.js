@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useContext } from "react";
-import { ViewportContext } from "./Viewport";
+import { ViewportContext } from "@/pages/_app";
 import {NewsNav, MobileNav, SimpleNav} from "./Navbar";
 import { colors } from "@/data/colors";
 
