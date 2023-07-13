@@ -1,6 +1,7 @@
 import { useEffect, useState, createContext, useRef } from "react";
 import { Paragraph } from "./TextStyles";
 import { useMotionValueEvent, useScroll } from "framer-motion";
+import { colors } from "@/data/colors";
 
 // modeled after https://blog.logrocket.com/developing-responsive-layouts-with-react-hooks/
 
@@ -30,25 +31,29 @@ export function ViewportProvider({ children }) {
     }, []);
 
     const dialogRef = useRef();
+    const showHideDialog = (show) => {
+        if (!dialogRef.current) return;
+        
+        document.body.style.backgroundColor = show ? colors.offWhite : colors.white
+        
+        if (show) dialogRef.current.showModal();
+        else dialogRef.current.close();
+    }
 
     const { scrollY } = useScroll();
-    useMotionValueEvent(scrollY, 'change', () => {if (dialogRef.current) {
-        dialogRef.current.close();
-        setTimeout(() => {dialogRef.current.showModal();}, 1000);
-    }});
+    useMotionValueEvent(scrollY, 'change', () => showHideDialog(false));
 
     useEffect(() => {
 
-        dialogRef.current.showModal();
+        showHideDialog(true);
 
         const dialogKeyHandler = (e) => {
             // if (e.code === "ArrowLeft") next(true);
             // if (e.code === "ArrowRight") next();
             if (e.code === "Escape") {
-                dialogRef.current.close();
-                setTimeout(() => {dialogRef.current.showModal();}, 1000);
+                showHideDialog(false)
             } else if (e.code === "KeyP") {
-                dialogRef.current.showModal(); 
+                showHideDialog(true);
             }
         }
         

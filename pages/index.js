@@ -164,7 +164,7 @@ export default function FrontPage( props ) {
           dept='mind map'
           title='Charting the Wilds'
           route="/world"
-          background={colors.light}
+          background={colors.offWhite}
           annotateMap
         />
         <Story
@@ -177,7 +177,7 @@ export default function FrontPage( props ) {
           ]}
           link="youtube"
           route="https://youtu.be/JRXZAaDxGCQ"
-          background={colors.light}
+          background={colors.offWhite}
         />
         <Story 
           img={imgData.diss}

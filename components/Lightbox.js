@@ -117,7 +117,7 @@ export default function Lightbox({ index }) {
                     display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
                     flexFlow: isTall ? 'column' : 'row',
                     
-                    backgroundColor: colors.light,
+                    backgroundColor: colors.offWhite,
                 }}
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ ease: "easeOut", duration: 0.1 }}
             >
@@ -221,7 +221,7 @@ export function LightboxLinkedSlideshow({ imgKeys, noCaptions, noBorder, margin,
         const buttonElement = prev ? arrowLeft.current : arrowRight.current;
         
         // start animation
-        animate(buttonElement, {color: colors.light, backgroundColor: colors.grey}, {duration: 0.1});
+        animate(buttonElement, {color: colors.offWhite, backgroundColor: colors.grey}, {duration: 0.1});
         
         // end animation
         setTimeout(() => {
@@ -281,7 +281,7 @@ export function LightboxLinkedSlideshow({ imgKeys, noCaptions, noBorder, margin,
             backgroundColor: colors.white,
         },
         whileHover: {
-            color: colors.light,
+            color: colors.offWhite,
             backgroundColor: colors.grey,
             transition: {duration: 0.2}
         },

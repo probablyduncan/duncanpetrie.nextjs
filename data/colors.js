@@ -3,7 +3,7 @@ export const colors = {
     slate: '#444a4a',
     caption: '#737878',
     grey: '#cdcdcd',
-    light: '#fafaff',
+    offWhite: '#fafaff',
     white: '#ffffff',
     clear: '#ffffff00',
 
