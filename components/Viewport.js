@@ -41,11 +41,6 @@ export function ViewportProvider({ children }) {
 
         dialogRef.current.showModal();
 
-        const showHideDialog = (on) => {
-            if (on) dialogRef.current.showModal(); 
-            else dialogRef.current.close();
-        }
-
         const dialogKeyHandler = (e) => {
             // if (e.code === "ArrowLeft") next(true);
             // if (e.code === "ArrowRight") next();
