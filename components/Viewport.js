@@ -1,5 +1,6 @@
 import { useEffect, useState, createContext, useRef } from "react";
 import { Paragraph } from "./TextStyles";
+import { useMotionValueEvent, useScroll } from "framer-motion";
 
 // modeled after https://blog.logrocket.com/developing-responsive-layouts-with-react-hooks/
 
@@ -29,6 +30,13 @@ export function ViewportProvider({ children }) {
     }, []);
 
     const dialogRef = useRef();
+
+    const { scrollY } = useScroll();
+    useMotionValueEvent(scrollY, 'change', () => {if (dialogRef.current) {
+        dialogRef.current.close();
+        setTimeout(() => {dialogRef.current.showModal();}, 1000);
+    }});
+
     useEffect(() => {
 
         dialogRef.current.showModal();
@@ -41,18 +49,22 @@ export function ViewportProvider({ children }) {
         const dialogKeyHandler = (e) => {
             // if (e.code === "ArrowLeft") next(true);
             // if (e.code === "ArrowRight") next();
-            if (e.code === "Escape") showHideDialog();
-            else if (e.code === "KeyP") showHideDialog(true);
+            if (e.code === "Escape") {
+                dialogRef.current.close();
+                setTimeout(() => {dialogRef.current.showModal();}, 1000);
+            } else if (e.code === "KeyP") {
+                dialogRef.current.showModal(); 
+            }
         }
         
         window.addEventListener("keydown", dialogKeyHandler);
-        window.addEventListener('wheel', () => showHideDialog());
-        window.addEventListener('touchmove', () => showHideDialog());
+        // window.addEventListener('scroll', dialogScrollHandler);
+        // window.addEventListener('touchmove', () => showHideDialog());
         
         return () => {
             window.removeEventListener("keydown", dialogKeyHandler)
-            window.removeEventListener('wheel', () => showHideDialog());
-            window.removeEventListener('touchmove', () => showHideDialog());
+            // window.removeEventListener('scroll', dialogScrollHandler);
+            // window.removeEventListener('touchmove', () => showHideDialog());
         };
 
     }, [])

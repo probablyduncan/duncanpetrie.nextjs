@@ -103,3 +103,14 @@ button {
   margin: -5px;
   border-radius: 5px;
 } */
+
+
+dialog {
+  background-color: aliceblue;
+}
+
+dialog::backdrop {
+  background-color: #fafaff;
+  padding: 20vh 20vw;
+  margin: -20vh -20vw;
+}
