@@ -55,19 +55,30 @@ export function ViewportProvider({ children }) {
         const dialogKeyHandler = (e) => {
             // if (e.code === "ArrowLeft") previousImage();
             // if (e.code === "ArrowRight") nextImage();
-            if (e.code === "Escape") {
+            if (e.code === 'Escape') {
                 hideDialog();
-            } else if (e.code === "Backquote") {
+            } else if (e.code === 'Backquote') {
                 showDialog();
             }
         }
-        
-        window.addEventListener('keydown', dialogKeyHandler);
-        window.addEventListener('wheel', hideDialog);
-        return () => { 
-            window.removeEventListener("keydown", dialogKeyHandler) 
-            window.addEventListener('wheel', hideDialog);
 
+        const dialogTouchHandler = (e) => {
+            if (e.touches.length == 1) hideDialog();
+        }
+        
+        // this handles escaping from the dialog, as well as changing images
+        window.addEventListener('keydown', dialogKeyHandler);
+
+        // this handles escaping on mouse scroll
+        window.addEventListener('wheel', hideDialog);
+
+        // this handles escaping on touch scroll, but NOT on zoom
+        window.addEventListener('touchmove', dialogTouchHandler);
+
+        return () => { 
+            window.removeEventListener('keydown', dialogKeyHandler);
+            window.removeEventListener('wheel', hideDialog);
+            window.removeEventListener('touchmove', dialogTouchHandler);
         };
 
     }, []);
@@ -84,7 +95,7 @@ export function ViewportProvider({ children }) {
                 boxShadow: `inset 0 0 8px ${colors.black}55`,
                 ...getGradientBackgroundCSS(...gradients.purpleGreen),
             }}>
-                <GaramondWrapper style={{fontWeight: 'semi-bold'}}>Hello.</GaramondWrapper>
+                <GaramondWrapper style={{fontWeight: 'semi-bold'}} onClick={hideDialog}>Close.</GaramondWrapper>
             </motion.dialog>
             {children}
         </ViewportContext.Provider>
