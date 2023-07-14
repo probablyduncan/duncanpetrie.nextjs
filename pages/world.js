@@ -67,6 +67,8 @@ export default function World({ worldCards }) {
         startExiting(true);
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
+        if (!mapContainer.current || !cardsContainer.current) return 0;
+
         // animate map
         animate(mapContainer.current, {
             // animation
@@ -264,9 +266,6 @@ export default function World({ worldCards }) {
                     <div style={{ margin: '80px 4px' }}>
                         <CardList 
                             cardData={worldCards} 
-                            onHover={(on, coords) => parseHoverCoords(on ? coords : null)} 
-                            delayAction={toCardAnimation} 
-                            exiting={exiting}
                         />
                     </div>
 
@@ -363,7 +362,7 @@ export function WorldMenu({ allIDs, left }) {
 
 export function WorldDialogs({ cardData }) {
 
-    const processedCardData = cardData.map((w) => {return {id: w.id, title: w.title, tags: w.tags}})
+    const processedCardData = cardData.map((w) => {return {id: w.id, title: w.title, groups: processWorldCardGroups(w.groups)}});
 
     return (<>
         <dialog id="filter">
