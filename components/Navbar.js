@@ -183,14 +183,10 @@ export function MobileTopNav({ }) {
 }
 
 export function MobileNav( props ) {
-    
-    const mobileNavMenu = () => {
-        
-    };
 
     return <LatoWrapper className={style.mobileNavContainer} div>
-        <nav className={style.mobileNav}>
-            <Menurl {...props} menuFunction={mobileNavMenu} spread />
+        <nav className={style.mobileNav} style={{width: props.fullWidth ? '100vw' : 'calc(480px - 48px)'}}>
+            <Menurl {...props} spread />
         </nav>
     </LatoWrapper>;
 }
@@ -235,7 +231,7 @@ function Menurl({ pageName = "menu", menuName = "menu", color, menuFunction, men
                     &nbsp;&nbsp;&nbsp;&nbsp;{hover ? menuName?.toUpperCase() : pageName?.toUpperCase()}
                 </Lonk>
             </motion.span>
-        :
+        : menuFunction ?
             <motion.button  
                 whileHover={{ x: spread ? -8 : 8 }} 
                 whileTap={{x : spread ? -16 : 16 }}
@@ -245,7 +241,7 @@ function Menurl({ pageName = "menu", menuName = "menu", color, menuFunction, men
                 onHoverEnd={() => setHover(false)}
             >
                 &nbsp;&nbsp;&nbsp;&nbsp;{hover ? menuName?.toUpperCase() : pageName?.toUpperCase()}
-            </motion.button>
+            </motion.button> : <span style={{color : color ?? colors.cornflowerBlue}} >&nbsp;&nbsp;&nbsp;&nbsp;{pageName?.toUpperCase()}</span>
         }
     </div>)
 }

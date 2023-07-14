@@ -47,7 +47,6 @@ main.mobileContent {
 a, p, h1, h2, h3, h4, h5, h6, button {
   margin: 0;
   padding: 0;
-  transition: color 0.2s;
   font-family: inherit;
   font-size: inherit;
   font-weight: inherit;
@@ -105,11 +104,11 @@ button {
 } */
 
 
-dialog {
+dialog#lightbox {
   border-radius: 20px;
 }
 
-dialog::backdrop {
+dialog#lightbox::backdrop {
   background-color: #fafaff;
   padding: 20vh 20vw;
   margin: -20vh -20vw;

@@ -30,17 +30,36 @@ export function ViewportProvider({ children }) {
         }
     }, []);
 
+    const [viewport, setViewportSize] = useState({width: 1920, height: 1080});
+    // const [width, setWidth] = useState(1920);
+    // const [height, setHeight] = useState(1080);
+    useEffect(() => {
+
+        const updateViewportSize = (e) => { 
+            
+            // if (width != window.innerWidth) setWidth(window.innerWidth);
+            // if (height != window.innerHeight) setHeight(window.innerHeight);
+            setViewportSize({width: window.innerWidth, height: window.innerHeight}); 
+        }
+        
+        updateViewportSize();
+        
+        window.addEventListener('resize', updateViewportSize);
+        return () => { window.removeEventListener('resize', updateViewportSize); }
+
+    }, [])
+
 
     const dialogRef = useRef();
 
-    const showDialog = () => {
+    const showModal = () => {
         
         if (!dialogRef.current) return;
 
         document.body.style.backgroundColor = colors.offWhite;
         dialogRef.current.showModal();
     }
-    const hideDialog = () => {
+    const closeModal = () => {
         
         if (!dialogRef.current) return;
 
@@ -50,32 +69,29 @@ export function ViewportProvider({ children }) {
 
     useEffect(() => {
 
-        showDialog();
-
         const dialogKeyHandler = (e) => {
-            // if (e.code === "ArrowLeft") previousImage();
-            // if (e.code === "ArrowRight") nextImage();
-            if (e.code === 'Escape') {
-                hideDialog();
-            } else if (e.code === 'Backquote') {
-                showDialog();
-            }
+            if (e.code === 'Escape') closeModal();
+            else if (e.code === 'Backquote') showModal();
+            // else if (e.code === "ArrowLeft") previousImage();
+            // else if (e.code === "ArrowRight") nextImage();
+            
         }
         
         window.addEventListener('keydown', dialogKeyHandler);
-        window.addEventListener('wheel', hideDialog);
+        window.addEventListener('wheel', closeModal);
 
         return () => { 
             window.removeEventListener('keydown', dialogKeyHandler);
-            window.removeEventListener('wheel', hideDialog);
+            window.removeEventListener('wheel', closeModal);
         };
 
     }, []);
 
     // return the context provider with mobile bool
     return (
-        <ViewportContext.Provider value={{mobile}}>
-            <motion.dialog ref={dialogRef} style={{
+        <ViewportContext.Provider value={{mobile, viewport}}>
+            <Loading loadOnDefined={mobile}/>
+            <motion.dialog id="lightbox" ref={dialogRef} style={{
                 zIndex: 1000, 
                 color: colors.black, 
                 padding: '8px 12px',
@@ -84,9 +100,26 @@ export function ViewportProvider({ children }) {
                 boxShadow: `inset 0 0 8px ${colors.black}55`,
                 ...getGradientBackgroundCSS(...gradients.purpleGreen),
             }}>
-                <GaramondWrapper style={{fontWeight: 'semi-bold'}}><button onClick={hideDialog}>Close.</button></GaramondWrapper>
+                <GaramondWrapper style={{fontWeight: 'semi-bold'}}><button onClick={closeModal}>Close.</button></GaramondWrapper>
             </motion.dialog>
             {children}
         </ViewportContext.Provider>
     );
+}
+
+function Loading({ loadOnDefined }) {
+    return (<div style={{
+        zIndex: '100',
+        position: 'fixed',
+        top: '0', left: '0',
+        width: '100vw', height: '100vh',
+
+        backgroundColor: colors.white,
+        transition: 'opacity 1s',
+        opacity: loadOnDefined == undefined ? '1' : '0',
+
+        pointerEvents: 'none'
+    }}>
+        
+    </div>);
 }

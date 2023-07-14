@@ -12,7 +12,6 @@ export default function Layout({ title, children, newsNav, color, pageName, menu
 
     return (<>
         <HeadData title={title}/>
-        <Loading loadOnDefined={mobile} />
         {!mobile && newsNav && <NewsNav />}
         {!mobile && !newsNav && <SimpleNav color={color} pageName={pageName} menuName={menuName} menuLink={menuLink} galleryAction={galleryAction} galleryName={galleryName} galleryColor={galleryColor} />}
         <main className={!mobile ? 'content ' : 'mobileContent '} style={{
@@ -37,23 +36,6 @@ function Menu({ bottom, show }) {
         backgroundColor: 'green',
         opacity: '0.2',
         zIndex: '100'
-    }}>
-        
-    </div>);
-}
-
-function Loading({ loadOnDefined }) {
-    return (<div style={{
-        zIndex: '100',
-        position: 'fixed',
-        top: '0', left: '0',
-        width: '100vw', height: '100vh',
-
-        backgroundColor: colors.white,
-        transition: 'opacity 1s',
-        opacity: loadOnDefined == undefined ? '1' : '0',
-
-        pointerEvents: 'none'
     }}>
         
     </div>);

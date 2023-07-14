@@ -1,17 +1,19 @@
 import Lonk from "@/components/Lonk";
 import Magnifier from "@/components/Magnifier";
-import { LatoWrapper, Title, Dept, UnderLonk, UnderLine } from "@/components/TextStyles";
+import { LatoWrapper, Title, Dept, UnderLonk, UnderLine, GaramondWrapper, Caption } from "@/components/TextStyles";
 import { imgData } from "@/data/images";
 import { getWorldCardData } from "@/lib/dataParser";
 import { AnimatePresence, animate, motion } from "framer-motion";
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { RoughNotation } from "react-rough-notation";
 import groupBy from "@/lib/groupBy";
 import { ViewportContext } from "@/pages/_app";
 import Img from "@/components/Img";
 import Head from "next/head";
 import Layout, { HeadData } from "@/components/Layout";
-import { colors } from "@/data/colors";
+import { colors, getGradientTextCSS, gradients } from "@/data/colors";
+import { processWorldCardGroups } from "@/lib/worldHelper";
+import { MobileNav } from "@/components/Navbar";
 
 export async function getStaticProps() {
     
@@ -25,11 +27,12 @@ export async function getStaticProps() {
 
 export default function World({ worldCards }) {
 
-    const { mobile } = useContext(ViewportContext);
+    const { mobile, viewport } = useContext(ViewportContext);
     
     const mapRef = useRef();
     const mapContainer = useRef();
     const cardsContainer = useRef();
+    const navContainer = useRef();
 
     const [homeLinkHover, setHomeLinkHover] = useState();
 
@@ -44,13 +47,15 @@ export default function World({ worldCards }) {
         const width = mapRef.current.clientWidth;
 
         // for testing
-        // coords = [0.425,0.425]
+        // coords = [0.425,0.425,1.2]
+
+        const size = 25 * (coords[2] ?? 1);
 
         setHoverCoords([
-            25 - height * coords[0], 
-            25 - width * (1 - coords[1]), 
-            25 - height * (1 - coords[0]), 
-            25 - width * coords[1],
+            size - height * coords[0], 
+            size - width * (1 - coords[1]), 
+            size - height * (1 - coords[0]), 
+            size - width * coords[1],
         ]);
     }
 
@@ -89,41 +94,72 @@ export default function World({ worldCards }) {
         return toCardDelay;
     }
 
+
+    // mapwidth = (viewport.height - 80) * 4/5
+    // ultrawide: viewport.width - 80 >= (viewport.height - 80) * 8/5 + 400
+    const ultrawideWidth = (viewport.height - 80) * 8/5 + 400;
+    const ultrawide = viewport.width - 80 >= ultrawideWidth;
+
+    // wide: viewport.width - 80 >= (viewport.height - 80) * 8/5
+    const wideWidth = (viewport.height - 80) * 8/5;
+    const wide = viewport.width - 80 >= wideWidth;
+
+    // square: viewport.width - 80 >= (viewport.height - 80) * 4/5 + 300
+    const squareWidth = (viewport.height - 80) * 4/5 + 365;
+    const square = viewport.width - 80 >= squareWidth;
+
+    const menuWidth = 138;
+
     return <>
         <HeadData title={'Springtide - '} />
-        {!mobile ? (
-            <main style={{
-                width: '1280px',
-                maxWidth: '95vw',
-                minHeight: 'calc(100vh - 40px)',
-                display: 'flex',
-                justifyContent: 'flex-start',
-                alignItems: 'stretch', 
-                marginTop: '40px',
-            }}>
-                
-                {/* home link */}
-                <Lonk href={'/'} style={{ position: 'fixed', top: '40px', right: 'calc(50vw - 640px)', color: colors.black, padding: '5px', margin: '-5px', borderRadius: '5px' }} onMouseEnter={() => setHomeLinkHover(true)} onMouseLeave={() => setHomeLinkHover(false)} >
-                    <RoughNotation
-                        type={"circle"}
-                        strokeWidth={2}
-                        padding={[8,8]}
-                        iterations={1}
-                        animationDuration={120}
-                        color={colors.rellow}
-                        show={homeLinkHover}
-                    >
-                        <LatoWrapper>HOME</LatoWrapper>
-                    </RoughNotation>
-                </Lonk>
 
-                {/* map container */}
-                <motion.div ref={mapContainer} initial={{
-                    opacity: 0,
-                }} animate={{opacity: 1}}
-                >
+        {square ? (
+            
+            // landscape screens
+
+            <div style={{
+                width: ultrawide ? `${ultrawideWidth}px` : `${wideWidth}px`,
+                maxWidth: 'calc(100vw - 80px)',
+                margin: '40px 0',
+                display: 'flex',
+                flexFlow: 'row-reverse',
+                justifyContent: ultrawide ? 'center' : 'flex-start',
+                alignItems: 'stretch',
+            }}>
+
+                {/* nav links */}
+                <div>
+                    <motion.nav ref={navContainer} style={{
+                        width: ultrawide ? (viewport.height - 80) * 4/5 : menuWidth, 
+                        position: 'sticky',
+                        top: '40px',
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                    }}>
+                        <WorldMenu allIDs={worldCards.map(w => w.id)} />
+                    </motion.nav>
+                </div>
+                
+
+                {/* entry list */}
+                <motion.div ref={cardsContainer} style={{
+                    width: ultrawide ? 400 : (viewport.height - 80) * 4/5 - menuWidth,
+                    margin: `${viewport.height >= 400 ? 300 : 20}px ${ultrawide ? 40 : 0}px 300px 40px`
+
+                }}>
+                    <CardList 
+                        cardData={worldCards} 
+                        onHover={(on, coords) => parseHoverCoords(on ? coords : null)} 
+                        delayAction={toCardAnimation} 
+                        exiting={exiting}
+                    />
+                </motion.div>
+
+
+                {/* map */}
+                <motion.div ref={mapContainer} initial={{opacity: 0}} animate={{opacity: 1}}>
                     <div ref={mapRef} style={{
-                        width: 'calc(80vh - 70px)', 
+                        width: `${(viewport.height - 80) * 4/5}px`, 
                         position: 'sticky',
                         top: '40px',
                     }}>
@@ -148,41 +184,112 @@ export default function World({ worldCards }) {
                     </div>
                 </motion.div>
 
-                {/* cards container */}
-                <motion.nav ref={cardsContainer} style={{
-                    width: '270px',
-                    margin: '240px 40px 180px',
-                }} initial={{
-                    textAlign: 'left'
+                <WorldDialogs cardData={worldCards} />
+            </div>
+        ) : (
+
+            viewport.width >= 720 ? (
+
+                // tall screens, tablets, portait monitors, etc  
+                <div style={{
+                    width: 'calc(100vw - 80px)',
+                    marginTop: '40px',
+                    display: 'flex',
+
                 }}>
+
+                    {/* BACKLINK HERE */}
+                    <LatoWrapper div style={{
+                        position: 'fixed',
+                        top: 40,
+                        right: 40
+                    }}>
+                        <Lonk href={'/'}><motion.span whileHover={{color: colors.rellow}}>HOME</motion.span></Lonk>
+                    </LatoWrapper>
+
+                    {/* map */}
+                    <motion.div ref={mapContainer} initial={{opacity: 0}} animate={{opacity: 1}}>
+                        <div ref={mapRef} style={{
+                            width: viewport.width - 380, 
+                            position: 'sticky',
+                            top: '40px',
+                            marginBottom: '40px',
+                        }}>
+                            <RoughNotation
+                                show={hoverCoords != null}
+                                type="box"
+                                iterations={1}
+                                strokeWidth={2}
+                                color={colors.black}
+                                animationDuration={200}
+                                padding={hoverCoords}
+                            >
+                                <Magnifier 
+                                    img={imgData.bigmap}
+                                    magImg={imgData.bigmapnames}
+                                    noBorder
+                                    magStrength={0.8}
+                                    magWidth={200}
+                                    magHeight={250}
+                                />
+                            </RoughNotation>
+                        </div>
+                    </motion.div>
+
+                    {/* entry list */}
+                    <motion.div ref={cardsContainer} style={{
+                        width: 260,
+                        margin: '200px 0 200px 40px'
+                    }}>
                         <CardList 
                             cardData={worldCards} 
                             onHover={(on, coords) => parseHoverCoords(on ? coords : null)} 
                             delayAction={toCardAnimation} 
                             exiting={exiting}
                         />
+                    </motion.div>
 
-                </motion.nav>
-            </main>
-        ) : (
-            <Layout pageName='world' menuLink='/i/all' color={imgData.bigmap.color}>
-                <div style={{padding: '25px 20px 0'}} >
-                    <Img img={imgData.bigmapnames} />
                 </div>
-                <div style={{padding: '80px 24px 0'}}>
-                    <CardList cardData={worldCards} onHover={(on, coords) => parseHoverCoords(on ? coords : null)} />
+            
+            ) : (
+            
+                // portrait mobile screens
+                <div style={{
+                    margin: viewport.width >= 500 ? '40px' : '20px'
+                }}>
+                    <motion.div ref={mapContainer} initial={{opacity: 0}} animate={{opacity: 1}}>
+                        <Img img={imgData.bigmapnames} />
+                    </motion.div>
+
+                    <div style={{ margin: '80px 4px' }}>
+                        <CardList 
+                            cardData={worldCards} 
+                            onHover={(on, coords) => parseHoverCoords(on ? coords : null)} 
+                            delayAction={toCardAnimation} 
+                            exiting={exiting}
+                        />
+                    </div>
+
+                    <MobileNav pageName="world" color={colors.mapGreen} fullWidth />
                 </div>
-            </Layout>
+            )
         )}
+        
+
     </>
 }
 
 
 
-export function CardList({ cardData, selected = "", onHover = () => {}, exitDelay, delayAction, exiting }) {
+export function CardList({ cardData, selected = "", filter, onHover = () => {}, exitDelay, delayAction, exiting }) {
+
+    // we assemble like so:
+    // first, if the current card (only on /w/ pages) is a parent of any others (use SELECTED), show that group
+    // then, if any filters are active, show them
+    // otherwise, show default list
 
     // group cards
-    return Object.entries(groupBy(cardData.filter(w => w.group), 'group')).map(([group, cards]) => 
+    return Object.entries(groupBy(cardData.filter(w => w.group || w.groups), 'group')).map(([group, cards]) => 
         // map each group
         <div key={group}>
             <Dept small color={cards[0].color}>{group?.toUpperCase()}</Dept>
@@ -218,22 +325,53 @@ export function CardList({ cardData, selected = "", onHover = () => {}, exitDela
     );
 }
 
-export function BackLink({ text = 'home', href = '/', delay, delayAction, ref }) {
+export function WorldMenu({ allIDs, left }) {
+
+    const linkProps = {
+        initial: {color: colors.slate},
+        whileHover: {color: colors.rellow},
+    }
+    
+    const openDialog = (id) => {
+        const dialog = document.getElementById(id);
+        if (dialog) dialog.showModal();
+    }
+
+    const randomEntry = () => {
+        window.location.href = `/w/${allIDs[Math.floor(allIDs.length * Math.random())]}`
+    }
 
     return (
-        <motion.div ref={ref} whileHover="hover" style={{position: 'fixed', top: '40px', right: 'calc(50vw - 640px)', color: imgData.bigmap.color}}>
-            <LatoWrapper>
-                <Lonk href={href} delay={delay} delayAction={delayAction}>
-                    <motion.div variants={{hover: {color: imgData.bigmapnames.color}}}>
-                        <motion.span  aria-hidden="true" style={{display: 'inline-block', marginRight: 8, rotate: 180, y: 2}} variants={{hover: {x: -4}}}>
-                            ➱
-                        </motion.span>
-                        <motion.span>
-                            {text.toUpperCase()}
-                        </motion.span>
-                    </motion.div>
-                </Lonk>
-            </LatoWrapper>
-        </motion.div>
-    );
+        <GaramondWrapper div style={{
+            fontSize: '16px',
+            lineHeight: '32px',
+            textAlign: left ? 'left' : 'right',
+            userSelect: 'none',
+            letterSpacing: 0.1,
+        }}>
+            <Lonk title={'Back! to the front page.'} href={'/'}><motion.span {...linkProps} >Back home.</motion.span></Lonk>
+            <br />
+            <br />
+            <motion.button title={'See more categories.'} {...linkProps} onClick={() => openDialog('filter')}>Filter.</motion.button>
+            <br />
+            <motion.button title="Finally, make use of that keyboard of yours." {...linkProps} onClick={() => openDialog('search')}>Search.</motion.button>
+            <br />
+            <motion.button title={'Go to a random entry.'} {...linkProps} onClick={randomEntry}>Random.</motion.button>
+        </GaramondWrapper>
+    );   
+}
+
+export function WorldDialogs({ cardData }) {
+
+    const processedCardData = cardData.map((w) => {return {id: w.id, title: w.title, tags: w.tags}})
+
+    return (<>
+        <dialog id="filter">
+            filter filter filter
+        </dialog>
+        <dialog id="search">
+            <input />
+        </dialog>
+    </>);
+
 }

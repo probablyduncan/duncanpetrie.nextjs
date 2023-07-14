@@ -1,16 +1,15 @@
 import Layout, { HeadData } from "@/components/Layout";
 import { getWorldCard, getWorldCardData, getWorldCardIDs } from "@/lib/dataParser";
 import { getMDXComponent } from "mdx-bundler/client";
-import { Caption, ComicSansWrapper, Dept, LinkHeading1, LinkHeading2, LinkHeading3, Paragraph, Title, UnderLonk, UnorderedList, Heading1, Heading2, Heading3 } from "@/components/TextStyles";
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { Caption, ComicSansWrapper, Dept, LinkHeading1, LinkHeading2, LinkHeading3, Paragraph, Title, UnderLonk, UnorderedList, Heading1, Heading2, Heading3, CinzelWrapper, LatoWrapper, GaramondWrapper } from "@/components/TextStyles";
+import { useContext, useMemo, useRef, useState } from "react";
 import { ViewportContext } from "@/pages/_app";
-import Head from "next/head";
 import { BackLink, CardList } from "../world";
 import { animate, motion, useScroll } from "framer-motion";
 import { imgData } from "@/data/images";
 import Img from "@/components/Img";
+import { colors, getGradientTextCSS, gradients } from "@/data/colors";
 import { useRouter } from "next/router";
-import { colors } from "@/data/colors";
 
 export async function getStaticPaths() {
     const paths = await getWorldCardIDs();
@@ -34,8 +33,10 @@ export async function getStaticProps( {params} ) {
 
 export default function World({ card, cardData }) {
 
-    const { mobile } = useContext(ViewportContext);
+    const { mobile, viewport } = useContext(ViewportContext);
     const Content = useMemo(() => getMDXComponent(card.code, {Img: WorldImg, ComicSans: ComicSansWrapper}), [card.code]);
+
+    const router = useRouter();
 
     const cardListRef = useRef();
     const articleRef = useRef();
@@ -177,6 +178,73 @@ export default function World({ card, cardData }) {
             <HeadData title={`${card.frontmatter.title} - Springtide - `} />
 
             <div style={{
+                maxWidth: '100vw',
+                display: 'flex',
+                flexFlow: 'row nowrap',
+                justifyContent: 'space-between',
+            }}>
+
+
+                {viewport.width >= 980 && <div style={{
+                    width: '270px',
+                    paddingRight: '40px',
+                    borderRight: `2px solid ${colors.black}`,
+                    height: 'calc(100vh - 70px)',
+                    marginTop: '40px',
+                }}>
+                    <nav ref={cardListRef} style={{
+                        margin: '0 0 160px 0',
+                    }}>
+                        <CardList cardData={cardData} delayAction={toCardAnimation} selected={exiting ? null : card.w} />
+                    </nav>
+                </div>}
+
+
+                <div style={{
+                    width: '680px',
+                    maxWidth: '100%',
+                    backgroundColor: colors.white,
+                }}>
+                    <header style={{
+                        margin: '160px 40px 20px',
+                        userSelect: 'none'
+                    }}>
+                        <CinzelWrapper style={{fontSize: '52px', ...getGradientTextCSS(...gradients.mapGreen)}}>{card.frontmatter.title}</CinzelWrapper>
+                    </header>
+                    <nav style={{
+                        padding: '10px 0 10px 40px',
+                        borderBottom: `2px solid ${colors.black}`,
+                        borderTop: `2px solid ${colors.grey}`,
+                        // position: 'sticky',
+                        // top: 0,
+                        backgroundColor: colors.white,
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                    }}>
+                        <LatoWrapper>
+                            GRUNK&nbsp;&nbsp;|&nbsp;&nbsp;BUNK&nbsp;&nbsp;|&nbsp;&nbsp;ZUNK
+                        </LatoWrapper>
+                        <GaramondWrapper>
+                            Back to map.
+                        </GaramondWrapper>
+                    </nav>
+                    <article style={{
+                        margin: '40px 40px 160px '
+                    }}>
+                        <Content components={{h1: LinkHeading1, h2: LinkHeading2, h3: LinkHeading3, h4: Caption, p: Paragraph, a: WorldLink, ul: UnorderedList}} />
+                    </article>
+                </div>
+
+
+                {viewport.width >= 1200 && <div style={{
+                    width: '180px',
+                }}>
+                </div>}
+
+
+            </div>
+
+            {/* <div style={{
                 width: '1280px',
                 maxWidth: '95vw',
                 display: 'flex',
@@ -185,7 +253,6 @@ export default function World({ card, cardData }) {
                 marginTop: '40px',
             }}>
 
-                {/* card list */}
                 <nav style={{
                     display: 'flex',
                     justifyContent: 'flex-end',
@@ -208,7 +275,6 @@ export default function World({ card, cardData }) {
                     </div>
                 </nav>
 
-                {/* middle border */}
                 {!exiting && <motion.div aria-hidden="true" initial={{
                     width: '2px',
                     height: 'calc(100vh - 70px)',
@@ -231,7 +297,7 @@ export default function World({ card, cardData }) {
                     </main>
                 </motion.div>
 
-            </div>
+            </div> */}
         </>
     ) : (
         <Layout title={card.frontmatter.title ?? card.w ?? "World"} pageName={'back to map'} color={colors.mapGreen} menuLink='/world' menuName={'back to map'}>
@@ -239,7 +305,7 @@ export default function World({ card, cardData }) {
             <article style={{padding: '120px 25px 0', overflow: 'hidden'}}>
                 {card.frontmatter.dept && <Dept color={card.frontmatter.color ?? colors.yellow} style={{marginTop: 0}}>{card.frontmatter.dept.toUpperCase()}</Dept>}
                 <Title>{card.frontmatter.title}</Title>
-                <Content components={{h1: Heading1, h2: Heading2, h3: Heading3, h4: Caption, p: Paragraph, a: MobileWorldLink, ul: UnorderedList, blockquote: 'span'}} />
+                <Content components={{h1: LinkHeading1, h2: LinkHeading2, h3: LinkHeading3, h4: Caption, p: Paragraph, a: MobileWorldLink, ul: UnorderedList, blockquote: 'span'}} />
             </article>
         </Layout>
     )
