@@ -4,12 +4,12 @@ import { getMDXComponent } from "mdx-bundler/client";
 import { Caption, ComicSansWrapper, Dept, LinkHeading1, LinkHeading2, LinkHeading3, Paragraph, Title, UnderLonk, UnorderedList, Heading1, Heading2, Heading3, CinzelWrapper, LatoWrapper, GaramondWrapper } from "@/components/TextStyles";
 import { useContext, useMemo, useRef, useState } from "react";
 import { ViewportContext } from "@/pages/_app";
-import { BackLink, CardList } from "../world";
 import { animate, motion, useScroll } from "framer-motion";
 import { imgData } from "@/data/images";
 import Img from "@/components/Img";
 import { colors, getGradientTextCSS, gradients } from "@/data/colors";
 import { useRouter } from "next/router";
+import { CardList } from "@/components/WorldComponents";
 
 export async function getStaticPaths() {
     const paths = await getWorldCardIDs();

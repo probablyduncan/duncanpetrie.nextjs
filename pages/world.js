@@ -14,6 +14,7 @@ import Layout, { HeadData } from "@/components/Layout";
 import { colors, getGradientTextCSS, gradients } from "@/data/colors";
 import { processWorldCardGroups } from "@/lib/worldHelper";
 import { MobileNav } from "@/components/Navbar";
+import { CardList, WorldDialogs, WorldMenu } from "@/components/WorldComponents";
 
 export async function getStaticProps() {
     
@@ -65,35 +66,36 @@ export default function World({ worldCards }) {
     const toCardAnimation = () => {    
 
         startExiting(true);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        // window.scrollTo({ top: 0, behavior: 'smooth' });
 
-        if (!mapContainer.current || !cardsContainer.current) return 0;
+        // if (!mapContainer.current || !cardsContainer.current) 
+        return 0;
 
         // animate map
-        animate(mapContainer.current, {
-            // animation
-            x: 0 - mapContainer.current.clientWidth - (window.innerWidth - 1280) / 2
-        }, {
-            // options
-            duration: toCardDelay / 1000, 
-            damping: 20, 
-            stiffness: 20
-        });
+        // animate(mapContainer.current, {
+        //     // animation
+        //     x: 0 - mapContainer.current.clientWidth - (window.innerWidth - 1280) / 2
+        // }, {
+        //     // options
+        //     duration: toCardDelay / 1000, 
+        //     damping: 20, 
+        //     stiffness: 20
+        // });
 
-        // animate cards container
-        animate(cardsContainer.current, {
-            // animation
-            textAlign: 'right',
-            y: -240,
-            x: 40 - cardsContainer.current.offsetLeft
-        }, {
-            // options
-            duration: toCardDelay / 1000, 
-            damping: 20, 
-            stiffness: 20
-        });
+        // // animate cards container
+        // animate(cardsContainer.current, {
+        //     // animation
+        //     textAlign: 'right',
+        //     y: -240,
+        //     x: 40 - cardsContainer.current.offsetLeft
+        // }, {
+        //     // options
+        //     duration: toCardDelay / 1000, 
+        //     damping: 20, 
+        //     stiffness: 20
+        // });
 
-        return toCardDelay;
+        // return toCardDelay;
     }
 
 
@@ -138,7 +140,7 @@ export default function World({ worldCards }) {
                         display: 'flex',
                         justifyContent: 'flex-end',
                     }}>
-                        <WorldMenu allIDs={worldCards.map(w => w.id)} />
+                        <WorldMenu cardData={worldCards} />
                     </motion.nav>
                 </div>
                 
@@ -280,97 +282,3 @@ export default function World({ worldCards }) {
 
 
 
-export function CardList({ cardData, selected = "", filter, onHover = () => {}, exitDelay, delayAction, exiting }) {
-
-    // we assemble like so:
-    // first, if the current card (only on /w/ pages) is a parent of any others (use SELECTED), show that group
-    // then, if any filters are active, show them
-    // otherwise, show default list
-
-    // group cards
-    return Object.entries(groupBy(cardData.filter(w => w.group || w.groups), 'group')).map(([group, cards]) => 
-        // map each group
-        <div key={group}>
-            <Dept small color={cards[0].color}>{group?.toUpperCase()}</Dept>
-            <br />
-            {cards.map(c => 
-                // map each card
-                <div key={c.id}>
-                    <Title small >
-                        {c.id == selected ? (
-                            <RoughNotation
-                                show={true}
-                                type="box"
-                                iterations={2}
-                                strokeWidth={2}
-                                color={imgData.bigmap.color}
-                                animationDuration={300}
-                                padding={8}
-                            >
-                                {c.title}
-                            </RoughNotation>
-                        ) : (
-                            <UnderLonk noUnderline={exiting} href={`/w/${c.id}`} delay={exitDelay} delayAction={delayAction} color={colors.black} thick onHover={(on) => onHover(on, c.coords)}>
-                                {c.title}
-                            </UnderLonk>
-                        )}
-                    </Title>
-                    <br /> 
-                </div>
-            )}
-            <br />
-            <br />
-        </div>
-    );
-}
-
-export function WorldMenu({ allIDs, left }) {
-
-    const linkProps = {
-        initial: {color: colors.slate},
-        whileHover: {color: colors.rellow},
-    }
-    
-    const openDialog = (id) => {
-        const dialog = document.getElementById(id);
-        if (dialog) dialog.showModal();
-    }
-
-    const randomEntry = () => {
-        window.location.href = `/w/${allIDs[Math.floor(allIDs.length * Math.random())]}`
-    }
-
-    return (
-        <GaramondWrapper div style={{
-            fontSize: '16px',
-            lineHeight: '32px',
-            textAlign: left ? 'left' : 'right',
-            userSelect: 'none',
-            letterSpacing: 0.1,
-        }}>
-            <Lonk title={'Back! to the front page.'} href={'/'}><motion.span {...linkProps} >Back home.</motion.span></Lonk>
-            <br />
-            <br />
-            <motion.button title={'See more categories.'} {...linkProps} onClick={() => openDialog('filter')}>Filter.</motion.button>
-            <br />
-            <motion.button title="Finally, make use of that keyboard of yours." {...linkProps} onClick={() => openDialog('search')}>Search.</motion.button>
-            <br />
-            <motion.button title={'Go to a random entry.'} {...linkProps} onClick={randomEntry}>Random.</motion.button>
-        </GaramondWrapper>
-    );   
-}
-
-export function WorldDialogs({ cardData }) {
-
-    const processedCardData = cardData.map((w) => {return {id: w.id, title: w.title, groups: processWorldCardGroups(w.groups)}});
-
-    return (<>
-        <dialog id="filter">
-            filter filter filter
-        </dialog>
-        <dialog id="search">
-            <input />
-        </dialog>
-    </>);
-
-}
