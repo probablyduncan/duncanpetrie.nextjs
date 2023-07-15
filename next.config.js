@@ -4,17 +4,17 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/w/',
+        source: '/w',
         destination: '/world',
         permanent: true,
       },
       {
-        source: '/a/',
+        source: '/a',
         destination: '/i/all',
         permanent: true,
       },
       {
-        source: '/i/',
+        source: '/i',
         destination: '/i/all',
         permanent: true,
       },

@@ -74,7 +74,7 @@ export function WorldMenu({ cardData, left, mapLink }) {
             letterSpacing: 0.1,
             color: colors.slate
         }}>
-            <Lonk title={'Back! to the front page.'} href={'/world'}><motion.span {...linkProps} >Back home.</motion.span></Lonk>
+            <Lonk title={'Back! to the front page.'} href={'/'}><motion.span {...linkProps} >Back home.</motion.span></Lonk>
             <br />
             <br />
             <motion.button title={'See more categories.'} {...linkProps} onClick={() => openDialog('filter')}>filter</motion.button>.
