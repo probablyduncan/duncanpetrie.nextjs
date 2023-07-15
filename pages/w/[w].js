@@ -4,12 +4,12 @@ import { getMDXComponent } from "mdx-bundler/client";
 import { Caption, ComicSansWrapper, Dept, LinkHeading1, LinkHeading2, LinkHeading3, Paragraph, Title, UnderLonk, UnorderedList, Heading1, Heading2, Heading3, CinzelWrapper, LatoWrapper, GaramondWrapper } from "@/components/TextStyles";
 import { useContext, useMemo, useRef, useState } from "react";
 import { ViewportContext } from "@/pages/_app";
-import { animate, motion, useScroll } from "framer-motion";
+import { animate, motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import { imgData } from "@/data/images";
 import Img from "@/components/Img";
 import { colors, getGradientTextCSS, gradients } from "@/data/colors";
 import { useRouter } from "next/router";
-import { CardList } from "@/components/WorldComponents";
+import { CardList, WorldMenu } from "@/components/WorldComponents";
 
 export async function getStaticPaths() {
     const paths = await getWorldCardIDs();
@@ -35,6 +35,11 @@ export default function World({ card, cardData }) {
 
     const { mobile, viewport } = useContext(ViewportContext);
     const Content = useMemo(() => getMDXComponent(card.code, {Img: WorldImg, ComicSans: ComicSansWrapper}), [card.code]);
+    
+    const gradient = useMemo(() => {
+        const grads = Object.keys(gradients);
+        return gradients[grads[Math.floor(grads.length * Math.random())]];
+    }, [])
 
     const router = useRouter();
 
@@ -50,34 +55,13 @@ export default function World({ card, cardData }) {
         startExiting(true);
         toCardAnimation();
 
-        animate(cardListRef.current, {
-            // animation
-            textAlign: 'left',
-            y: 240,
-            x: (window.innerHeight * 0.8) - 70
-        }, {
-            // options
-            duration: 0.2, 
-            damping: 20, 
-            stiffness: 20
-        });
-
-        animate(articleRef.current, {
-            // animation
-            x: window.innerWidth
-        }, {
-            // options
-            duration: 0.2,
-            damping: 20,
-            stiffness: 20
-        });
-
-        return 200;
+        return 0;
     }
 
     const toCardAnimation = () => {
+        const scroll = Math.min(scrollY.get(), 100)
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        return Math.min(scrollY.get(), 100);
+        return scroll;
     }
 
     //#endregion
@@ -173,140 +157,65 @@ export default function World({ card, cardData }) {
 
     //#endregion
 
-    return !mobile ? (
-        <>
-            <HeadData title={`${card.frontmatter.title} - Springtide - `} />
+    // scale title on scroll
+    const titleY = useTransform(scrollY, [0, 300], [0, -80,]);
 
-            <div style={{
-                maxWidth: '100vw',
-                display: 'flex',
-                flexFlow: 'row nowrap',
-                justifyContent: 'space-between',
-            }}>
+    return (<>
+        <HeadData title={`${card.w} - Springtide - `} />
 
+        <div style={{
+            width: 'calc(100vw - 40px)',
+            display: 'flex',
+            flexFlow: 'row-reverse',
+            justifyContent: 'space-between',
+            alignItems: 'stretch',
+        }}>
 
-                {viewport.width >= 980 && <div style={{
-                    width: '270px',
-                    paddingRight: '40px',
-                    borderRight: `2px solid ${colors.black}`,
-                    height: 'calc(100vh - 70px)',
-                    marginTop: '40px',
-                }}>
-                    <nav ref={cardListRef} style={{
-                        margin: '0 0 160px 0',
-                    }}>
-                        <CardList cardData={cardData} delayAction={toCardAnimation} selected={exiting ? null : card.w} />
-                    </nav>
-                </div>}
-
-
-                <div style={{
-                    width: '680px',
-                    maxWidth: '100%',
-                    backgroundColor: colors.white,
-                }}>
-                    <header style={{
-                        margin: '160px 40px 20px',
-                        userSelect: 'none'
-                    }}>
-                        <CinzelWrapper style={{fontSize: '52px', ...getGradientTextCSS(...gradients.mapGreen)}}>{card.frontmatter.title}</CinzelWrapper>
-                    </header>
-                    <nav style={{
-                        padding: '10px 0 10px 40px',
-                        borderBottom: `2px solid ${colors.black}`,
-                        borderTop: `2px solid ${colors.grey}`,
-                        // position: 'sticky',
-                        // top: 0,
-                        backgroundColor: colors.white,
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                    }}>
-                        <LatoWrapper>
-                            GRUNK&nbsp;&nbsp;|&nbsp;&nbsp;BUNK&nbsp;&nbsp;|&nbsp;&nbsp;ZUNK
-                        </LatoWrapper>
-                        <GaramondWrapper>
-                            Back to map.
-                        </GaramondWrapper>
-                    </nav>
-                    <article style={{
-                        margin: '40px 40px 160px '
-                    }}>
-                        <Content components={{h1: LinkHeading1, h2: LinkHeading2, h3: LinkHeading3, h4: Caption, p: Paragraph, a: WorldLink, ul: UnorderedList}} />
-                    </article>
-                </div>
-
-
-                {viewport.width >= 1200 && <div style={{
-                    width: '180px',
-                }}>
-                </div>}
-
-
-            </div>
-
-            {/* <div style={{
-                width: '1280px',
-                maxWidth: '95vw',
-                display: 'flex',
-                justifyContent: 'flex-start',
-                alignItems: 'stretch', 
-                marginTop: '40px',
-            }}>
-
-                <nav style={{
+            {/* nav links */}
+            {viewport.width >= 600 && <div>
+                <motion.nav style={{
+                    width: 270,
+                    margin: '40px 40px 0 0',
                     display: 'flex',
                     justifyContent: 'flex-end',
+                    position: 'sticky', top: 40
                 }}>
-                    <div style={{
-                        margin: '0 0 50vh',
-                        textAlign: 'right',
+                        <WorldMenu cardData={cardData} />
+                </motion.nav>
+            </div>}
+
+            <main style={{
+                width: 600,
+            }}>
+                    <motion.header style={{
+                        position: 'fixed', top: -5, left: 0,
+                        width: 'calc(100vw)', textAlign: 'center',
+                        fontSize: 60, lineHeight: '150%',
+                        zIndex: 0, userSelect: 'none',
+                        y: titleY,
                     }}>
-                        <div>
-                            <BackLink href="/world/" text="map" delayAction={toMapAnimation} />
-                        </div>
-                        <div ref={cardListRef} style={{
-                            width: '270px',
-                            margin: '0 40px -60px',
-                            // position: 'sticky',
-                            // top: '40px',
-                        }}>
-                            <CardList cardData={cardData} delayAction={toCardAnimation} selected={exiting ? null : card.w} />
-                        </div>
-                    </div>
-                </nav>
+                        <CinzelWrapper style={{...getGradientTextCSS(...gradient),}}>{card.frontmatter.title}</CinzelWrapper>
+                    </motion.header>
 
-                {!exiting && <motion.div aria-hidden="true" initial={{
-                    width: '2px',
-                    height: 'calc(100vh - 70px)',
-                    top: '40px',
-                    backgroundColor: colors.black,
-                    position: 'sticky',
-                }}></motion.div>}
+                <article style={{
+                    margin: '300px 0',
+                }}>
+                    <Content components={{h1: LinkHeading1, h2: LinkHeading2, h3: LinkHeading3, h4: Caption, p: Paragraph, a: WorldLink, ul: UnorderedList}} />
+                </article>
 
-                <motion.div initial={{ opacity: 0, }} animate={{ opacity: 1 }}>
-                    <main ref={articleRef} style={{
-                        width: '600px',
-                        margin: '200px 60px',
-                    }}>
-                        <header>
-                            <LinkHeading1 pageOnly>{card.frontmatter.title}</LinkHeading1>
-                        </header>
-                        <article>
-                            <Content components={{h1: LinkHeading1, h2: LinkHeading2, h3: LinkHeading3, h4: Caption, p: Paragraph, a: WorldLink, ul: UnorderedList}} />
-                        </article>
-                    </main>
-                </motion.div>
+            </main>
 
-            </div> */}
-        </>
-    ) : (
-        <Layout title={card.frontmatter.title ?? card.w ?? "World"} pageName={'back to map'} color={colors.mapGreen} menuLink='/world' menuName={'back to map'}>
-            
-            <article style={{padding: '120px 25px 0', overflow: 'hidden'}}>
-                {card.frontmatter.dept && <Dept color={card.frontmatter.color ?? colors.yellow} style={{marginTop: 0}}>{card.frontmatter.dept.toUpperCase()}</Dept>}
-                <Title>{card.frontmatter.title}</Title>
-                <Content components={{h1: LinkHeading1, h2: LinkHeading2, h3: LinkHeading3, h4: Caption, p: Paragraph, a: MobileWorldLink, ul: UnorderedList, blockquote: 'span'}} />
-            </article>
-        </Layout>
-    )
+            <div style={{
+                display: 'flex',
+                flexFlow: 'column',
+                margin: '40px 0 300px 40px',
+                width: 270,
+            }}>
+                <CardList cardData={cardData} delayAction={toCardAnimation} selected={exiting ? null : card.w} />
+            </div>
+
+
+        </div>
+
+    </>);
 }
