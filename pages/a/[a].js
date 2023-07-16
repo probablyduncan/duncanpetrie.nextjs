@@ -49,7 +49,6 @@ export async function getStaticProps( {params} ) {
  * text: {
  *     centered: true,      // defaults to true
  *     slideIn: false,      // defaults to true, only works if centered=true
- *     width: '500',        // val in px, defaults to 500
  * }
  * 
  * lightbox: {
@@ -79,7 +78,7 @@ export default function ArticleLayout({ article }) {
     
     // this is the distance between the top of the window and the start of the article
     const topOffset = article.frontmatter.text?.top ?? 300;
-    const textWidth = article.frontmatter.text?.width ?? 500;
+    const textWidth = 500;
 
     // text/other stuff
     const slideOnScroll = !mobile && article.frontmatter.cover?.slideOnScroll;

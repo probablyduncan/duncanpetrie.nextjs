@@ -187,7 +187,7 @@ export default function World({ card, cardData }) {
                     position: 'sticky',
                     top: 0,
                 }}>
-                    <WorldMenu />
+                    <WorldMenu cardData={cardData} />
                 </span>
             </div>}
 
