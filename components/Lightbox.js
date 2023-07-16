@@ -74,8 +74,12 @@ export default function Lightbox({ index }) {
             if (e.code === "Escape") toggleLightbox(false);
         };
 
-        window.addEventListener("keydown", keyDownHandler);
-        return () => window.removeEventListener("keydown", keyDownHandler);
+        window.addEventListener('keydown', keyDownHandler);
+        window.addEventListener('wheel', () => {if (index) toggleLightbox(null)});
+        return () => {
+            window.removeEventListener('keydown', keyDownHandler);
+            window.removeEventListener('wheel', () => {if (index >= 0) toggleLightbox(null)});
+        }
 
     }, [index, next, toggleLightbox]);
 
