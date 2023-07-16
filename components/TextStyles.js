@@ -43,7 +43,7 @@ export function Title({ children, small, style, ...props }) {
         margin: small ? '0 0 6px 0' : '0 4px 35px'
     }, style);
 
-    return (<h1 className={merriweather.className} style={style} {...props}>{children}</h1>);
+    return (<h1 style={style} {...props}><MerriweatherWrapper>{children}</MerriweatherWrapper></h1>);
 }
 
 export function Subtitle({ children, small, style, ...props }) {
@@ -55,7 +55,7 @@ export function Subtitle({ children, small, style, ...props }) {
         margin: small ? '0 0 6px 0' : '0 4px 25px'
     }, style);
 
-    return (<h1 className={merriweather.className} style={style} {...props}>{children}</h1>);
+    return (<h1 style={style} {...props}><MerriweatherWrapper>{children}</MerriweatherWrapper></h1>);
 }
 
 export function Dept({ children, small, style, color, margin, ...props }) {
@@ -66,7 +66,7 @@ export function Dept({ children, small, style, color, margin, ...props }) {
         margin: margin ?? (small ? '0' : '25px 4px 0')
     }, style);
 
-    return (<h3 className={lato.className} style={style} {...props} >{children}</h3>);
+    return (<h3 style={style} {...props} ><LatoWrapper>{children}</LatoWrapper></h3>);
 }
 
 export function Paragraph({ children, small, style, ...props }) {
@@ -82,7 +82,7 @@ export function Paragraph({ children, small, style, ...props }) {
         WebkitHyphens: small ? 'auto' : 'none',
     }, style);
 
-    return (<p className={garamond.className} style={style} {...props}>{children}</p>);
+    return (<p style={style} {...props}><GaramondWrapper>{children}</GaramondWrapper></p>);
 }
 
 export function UnorderedList({ children, small, style, ...props }) {
@@ -98,7 +98,7 @@ export function UnorderedList({ children, small, style, ...props }) {
         WebkitHyphens: small ? 'auto' : 'none',
     }, style);
 
-    return (<ul className={garamond.className} style={style} {...props}>{children}</ul>)
+    return (<ul style={style} {...props}><GaramondWrapper>{children}</GaramondWrapper></ul>)
 }
 
 export function Caption({ children, small, style, textAlign, color, ...props }) {
@@ -111,7 +111,7 @@ export function Caption({ children, small, style, textAlign, color, ...props }) 
         margin: '12px 4px 0',
     }, style)
 
-    return (<h4 className={garamond.className} style={style} {...props}>{children}</h4>);
+    return (<h4 style={style} {...props}><GaramondWrapper>{children}</GaramondWrapper></h4>);
 }
 
 // when hover stops, onHover(null) is called
@@ -191,14 +191,14 @@ export function LightboxButton({ action, hoverColor, children }) {
     </motion.button>);
 }
 
-export const Heading1 = ( props ) => (<Title {...props} />);
-export const Heading2 = ( props ) => (<><br /><Title small style={{margin: '0 4px 25px'}} {...props} /></>);
-export const Heading3 = ( props ) => (<Paragraph style={{margin: `0 4px 15px`, fontWeight: 'bold'}} {...props} />);
-export const LinkHeading1 = ( props ) => (<Title><LinkHeadingTemplate {...props} /></Title>);
-export const LinkHeading2 = ( props ) => (<><br /><Title small style={{margin: '0 4px 25px'}}><LinkHeadingTemplate {...props} /></Title></>);
-export const LinkHeading3 = ( props ) => (<Paragraph style={{margin: `0 4px 15px`}}><LinkHeadingTemplate {...props} /></Paragraph>);
+export const Heading1 = ( props ) => (<Title className={'heading1'} alt={props.children} {...props} />);
+export const Heading2 = ( props ) => (<><br /><Title className={'heading2'} alt={props.children} small style={{margin: '0 4px 25px'}} {...props} /></>);
+export const Heading3 = ( props ) => (<Paragraph className={'heading3'} alt={props.children} style={{margin: `0 4px 15px`, fontWeight: 'bold'}} {...props} />);
+export const LinkHeading1 = ( props ) => (<Title className={'heading1'} alt={props.children} ><LinkHeadingTemplate {...props} /></Title>);
+export const LinkHeading2 = ( props ) => (<><br /><Title className={'heading2'} alt={props.children} small style={{margin: '0 4px 25px'}}><LinkHeadingTemplate {...props} /></Title></>);
+export const LinkHeading3 = ( props ) => (<Paragraph className={'heading3'} alt={props.children} style={{margin: `0 4px 15px`}}><LinkHeadingTemplate {...props} /></Paragraph>);
 
-export function LinkHeadingTemplate ({ children, go = true, pageOnly }) {
+export function LinkHeadingTemplate ({ children, go = true, pageOnly, hSize }) {
 
     const {mobile} = useContext(ViewportContext);
 

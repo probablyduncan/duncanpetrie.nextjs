@@ -9,7 +9,7 @@ body {
   display: flex;
   justify-content: center;
   background-color: #fff;
-  scroll-behavior:smooth
+  scroll-behavior: smooth
   
   /* opacity transition? */
 }

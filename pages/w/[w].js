@@ -2,14 +2,16 @@ import Layout, { HeadData } from "@/components/Layout";
 import { getWorldCard, getWorldCardData, getWorldCardIDs } from "@/lib/dataParser";
 import { getMDXComponent } from "mdx-bundler/client";
 import { Caption, ComicSansWrapper, Dept, LinkHeading1, LinkHeading2, LinkHeading3, Paragraph, Title, UnderLonk, UnorderedList, Heading1, Heading2, Heading3, CinzelWrapper, LatoWrapper, GaramondWrapper } from "@/components/TextStyles";
-import { useContext, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { ViewportContext } from "@/pages/_app";
 import { animate, motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import { imgData } from "@/data/images";
 import Img from "@/components/Img";
-import { colors, getGradientTextCSS, gradients } from "@/data/colors";
-import { useRouter } from "next/router";
+import { addOpacity, colors, getGradientBackgroundCSS, lightGradients } from "@/data/colors";
 import { CardList, WorldMenu } from "@/components/WorldComponents";
+import Lonk from "@/components/Lonk";
+import { MobileNav } from "@/components/Navbar";
+import { capitalize, processWorldCardGroups } from "@/lib/worldHelper";
 
 export async function getStaticPaths() {
     const paths = await getWorldCardIDs();
@@ -35,33 +37,22 @@ export default function World({ card, cardData }) {
 
     const { mobile, viewport } = useContext(ViewportContext);
     const Content = useMemo(() => getMDXComponent(card.code, {Img: WorldImg, ComicSans: ComicSansWrapper}), [card.code]);
-    
-    const gradient = useMemo(() => {
-        const grads = Object.keys(gradients);
-        return gradients[grads[Math.floor(grads.length * Math.random())]];
-    }, [])
-
-    const router = useRouter();
-
-    const cardListRef = useRef();
-    const articleRef = useRef();
 
     //#region  animations on leaving page
     
     const [exiting, startExiting] = useState(false);
     const { scrollY } = useScroll();
-    const toMapAnimation = () => {
-
-        startExiting(true);
-        toCardAnimation();
-
-        return 0;
-    }
-
     const toCardAnimation = () => {
+
         const scroll = Math.min(scrollY.get(), 100)
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return scroll;
+    }
+
+    const toMapAnimation = () => {
+
+        startExiting(true);
+        return toCardAnimation();
     }
 
     //#endregion
@@ -92,8 +83,9 @@ export default function World({ card, cardData }) {
 
         // https://emojipedia.org/
         const cursors = [ '⛔', '🚫', '🚷', '🚳', '📵', '☣️', '☢️', '⚠️', '😡', '😬', '😲', ];
-        
         const [cursor, setCursor] = useState('🚫');
+
+        if (viewport.width < 600) return (<MobileWorldLink {...props}>{children}</MobileWorldLink>);
 
         const href = processWorldLinkHref(children, props.href);
         const page = href.split('#')[0];
@@ -148,7 +140,6 @@ export default function World({ card, cardData }) {
         
         return (<div style={{
             margin: '40px 0',
-            width: mobile ? '100%' : 'calc(100% + 80px)'
         }}>
             <Img img={img} noBorder />
             {img.caption && <Caption textAlign={'left'}>{img.caption}</Caption>}
@@ -157,65 +148,152 @@ export default function World({ card, cardData }) {
 
     //#endregion
 
-    // scale title on scroll
-    const titleY = useTransform(scrollY, [0, 300], [0, -80,]);
+    // <Content components={{h1: LinkHeading1, h2: LinkHeading2, h3: LinkHeading3, h4: Caption, p: Paragraph, a: WorldLink, ul: UnorderedList}} />
+    // <CardList cardData={cardData} delayAction={toCardAnimation} selected={exiting ? null : card.w} />
+
+    const tempRelatedList = processWorldCardGroups(card.frontmatter).map(g => ({
+        title: g.groupIsParentID ? cardData.find(w => w.id == g.group)?.title ?? null : capitalize(g.group),
+        isCardLink: g.groupIsParentID,
+        id: g.group,
+    })) ?? [];
+
+    const filter = (category) => {console.log(`filtering ${category}`)};
+
+    // breakpoints
+    const wide = viewport.width >= 1200;
+    const normal = viewport.width >= 900;
+    const textWidth = viewport.width > 1080 ? 600 : 500;
 
     return (<>
         <HeadData title={`${card.w} - Springtide - `} />
 
+        {/* page wrapper */}
         <div style={{
-            width: 'calc(100vw - 40px)',
             display: 'flex',
             flexFlow: 'row-reverse',
-            justifyContent: 'space-between',
-            alignItems: 'stretch',
+            width: '95vw',
+            justifyContent: normal ? 'space-between' : 'center'
         }}>
 
-            {/* nav links */}
-            {viewport.width >= 600 && <div>
-                <motion.nav style={{
-                    width: 270,
-                    margin: '40px 40px 0 0',
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    position: 'sticky', top: 40
+            {/* side links container */}
+            {normal && <div style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                justifyContent: 'flex-end',
+                margin: '0 0 0 40px',
+                width: `calc(45vw - ${textWidth / 2}px)`,
+            }}>
+                <span style={{
+                    position: 'sticky',
+                    top: 0,
                 }}>
-                        <WorldMenu cardData={cardData} />
-                </motion.nav>
+                    <WorldMenu />
+                </span>
             </div>}
 
-            <main style={{
+            {/* article container */}
+            <div style={{
                 width: 600,
+                maxWidth: '90vw',
+                marginTop: normal ? 200 : 100,
+                marginLeft: !wide && normal ? '20px' : 'inherit',
             }}>
-                    <motion.header style={{
-                        position: 'fixed', top: -5, left: 0,
-                        width: 'calc(100vw)', textAlign: 'center',
-                        fontSize: 60, lineHeight: '150%',
-                        zIndex: 0, userSelect: 'none',
-                        y: titleY,
-                    }}>
-                        <CinzelWrapper style={{...getGradientTextCSS(...gradient),}}>{card.frontmatter.title}</CinzelWrapper>
-                    </motion.header>
+                <header style={{
+                    display: 'flex',
+                    width: '100%',
+                    flexFlow: !normal ? 'column-reverse' : 'column',
+                }}>
+                    <Title style={{fontSize: 48, margin: `0 0 8px`, lineHeight: '140%'}}>{card.frontmatter.title}</Title>
+                    <GaramondWrapper>
+                        <motion.nav style={{
+                            width: '100%',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'flex-end',
+                            borderBottom: normal ? `2px solid ${colors.grey}` : 'none',
+                        }}>
 
+                            {/* related buttons container */}
+                            {normal && <div style={{
+                                display: 'flex',
+                                flexFlow: 'row wrap',
+                                marginBottom: '20px',
+                            }}>
+                                {tempRelatedList.map((tag, i) => {
+
+                                    const StyleSpan = ({ children }) => (
+                                        <motion.div style={{
+                                            ...getGradientBackgroundCSS(...lightGradients[i % lightGradients.length]),
+                                            color: colors.slate,
+                                            fontSize: 15,
+                                            fontWeight: 'bold',
+                                            display: 'block',
+                                            borderRadius: '20px',
+                                            padding: '6px 13px 6px 14px',
+                                            margin: '-3px',
+                                            boxShadow: `inset 6px 6px 0px ${addOpacity(colors.black)}`, 
+                                            border: `3px solid ${colors.white}`,
+                                            userSelect: 'none',
+                                        }} whileHover={{
+                                            border: `3px solid ${colors.slate}`,
+                                            boxShadow: `inset 0px 0px 0px ${addOpacity(colors.black)}`,
+                                        }}>
+                                            {children}
+                                        </motion.div>
+                                    );
+
+                                    if (tag.title) return (
+
+                                        <div key={tag.title} style={{margin: '0 12px 0 0'}}>
+                                            <Lonk href={tag.isCardLink ? `/w/${tag.id}` : `/w/${card.w}?filter=${tag.id}`}>
+                                                <StyleSpan>{tag.title}.</StyleSpan>
+                                            </Lonk>
+                                        </div>
+
+                                    );
+                                })}
+                            </div>}
+
+                            {/* back to home container */}
+
+                        </motion.nav>
+                    </GaramondWrapper>
+                </header>
+
+                {/* article container */}
                 <article style={{
-                    margin: '300px 0',
+                    margin: normal ? '80px 0 40vh' : '40px 0 120px',
+                    maxWidth: '90vw',
                 }}>
                     <Content components={{h1: LinkHeading1, h2: LinkHeading2, h3: LinkHeading3, h4: Caption, p: Paragraph, a: WorldLink, ul: UnorderedList}} />
                 </article>
 
-            </main>
-
-            <div style={{
-                display: 'flex',
-                flexFlow: 'column',
-                margin: '40px 0 300px 40px',
-                width: 270,
-            }}>
-                <CardList cardData={cardData} delayAction={toCardAnimation} selected={exiting ? null : card.w} />
             </div>
 
+            {/* card list container */}
+            {wide && <div style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                textAlign: 'left',
+                marginRight: '40px',
+                width: `calc(45vw - ${textWidth / 2}px)`,
+                direction: 'rtl',
+            }}>
+                <div style={{
+                    position: 'sticky',
+                    top: 40,
+                    maxHeight:  'calc(100vh - 40px)',
+                    overflowY: 'scroll',
+                    marginTop: '40px',
+                    padding: '0 40px',
+                }}>
+                    <CardList cardData={cardData} delayAction={toCardAnimation} selected={exiting ? null : card.w} />
+                </div>
+            </div>}
 
         </div>
+
+        {!normal && <MobileNav pageName={'map'} menuLink={'/world'} color={colors.mapGreen} fullWidth />}
 
     </>);
 }

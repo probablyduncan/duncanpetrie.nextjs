@@ -112,7 +112,7 @@ export default function World({ worldCards }) {
     const squareWidth = (viewport.height - 80) * 4/5 + 365;
     const square = viewport.width - 80 >= squareWidth;
 
-    const menuWidth = 138;
+    const menuWidth = 170;
 
     return <>
         <HeadData title={'Springtide - '} />
@@ -140,7 +140,7 @@ export default function World({ worldCards }) {
                         display: 'flex',
                         justifyContent: 'flex-end',
                     }}>
-                        <WorldMenu cardData={worldCards} />
+                        <WorldMenu cardData={worldCards} mapPage />
                     </motion.nav>
                 </div>
                 
