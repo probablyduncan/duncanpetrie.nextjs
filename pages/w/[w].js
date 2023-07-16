@@ -151,7 +151,7 @@ export default function World({ card, cardData }) {
     // <Content components={{h1: LinkHeading1, h2: LinkHeading2, h3: LinkHeading3, h4: Caption, p: Paragraph, a: WorldLink, ul: UnorderedList}} />
     // <CardList cardData={cardData} delayAction={toCardAnimation} selected={exiting ? null : card.w} />
 
-    const tempRelatedList = processWorldCardGroups(card.frontmatter).map(g => ({
+    const tempRelatedList = processWorldCardGroups(card.frontmatter)?.map(g => ({
         title: g.groupIsParentID ? cardData.find(w => w.id == g.group)?.title ?? null : capitalize(g.group),
         isCardLink: g.groupIsParentID,
         id: g.group,
@@ -230,12 +230,12 @@ export default function World({ card, cardData }) {
                                             display: 'block',
                                             borderRadius: '20px',
                                             padding: '6px 13px 6px 14px',
-                                            margin: '-3px',
+                                            // margin: '-3px',
                                             boxShadow: `inset 6px 6px 0px ${addOpacity(colors.black)}`, 
-                                            border: `3px solid ${colors.white}`,
+                                            // border: `3px solid ${colors.white}`,
                                             userSelect: 'none',
                                         }} whileHover={{
-                                            border: `3px solid ${colors.slate}`,
+                                            // border: `3px solid ${colors.slate}`,
                                             boxShadow: `inset 0px 0px 0px ${addOpacity(colors.black)}`,
                                         }}>
                                             {children}
