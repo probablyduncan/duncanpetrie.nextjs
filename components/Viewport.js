@@ -15,7 +15,7 @@ export function ViewportProvider({ children }) {
     useEffect(() => {
 
         // if query matches, then we are on mobile
-        const mobileQuery = window.matchMedia(`(max-width: 1360px)`);
+        const mobileQuery = window.matchMedia(`(max-width: 1200px)`);
     
         // function to update mobile state
         const updateMobile = () => setMobile(mobileQuery.matches);
@@ -91,7 +91,7 @@ export function ViewportProvider({ children }) {
     return (
         <ViewportContext.Provider value={{mobile, viewport}}>
             <Loading loadOnDefined={mobile}/>
-            <motion.dialog id="lightbox" ref={dialogRef} style={{
+            {/* <motion.dialog id="lightbox" ref={dialogRef} style={{
                 zIndex: 1000, 
                 color: colors.black, 
                 padding: '8px 12px',
@@ -101,7 +101,7 @@ export function ViewportProvider({ children }) {
                 ...getGradientBackgroundCSS(...gradients.purpleGreen),
             }}>
                 <GaramondWrapper style={{fontWeight: 'semi-bold'}}><button onClick={closeModal}>Close.</button></GaramondWrapper>
-            </motion.dialog>
+            </motion.dialog> */}
             {children}
         </ViewportContext.Provider>
     );

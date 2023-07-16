@@ -9,7 +9,7 @@ import { colors } from '@/data/colors';
 
 export default function FrontPage( props ) {
 
-  const {mobile} = useContext(ViewportContext);
+  const {mobile, viewport} = useContext(ViewportContext);
 
   return ( 
     <Layout pageName="home" menuLink="/i/all" newsNav>{!mobile ? <>
@@ -26,7 +26,7 @@ export default function FrontPage( props ) {
           title: "Lingermyth",
           text: [
             "Gradually, we grew out of our past, explained away halos and beasts and cities of clouds. History, after all, is written by those that live in the present.",
-            "But it’s still there, that old world. Beneath our own, like a first coat of paint, glinting through chips and scratches."
+            viewport.width > 1280 ? "But it’s still there, that old world. Beneath our own, like a first coat of paint, glinting through chips and scratches." : ''
           ],
           link: "gallery",
           route: "/a/myth"
@@ -37,8 +37,8 @@ export default function FrontPage( props ) {
           title: "Hello! I'm Duncan Petrie",
           text: [
             "I'm a photographer, writer, and full stack web developer based in London.",
-            "In 2019, I needed an online portfolio. I took one look at the price of a website builder and decided to make my own from scratch.",
-            "Three years and four redesigns later, I’m proud of this messy work-in-progress."
+            viewport.width > 1280 ? "In 2019, I needed an online portfolio. I took one look at the price of a website builder and decided to make my own from scratch." : '',
+            viewport.width > 1280 ? "Three years and four redesigns later, I’m proud of this messy work-in-progress." : ''
           ],
           link: "about/cv",
           route: "/a/about"
@@ -93,7 +93,7 @@ export default function FrontPage( props ) {
           title: "Crystalizing the Vastness",
           text: [
             "For years I struggled to photograph water; my photos were much too busy, seeing everything while capturing nothing.",
-            "Now, I distill the water into its simplest form, making abstract what is too big to capture conventionally."
+            viewport.width > 1280 ? "Now, I distill the water into its simplest form, making abstract what is too big to capture conventionally." : ''
           ],
           link: "Gallery",
           route: "/a/blurry"

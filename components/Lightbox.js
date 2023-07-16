@@ -185,6 +185,7 @@ export function LightboxLinkedImg({ imgKey, noCaptions, noBorder, margin, restri
                 width: !noBorder ? 'calc(100% - 4px)' : '100%',
                 boxShadow: !noBorder ? `4px 4px ${colors.black}` : `0px 0px 0px ${colors.black}0f`,
                 cursor: lightboxKeys[0] ? 'zoom-in' : 'auto',
+                zIndex: 50,
                 margin
             }} 
             whileHover={lightboxKeys[0] && (noBorder ? {boxShadow: `4px 4px 15px ${colors.black}0f`} : {boxShadow: `6px 6px ${colors.black}`})}
@@ -301,6 +302,7 @@ export function LightboxLinkedSlideshow({ imgKeys, noCaptions, noBorder, margin,
                     width: !noBorder ? 'calc(100% - 4px)' : '100%',
                     boxShadow: !noBorder ? `4px 4px ${colors.black}` : `0px 0px 0px ${colors.black}0f`,
                     cursor: lightboxKeys[0] ? 'zoom-in' : 'auto',
+                    zIndex: 50,
                     margin
                 }} 
                 whileHover={lightboxKeys[0] && (noBorder ? {boxShadow: `4px 4px 15px ${colors.black}0f`} : {boxShadow: `6px 6px ${colors.black}`})}
