@@ -8,7 +8,6 @@ body {
   margin: 0;
   display: flex;
   justify-content: center;
-  background-color: #fff;
   scroll-behavior: smooth
   
   /* opacity transition? */

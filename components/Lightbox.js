@@ -71,7 +71,7 @@ export default function Lightbox({ index }) {
 
             if (e.code === "ArrowLeft") next(true);
             if (e.code === "ArrowRight") next();
-            if (e.code === "Escape") toggleLightbox(false);
+            if (e.code === "Escape") toggleLightbox(null);
         };
 
         window.addEventListener('keydown', keyDownHandler);

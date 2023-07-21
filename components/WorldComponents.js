@@ -136,7 +136,7 @@ export function TableOfContents({ }) {
                 whileHover={{color: colors.rellow}}
                 style={{fontStyle: h.level == 3 ? 'italic' : 'inherit'}}
             >
-                {h.title}.
+                {h.title}{h.title.at(-1) == '.' ? '' : '.'}
             </motion.button>
             <br />
         </div>))}

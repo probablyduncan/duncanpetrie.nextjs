@@ -1,8 +1,6 @@
 import { useEffect, useState, useRef } from "react";
-import { GaramondWrapper } from "./TextStyles";
-import { motion } from "framer-motion";
-import { colors, getGradientBackgroundCSS, gradients } from "@/data/colors";
-import { ViewportContext } from "@/pages/_app";
+import { colors } from "@/data/colors.js";
+import { ViewportContext } from "@/pages/_app.js";
 
 // modeled after https://blog.logrocket.com/developing-responsive-layouts-with-react-hooks/
 // ViewportContext lives in _app.js so I can fest-refresh here
@@ -56,14 +54,14 @@ export function ViewportProvider({ children }) {
         
         if (!dialogRef.current) return;
 
-        document.body.style.backgroundColor = colors.offWhite;
+        document.documentElement.style.backgroundColor = colors.offWhite;
         dialogRef.current.showModal();
     }
     const closeModal = () => {
         
         if (!dialogRef.current) return;
 
-        document.body.style.backgroundColor = colors.white;
+        document.documentElement.style.backgroundColor = colors.white;
         dialogRef.current.close();
     }
 

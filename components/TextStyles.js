@@ -191,9 +191,9 @@ export function LightboxButton({ action, hoverColor, children }) {
     </motion.button>);
 }
 
-export const Heading1 = ( props ) => (<Title className={'heading1'} alt={props.children} {...props} />);
-export const Heading2 = ( props ) => (<><br /><Title className={'heading2'} alt={props.children} small style={{margin: '0 4px 25px'}} {...props} /></>);
-export const Heading3 = ( props ) => (<Paragraph className={'heading3'} alt={props.children} style={{margin: `0 4px 15px`, fontWeight: 'bold'}} {...props} />);
+export const Heading1 = ( props ) => (<Title className={'heading1'} alt={props.children} id={props.children.toLowerCase().replaceAll(' ', '-')} {...props} />);
+export const Heading2 = ( props ) => (<><br /><Title className={'heading2'} alt={props.children} id={props.children.toLowerCase().replaceAll(' ', '-')} small style={{margin: '0 4px 25px'}} {...props} /></>);
+export const Heading3 = ( props ) => (<Paragraph className={'heading3'} alt={props.children} id={props.children.toLowerCase().replaceAll(' ', '-')} style={{margin: `0 4px 15px`, fontWeight: 'bold'}} {...props} />);
 export const LinkHeading1 = ( props ) => (<Title className={'heading1'} alt={props.children} ><LinkHeadingTemplate {...props} /></Title>);
 export const LinkHeading2 = ( props ) => (<><br /><Title className={'heading2'} alt={props.children} small style={{margin: '0 4px 25px'}}><LinkHeadingTemplate {...props} /></Title></>);
 export const LinkHeading3 = ( props ) => (<Paragraph className={'heading3'} alt={props.children} style={{margin: `0 4px 15px`}}><LinkHeadingTemplate {...props} /></Paragraph>);
