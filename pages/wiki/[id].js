@@ -3,12 +3,13 @@ import { getWikiDataAsObject, getWikiPaths } from "@/lib/dataParser";
 import { addToLocalStorage, getDateNumber, getSectionID, getWikiAPIKey, pushPopOpenCards } from "@/lib/wikihelper";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { ViewportContext } from "../_app";
-import { Caption, GaramondWrapper, Heading1, Heading2, Heading3, LatoWrapper, LinkHeading1, LinkHeading2, LinkHeading3, Paragraph, Title, UnderLonk, UnorderedList } from "@/components/TextStyles";
+import { Caption, ComicSansWrapper, GaramondWrapper, Heading1, Heading2, Heading3, LatoWrapper, LinkHeading1, LinkHeading2, LinkHeading3, Paragraph, Title, UnderLonk, UnorderedList } from "@/components/TextStyles";
 import { addOpacity, colors } from "@/data/colors";
 import { getMDXComponent } from "mdx-bundler/client";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import { WikiContext, useFetchWikiCode, useHeadings } from "@/lib/wikiHooks";
+import Img from "@/components/Img";
 
 export async function getStaticPaths() {
     const paths = await getWikiPaths();
@@ -196,7 +197,7 @@ function MDXContent({ id }) {
 
     const code = useFetchWikiCode(entriesData[id]);
 
-    const Content = useMemo(() => code ? getMDXComponent(code, {}) : <></>, [code]);
+    const Content = useMemo(() => code ? getMDXComponent(code, {Img: Img, ComicSans: ComicSansWrapper}) : <></>, [code]);
 
     return code && (<Content components={{h1: Heading1, h2: Heading2, h3: Heading3, h4: Caption, p: Paragraph, a: UnderLonk, ul: UnorderedList}} />);
 
