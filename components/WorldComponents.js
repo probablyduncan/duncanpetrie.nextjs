@@ -76,8 +76,6 @@ export function WorldMenu({ cardData, left, mapPage }) {
             userSelect: 'none',
             letterSpacing: 0.1,
             color: colors.slate,
-            maxHeight: 'calc(100vh - 40px)',
-            overflowY: 'scroll',
             marginTop: '40px',
             padding: '0 40px'
         }}>

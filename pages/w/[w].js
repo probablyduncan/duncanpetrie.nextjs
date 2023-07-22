@@ -282,8 +282,6 @@ export default function World({ card, cardData }) {
                 <div style={{
                     position: 'sticky',
                     top: 40,
-                    maxHeight:  'calc(100vh - 40px)',
-                    overflowY: 'scroll',
                     marginTop: '40px',
                     padding: '0 40px',
                 }}>

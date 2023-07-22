@@ -3,7 +3,7 @@ import { getWikiDataAsObject, getWikiPaths } from "@/lib/dataParser";
 import { addToLocalStorage, getSectionID, getSectionSelector } from "@/lib/wikihelper";
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { ViewportContext } from "../_app";
-import { Caption, ComicSansWrapper, GaramondWrapper, Heading1, Heading2, Heading3, Paragraph, Title, UnderLonk, UnorderedList } from "@/components/TextStyles";
+import { Caption, ComicSansWrapper, GaramondWrapper, Heading1, Heading2, Heading3, Paragraph, Title, UnderLine, UnderLonk, UnorderedList } from "@/components/TextStyles";
 import { addOpacity, colors } from "@/data/colors";
 import { getMDXComponent } from "mdx-bundler/client";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
@@ -47,7 +47,7 @@ export default function Wiki({ initialID, entriesData }) {
     const [currentCard, setCurrentCard] = useState(initialID);
     const [fullscreen, setFullscreen] = useState(null); // should be null, or id of fullscreen card
 
-    const textWidth = viewport.width > 1410 ? 720 : viewport.width > 1000 ? 600 : viewport.width - 140 ;
+    const textWidth = viewport.width > 1410 ? 720 : viewport.width > 1000 ? 600 : viewport.width >= 600 ? viewport.width - 140 : viewport.width - 80;
     const navWidth = 165;
 
     //#region init, read router query and add code to localstorage
@@ -216,7 +216,7 @@ export default function Wiki({ initialID, entriesData }) {
         {/* wrapper */}
         <WikiContext.Provider value={{entriesData, openCards, currentCard, toggleCard, scrollTo, textWidth, navWidth}}>
             <div style={{ 
-                width: 'calc(100vw - 80px)',
+                width: viewport.width >= 600 ? 'calc(100vw - 80px)' : 'calc(100vw - 40px)',
                 marginBottom: '40px',
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -307,13 +307,13 @@ function Card({ id }) {
         display: 'flex',
     }} exit={{opacity: 0, height: 0, transition: {duration: 0.15}}}>
         
-        {/* card container */}
+        {/* text container */}
         <section ref={textSectionRef} id={getSectionID(entriesData[id].id)} aria-label={`Entry for ${entriesData[id].title}`} style={{
-            boxShadow: viewport.width > 600 ? `4px 4px 20px ${addOpacity(colors.black)}` : 'none',
-            padding: viewport.width > 600 ? '40px 30px' : '0', marginTop: '40px',
-            backgroundColor: viewport.width > 600 ? colors.white : 'unset',
+            boxShadow: viewport.width >= 600 ? `4px 4px 20px ${addOpacity(colors.black)}` : 'none',
+            padding: viewport.width >= 600 ? '40px 30px' : '0', marginTop: '40px',
+            backgroundColor: viewport.width >= 600 ? colors.white : 'unset',
             borderRadius: '20px',
-            width: viewport.width > 600 ? textWidth : textWidth + 60,
+            width: viewport.width >= 600 ? textWidth : textWidth + 60,
         }}>
 
             <header style={{
@@ -321,7 +321,7 @@ function Card({ id }) {
                 justifyContent: 'space-between',
             }}>
                 <Title>{entriesData[id].title}</Title>
-                {viewport.width > 600 && <GaramondWrapper div style={{
+                {viewport.width >= 600 && <GaramondWrapper div style={{
                     color: colors.slate,
                     minWidth: '120px',
                     textAlign: 'right',
@@ -332,7 +332,7 @@ function Card({ id }) {
                 </GaramondWrapper>}
             </header>
             {code ? (
-                <Content components={{h1: Heading1, h2: Heading2, h3: Heading3, h4: Caption, p: Paragraph, ul: UnorderedList, a: UnderLonk}} />
+                <Content components={{h1: Heading1, h2: Heading2, h3: Heading3, h4: Caption, p: Paragraph, ul: UnorderedList, a: WikiLink}} />
             ) : (
                 <Paragraph>Hey! I&apos;m <span style={{color: colors.errorYellow}}>loading</span> this page as fast as I can! Gimme a sec, would ya?!</Paragraph>
             )}
@@ -356,23 +356,20 @@ function Card({ id }) {
                 userSelect: 'none',
             }} initial={{opacity: 0}} animate={{opacity: 1}}>
                 <GaramondWrapper>
-                    {/* <LatoWrapper style={{fontSize: 14}}>CONTENTS</LatoWrapper> */}
-                    {/* <div style={{lineHeight: '200%'}}> */}
-                        {headings.map(h => (
-                            <WikiNavButton 
-                                key={`${h.id}-headinglink`}
-                                color={id == currentCard && h.id == currentHeading ? colors.rellow : colors.slate}
-                                hoverColor={colors.rellow}
-                                action={() => { scrollTo({
-                                    top: document.querySelector(`section#${getSectionID(entriesData[id].id)}${(h.id ? ` #${h.id}` : '')}`)?.offsetTop - h.offset
-                                })}}
-                            >
-                                {/* {h.level > 2 && <>&nbsp;&nbsp;&nbsp;&nbsp;</>} */}
-                                {h.title ?? entriesData[id].title}
-                                {h.level == 0 && <><br /><br /></>}
-                            </WikiNavButton>
-                        ))}
-                    {/* </div> */}
+                    {headings.map(h => (
+                        <WikiNavButton 
+                            key={`${h.id}-headinglink`}
+                            color={id == currentCard && h.id == currentHeading ? colors.rellow : colors.slate}
+                            hoverColor={colors.rellow}
+                            action={() => { scrollTo({
+                                top: document.querySelector(`section#${getSectionID(entriesData[id].id)}${(h.id ? ` #${h.id}` : '')}`)?.offsetTop - h.offset
+                            })}}
+                        >
+                            {/* {h.level > 2 && <>&nbsp;&nbsp;&nbsp;&nbsp;</>} */}
+                            {h.title ?? entriesData[id].title}
+                            {h.level == 0 && <><br /><br /></>}
+                        </WikiNavButton>
+                    ))}
                 </GaramondWrapper>
             </motion.nav>
 
@@ -405,4 +402,44 @@ function WikiNavButton({ children, action, href, title, color, hoverColor }) {
             <br />
         </GaramondWrapper>
     );
+}
+
+function WikiLink({ children, href }) {
+
+    const {viewport} = useContext(ViewportContext);
+    const {toggleCard, entriesData} = useContext(WikiContext);
+
+    // https://emojipedia.org/
+    const cursors = [ '⛔', '🚫', '🚷', '🚳', '📵', '☣️', '☢️', '⚠️', '😡', '😬', '😲', ];
+    const [cursor, setCursor] = useState('🚫');
+
+    if (!href) href = children;
+    href = href.split('#')[0].toLowerCase().replaceAll(' ', '');
+
+    return viewport.width >= 600 && !href.includes('/') ? <UnderLonk action={() => toggleCard({id: href, add: true})}>{children}</UnderLonk> : <UnderLonk href={href}>{children}</UnderLonk>;
+
+    return href.includes('/') || href in entriesData  ? (
+        // should be displayed in full
+        <UnderLonk 
+            delayAction={() => {if (!isSamePage) toCardAnimation()}} 
+            title={`${cardData.find(w => w.id == page)?.title ?? (page.charAt(0).toUpperCase() + page.slice(1))} ➯`}
+            href={href}
+        >
+            {children}
+        </UnderLonk>
+    ) : (
+        // under construction
+        <motion.span 
+            title={'I\'m still workin\' on it!'} 
+            whileHover={{color: colors.errorRed}}
+            onMouseLeave={() => setCursor(cursors[Math.floor(Math.random() * cursors.length)])}
+            style={{
+                color: colors.errorYellow, 
+                // https://www.emojicursor.app/ custom cursor
+                cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>${cursor}</text></svg>") 16 16,auto`,
+            }}
+        >
+            {children}
+        </motion.span>
+    )
 }
