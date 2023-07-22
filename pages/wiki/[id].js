@@ -416,30 +416,23 @@ function WikiLink({ children, href }) {
     if (!href) href = children;
     href = href.split('#')[0].toLowerCase().replaceAll(' ', '');
 
-    return viewport.width >= 600 && !href.includes('/') ? <UnderLonk action={() => toggleCard({id: href, add: true})}>{children}</UnderLonk> : <UnderLonk href={href}>{children}</UnderLonk>;
-
-    return href.includes('/') || href in entriesData  ? (
-        // should be displayed in full
-        <UnderLonk 
-            delayAction={() => {if (!isSamePage) toCardAnimation()}} 
-            title={`${cardData.find(w => w.id == page)?.title ?? (page.charAt(0).toUpperCase() + page.slice(1))} ➯`}
-            href={href}
-        >
-            {children}
-        </UnderLonk>
-    ) : (
-        // under construction
-        <motion.span 
-            title={'I\'m still workin\' on it!'} 
-            whileHover={{color: colors.errorRed}}
-            onMouseLeave={() => setCursor(cursors[Math.floor(Math.random() * cursors.length)])}
-            style={{
-                color: colors.errorYellow, 
-                // https://www.emojicursor.app/ custom cursor
-                cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>${cursor}</text></svg>") 16 16,auto`,
-            }}
-        >
-            {children}
-        </motion.span>
-    )
+    return viewport.width >= 600 && !href.includes('/') ? (
+        href in entriesData ? (
+            <UnderLonk action={() => toggleCard({id: href, add: true})}>{children}</UnderLonk>
+        ) : (
+            <motion.span 
+                title={'I\'m still workin\' on it!'} 
+                whileHover={{color: colors.errorRed}}
+                onMouseLeave={() => setCursor(cursors[Math.floor(Math.random() * cursors.length)])}
+                style={{
+                    color: colors.errorYellow, 
+                    // https://www.emojicursor.app/ custom cursor
+                    cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>${cursor}</text></svg>") 16 16,auto`,
+                }}
+            >
+                {children}
+            </motion.span>
+        )
+    
+        ) : <UnderLonk href={href}>{children}</UnderLonk>;
 }
