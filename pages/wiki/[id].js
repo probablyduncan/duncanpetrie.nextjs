@@ -1,16 +1,14 @@
 import { HeadData } from "@/components/Layout";
 import { getWikiDataAsObject, getWikiPaths } from "@/lib/dataParser";
-import { addToLocalStorage, getSectionID, getSectionSelector } from "@/lib/wikihelper";
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { goToRandom } from "@/lib/wikihelper";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { ViewportContext } from "../_app";
-import { Caption, ComicSansWrapper, GaramondWrapper, Heading1, Heading2, Heading3, Paragraph, Title, UnderLine, UnderLonk, UnorderedList } from "@/components/TextStyles";
+import { Caption, ComicSansWrapper, GaramondWrapper, Paragraph, Title, UnderLonk, UnorderedList } from "@/components/TextStyles";
 import { addOpacity, colors } from "@/data/colors";
 import { getMDXComponent } from "mdx-bundler/client";
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { useRouter } from "next/router";
-import { WikiContext, useFetchWikiCode, useHeadings } from "@/lib/wikiHooks";
-import Img from "@/components/Img";
-import Lonk from "@/components/Lonk";
+import { AnimatePresence, motion } from "framer-motion";
+import { WikiContext, useHeadings } from "@/lib/wikiHooks";
+import { WikiHeading1, WikiHeading2, WikiHeading3, WikiImg, WikiLink, WikiList, WikiNavButton, WikiText } from "@/components/WikiComponents";
 
 export async function getStaticPaths() {
     const paths = await getWikiPaths();
@@ -25,7 +23,7 @@ export async function getStaticProps( {params} ) {
 
     return {
         props: {
-            initialID: params.id,
+            thisID: params.id,
             entriesData,
         }
     };
@@ -36,156 +34,32 @@ export async function getStaticProps( {params} ) {
  * data: object containing frontmatter of all wiki entries
  * data[id] contains data[id].code as well for mdx
  */
-export default function Wiki({ initialID, entriesData }) {
+export default function Wiki({ thisID, entriesData }) {
 
     const {viewport} = useContext(ViewportContext);
 
-    const router = useRouter();
     const mainRef = useRef();
+    const inspirationRef = useRef();
     
-    const [openCards, setOpenCards] = useState([initialID]);
-    const [currentCard, setCurrentCard] = useState(initialID);
+    const {headings, currentHeading} = useHeadings(mainRef, thisID);
+    
     const [fullscreen, setFullscreen] = useState(null); // should be null, or id of fullscreen card
 
-    const textWidth = viewport.width > 1410 ? 720 : viewport.width > 1000 ? 600 : viewport.width >= 600 ? viewport.width - 140 : viewport.width - 80;
-    const navWidth = 165;
+    const Content = useMemo(() => getMDXComponent(entriesData[thisID].code, {Img: WikiImg, ComicSans: ComicSansWrapper}), [entriesData, thisID]);
 
-    //#region init, read router query and add code to localstorage
+    // breakpoints
+    const noHeaders = viewport.width < 1200;
+    const noMenu = viewport.width < 1000;
+    const mobile = viewport.width < 600;
 
-    // this runs once, on page load
-    useEffect(() => { 
+    // style
 
-        // this keeps openCards up to date with open path query
-        if (router.query.open) {
-            const fromQuery = [...new Set(router.query.open.split(',').map(w => w.trim()).filter(w => w in entriesData))];
-            if (!fromQuery.includes(initialID)) fromQuery.unshift(initialID);
-            setOpenCards(fromQuery);
-        }
-
-        // add/update initial code to localstorage
-        addToLocalStorage(initialID, entriesData[initialID].code);
-
-        // ~ secret message ~
-        if (!localStorage.getItem('hey!')) localStorage.setItem('hey!', 'get outta here! go find your own secret little hidey-hole, this one is mine!');
-
-        setTimeout(() => {
-            window.scrollTo({
-                top: document.querySelector(getSectionSelector(initialID)).offsetTop - 40,
-                behavior: 'smooth'
-            });
-        }, 100);
-
-    }, [initialID, entriesData, router.query.open]);
-
-    //#endregion
-
-    //#region current card scroll listener
-
-    const { scrollY } = useScroll();
-    const cardTopPadding = 120  // the distance above a card where it will be current. 40 for bottom of prev card
-    useMotionValueEvent(scrollY, 'change', (scroll) => {
-        if (!mainRef.current) return;
-
-        let newCurrent = openCards[0];
-        openCards.every(id => {
-            if (mainRef.current.querySelector(getSectionSelector(id))?.offsetTop - cardTopPadding > scroll)
-                return false;
-            
-            newCurrent = id;
-            return true;
-        });
-
-        if (currentCard != newCurrent) setCurrentCard(newCurrent);
-    });
-
-    //#endregion
-
-    //#region toggle card, random card
-
-    // to add even if already open:         toggleCard({id, add: true})
-    // to toggle based on current state:    toggleCard({id})
-    // to close even if not already open:   toggleCard({id, add: false})
-    const toggleCard = ({id, add = null, openAtEnd}) => {
-
-        const cardIsOpen = openCards.includes(id);
-
-        // if adding or toggling open
-        if (add ?? !cardIsOpen) {
-
-            // if not already open, add to openCards, right after current card
-            if (!cardIsOpen) {
-
-                setOpenCards(cards => {
-
-                    // if openAtEnd, just append
-                    if (openAtEnd) 
-                        cards.push(id);
-
-                    // otherwise put after current card
-                    else
-                        cards.splice(cards.indexOf(currentCard) + 1, 0, id);
-
-                    return [...new Set(cards)];
-                });
-            }
-
-            // scroll to card
-            setTimeout(() => scrollTo({ id }), cardIsOpen ? 0 : 200);
-        }
-
-        // if removing or toggling closed
-        else {
-
-            // if closing last card, update current card to 2nd to last card. Otherwise, set to next card
-            setCurrentCard(openCards.at(-1) == id ? openCards.at(-2) : openCards[openCards.indexOf(id) + 1]);
-
-            // close card
-            setOpenCards(cards => cards.filter(c => c != id));
-        }
+    const panelStyle = {
+        boxShadow: `4px 4px 20px ${addOpacity(colors.black)}`,
+        padding: '40px 30px', marginTop: '40px',
+        backgroundColor: colors.white,
+        borderRadius: '20px',
     }
-
-    const openRandomCard = () => {
-        const options = Object.keys(entriesData).filter(w => !openCards.includes(w));
-        toggleCard({id: options[Math.floor(options.length * Math.random())], add: true, openAtEnd: true});
-    }
-
-    //#endregion
-
-    //#region scrollTo function
-
-    const scrollTo = useCallback(({id, top = 0, toBottom = false, next = false, prev = false}) => {
-
-        if (id) {
-
-            // if going down:
-            if (next) {
-
-                // if this is the last card, scroll to end of it
-                if (openCards.at(-1) == id) toBottom = true;
-
-                // otherwise set id to next id
-                else id = openCards[Math.min(openCards.indexOf(id) + 1, openCards.length - 1)];
-            } 
-
-            // if going up and we are not at top card already and we are at the top of the current card, scroll to previous card 
-            else if (prev && openCards[0] != id && window.scrollY < mainRef.current.querySelector(getSectionSelector(id)).offsetTop) {
-
-                // set id to previous open card
-                id = openCards[openCards.indexOf(id) - 1];
-            }
-            
-            // add id offset to top
-            top += mainRef.current.querySelector(getSectionSelector(id))?.offsetTop - 40;
-        }
-
-        // if toBottom, just scroll to end of document
-        if (toBottom) top = document.body.scrollHeight;
-
-        window.scrollTo({top, behavior: 'smooth'});
-
-    }, [openCards]);
-
-    //#endregion
 
     //#region arrow key listener for scrolling
 
@@ -194,57 +68,65 @@ export default function Wiki({ initialID, entriesData }) {
         const handleKeypress = (e) => {
             switch (e.code) {
                 case 'ArrowUp': 
-                    scrollTo({id: currentCard, prev: true}); 
+                    let upTop = 0;
+                    headings.map(h => h.id).splice(1).reverse().every(h => {
+                        
+                        const thisTop = mainRef.current.querySelector(`#${h}`).offsetTop + mainRef.current.offsetTop;
+
+                        if (thisTop > window.scrollY - 20) return true;
+                        upTop = thisTop; return false;
+                    })
+                    window.scrollTo({top: upTop});
                     e.preventDefault();
                     break;
                 case 'ArrowDown': 
-                    scrollTo({id: currentCard, next: true}); 
+                    let downTop = document.body.offsetHeight;
+                    headings.map(h => h.id).splice(1).every(h => {
+
+                        const thisTop = mainRef.current.querySelector(`#${h}`).offsetTop + mainRef.current.offsetTop;
+
+                        if (thisTop < window.scrollY + 20) return true;
+                        downTop = thisTop; return false;
+                    })
+                    window.scrollTo({top: downTop});
                     e.preventDefault();
                     break;
             }
         }
         window.addEventListener('keydown', handleKeypress);
         return () => window.removeEventListener('keydown', handleKeypress);
-    }, [currentCard, scrollTo]);
+    }, [headings, thisID]);
 
     //#endregion
-
 
     return (<>
         <HeadData title={'Wiki - '} />
 
         {/* wrapper */}
-        <WikiContext.Provider value={{entriesData, openCards, currentCard, toggleCard, scrollTo, textWidth, navWidth}}>
-            <div style={{ 
-                width: viewport.width >= 600 ? 'calc(100vw - 80px)' : 'calc(100vw - 40px)',
-                marginBottom: '40px',
-                display: 'flex',
-                justifyContent: 'space-between',
-            }}>
+        <WikiContext.Provider value={{ thisID, entriesData }}>
+            <motion.div style={{ 
+                width: !noMenu ? 'calc(100vw - 160px)' : !mobile ? 'calc(100vw - 80px)' : 'calc(100vw - 40px)',
+                display: 'grid',
+                gridTemplateColumns: !noHeaders ? '1fr 680px 1fr' : !noMenu ? '165px 1fr' : '1fr',
+                gap: '40px',
+            }} exit={{y: -1000}}>
 
                 {/* left nav container */}
-                {viewport.width > 1000 && <GaramondWrapper style={{
-                    fontSize: '16px',
-                    color: colors.slate,
-                    userSelect: 'none',
-
-                }}>
-                    <nav style={{
-                        boxShadow: `4px 4px 20px ${addOpacity(colors.black)}`,
-                        padding: '40px 30px', marginTop: '40px',
-                        backgroundColor: colors.white,
-                        borderRadius: '20px',
+                <div>
+                    {!noMenu && <nav style={{
                         position: 'sticky',
-                        top: 40,
-                        width: navWidth,
-                        marginRight: 40,
+                        top: 80,
+                        width: 165,
                         maxHeight: 'calc(100vh - 160px)',
                         overflowY: 'scroll',
+                        fontSize: '16px',
+                        color: colors.slate,
+                        userSelect: 'none',
                     }}>
                         <WikiNavButton href={'/'} title={'Back! to the front page.'}>Back to home.</WikiNavButton>
                         <br />
-                        <WikiNavButton action={() => toggleCard({id: 'yon', add: true, openAtEnd: true})}>About this world.</WikiNavButton>
-                        <WikiNavButton action={() => toggleCard({id: 'influences', add: true, openAtEnd: true})}>Inspiration.</WikiNavButton>
+                        <WikiNavButton href={'yon'}>About this world.</WikiNavButton>
+                        <WikiNavButton href={'influences'}>Inspiration.</WikiNavButton>
                         <WikiNavButton href={'/world'}>Map.</WikiNavButton>
                         <br />
                         <WikiNavButton href={'/'}>Stories.</WikiNavButton>
@@ -252,187 +134,104 @@ export default function Wiki({ initialID, entriesData }) {
                         <WikiNavButton href={'/'}>Regions.</WikiNavButton>
                         <WikiNavButton href={'/'}>Towns.</WikiNavButton>
                         <br />
-                        <WikiNavButton action={openRandomCard}>Random.</WikiNavButton>
-                        <WikiNavButton href={'/'}>Index.</WikiNavButton>
+                        <WikiNavButton action={() => goToRandom(thisID, entriesData)}>Random.</WikiNavButton>
+                        <WikiNavButton href={'index'}>Index.</WikiNavButton>
                         <br />
-                    </nav>
-                </GaramondWrapper>}
+                    </nav>}
+                </div>
 
-                {/* entries and contents container */}
-                <main ref={mainRef} style={{
-                    width: `calc(${textWidth / 2}px + 50vw)`,   // width should half of page plus the half of textwidth that's spilling over
+
+                {/* text container */}
+                <div style={{
+                    width: !noMenu ? 680 : '100%',
                 }}>
-                    <AnimatePresence>
-                        {openCards.map(id => <Card key={`${id}-card`} id={id} /> )}
-                    </AnimatePresence>
-                </main>
+                    <section style={{
+                        boxShadow: `4px 4px 20px ${addOpacity(colors.black)}`,
+                        padding: '40px', margin: `${noMenu ? 0 : 40}px 0 calc(50vh)`,
+                        backgroundColor: colors.white,
+                        borderRadius: '20px',
+                    }}>
+                        <header style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                        }}>
+                            <Title>{entriesData[thisID].title}</Title>
+                            {!mobile && <GaramondWrapper div style={{
+                                color: colors.slate,
+                                minWidth: '120px',
+                                textAlign: 'right',
+                            }}>
+                                <motion.button style={{color: colors.slate}} whileHover={{color: colors.rellow}}>fullscreen</motion.button>.
+                            </GaramondWrapper>}
+                        </header>
+                        <main ref={mainRef}>
+                            <Content components={{h1: WikiHeading1, h2: WikiHeading2, h3: WikiHeading3, h4: Caption, p: WikiText, ul: WikiList, a: WikiLink}} />
+                            {entriesData[thisID].inspiration && <>
+                                <br /><br />
+                                <WikiHeading2>Inspiration</WikiHeading2>
+                                <WikiList>
+                                    {entriesData[thisID].inspiration.map(i => (
+                                        <li key={`insp-${i.text.substring(0, 4)}`}>
+                                            {i.text.substring(0, i.text.indexOf('['))}
+                                            <UnderLonk href={i.url}>{i.text.substring(i.text.indexOf('[') + 1, i.text.indexOf(']'))}</UnderLonk>
+                                            {i.text.substring(i.text.indexOf(']') + 1)}
+                                        </li>
+                                    ))}
+                                </WikiList>
+                            </>}
+                        </main>
+                    </section>
+                    {/* <section style={{
+                        ...panelStyle
+                    }}>
+                        <footer>
+                            <WikiHeading2>Related</WikiHeading2>
+                        </footer>
+                    </section> */}
+                </div>
 
-            </div>
+
+                {/* table of contents sticky container */}
+                <AnimatePresence>
+                    {!noHeaders && headings.length > 0 && <motion.nav 
+                        key='table-of-contents'
+                        role="complementary" 
+                        aria-label={`Table of Contents for ${entriesData[thisID].title}`} 
+                        style={{
+                            width: 165,
+                            position: 'sticky',
+                            top: 80,
+                            marginLeft: '20px',
+                            maxHeight: 'calc(100vh - 160px)',
+                            overflowY: 'scroll',
+                            fontSize: '16px',
+                            color: colors.slate,
+                            userSelect: 'none',
+                        }} 
+                        initial={{ opacity: 0 }} 
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                    >
+                        <GaramondWrapper>
+                            {headings.map(h => (
+                                <WikiNavButton 
+                                    key={`${h.id}-headinglink`}
+                                    color={h.id == currentHeading ? colors.rellow : colors.slate}
+                                    hoverColor={colors.rellow}
+                                    // href={`#${h.id}`}
+                                    action={() => {scrollTo({top: h.id ? mainRef.current.querySelector(`#${h.id}`).offsetTop + mainRef.current.offsetTop : 0})}}
+                                >
+                                    {h.level > 2 && <>~&nbsp;&nbsp;</>}
+                                    {h.title ?? entriesData[thisID].title}
+                                    {h.level == 0 && <><br /></>}
+                                </WikiNavButton>
+                            ))}
+                        </GaramondWrapper>
+                    </motion.nav>}
+
+                </AnimatePresence>
+
+            </motion.div>
         </WikiContext.Provider>
     </>);
-}
-
-
-
-/**
- * -- COMPONENTS
- */
-
-function Card({ id }) {
-
-    const {viewport} = useContext(ViewportContext);
-    const {entriesData, toggleCard, currentCard, scrollTo, textWidth, navWidth} = useContext(WikiContext);
-
-    const code = useFetchWikiCode(entriesData[id]);
-    const Content = useMemo(() => code ? getMDXComponent(code, {Img: Img, ComicSans: ComicSansWrapper}) : <></>, [code]);
-
-    const textSectionRef = useRef();
-    const headings = useHeadings(textSectionRef, code);
-
-    const [currentHeading, setCurrentHeading] = useState('');
-
-    const { scrollY } = useScroll();
-    useMotionValueEvent(scrollY, 'change', (scroll) => {
-        if (currentCard != id || !textSectionRef.current || !headings || headings.length < 2) return;
-        let newCurrent = '';
-        headings.forEach(h => {
-            if (h.id !== '' && textSectionRef.current.querySelector(`#${h.id}`)?.offsetTop - 200 < scroll)
-                newCurrent = h.id;
-        });
-
-        if (currentHeading != newCurrent) setCurrentHeading(newCurrent);
-    })
-
-    return (<motion.div style={{ 
-        display: 'flex',
-    }} exit={{opacity: 0, height: 0, transition: {duration: 0.15}}}>
-        
-        {/* text container */}
-        <section ref={textSectionRef} id={getSectionID(entriesData[id].id)} aria-label={`Entry for ${entriesData[id].title}`} style={{
-            boxShadow: viewport.width >= 600 ? `4px 4px 20px ${addOpacity(colors.black)}` : 'none',
-            padding: viewport.width >= 600 ? '40px 30px' : '0', marginTop: '40px',
-            backgroundColor: viewport.width >= 600 ? colors.white : 'unset',
-            borderRadius: '20px',
-            width: viewport.width >= 600 ? textWidth : textWidth + 60,
-        }}>
-
-            <header style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-            }}>
-                <Title>{entriesData[id].title}</Title>
-                {viewport.width >= 600 && <GaramondWrapper div style={{
-                    color: colors.slate,
-                    minWidth: '120px',
-                    textAlign: 'right',
-                }}>
-                    <motion.button style={{color: colors.slate}} whileHover={{color: colors.rellow}}>fullscreen</motion.button>
-                    &nbsp;&nbsp;|&nbsp;&nbsp;
-                    <motion.button style={{color: colors.slate}} whileHover={{color: colors.rellow}} onClick={() => {toggleCard({id, add: false})}}>close.</motion.button>
-                </GaramondWrapper>}
-            </header>
-            {code ? (
-                <Content components={{h1: Heading1, h2: Heading2, h3: Heading3, h4: Caption, p: Paragraph, ul: UnorderedList, a: WikiLink}} />
-            ) : (
-                <Paragraph>Hey! I&apos;m <span style={{color: colors.errorYellow}}>loading</span> this page as fast as I can! Gimme a sec, would ya?!</Paragraph>
-            )}
-        </section>
-
-        {/* table of contents sticky container */}
-        {viewport.width > 1280 && headings.length > 0 && <div>
-            <motion.nav role="complementary" aria-label={`Table of Contents for ${entriesData[id].title}`} style={{
-                boxShadow: `4px 4px 20px ${addOpacity(colors.black)}`,
-                padding: '40px 30px', marginTop: '40px',
-                backgroundColor: colors.white,
-                borderRadius: '20px',
-                width: navWidth,
-                marginLeft: '40px',
-                position: 'sticky',
-                top: 40,
-                maxHeight: 'calc(100vh - 160px)',
-                overflowY: 'scroll',
-                fontSize: '16px',
-                color: colors.slate,
-                userSelect: 'none',
-            }} initial={{opacity: 0}} animate={{opacity: 1}}>
-                <GaramondWrapper>
-                    {headings.map(h => (
-                        <WikiNavButton 
-                            key={`${h.id}-headinglink`}
-                            color={id == currentCard && h.id == currentHeading ? colors.rellow : colors.slate}
-                            hoverColor={colors.rellow}
-                            action={() => { scrollTo({
-                                top: document.querySelector(`section#${getSectionID(entriesData[id].id)}${(h.id ? ` #${h.id}` : '')}`)?.offsetTop - h.offset
-                            })}}
-                        >
-                            {/* {h.level > 2 && <>&nbsp;&nbsp;&nbsp;&nbsp;</>} */}
-                            {h.title ?? entriesData[id].title}
-                            {h.level == 0 && <><br /><br /></>}
-                        </WikiNavButton>
-                    ))}
-                </GaramondWrapper>
-            </motion.nav>
-
-        </div>}
-    </motion.div>)
-}
-
-function WikiNavButton({ children, action, href, title, color, hoverColor }) {
-
-    return (
-        <GaramondWrapper div >
-            <motion.span
-                animate={{
-                    color: color ?? colors.slate,
-                    display: 'block',
-                    textAlign: 'left',
-                }}
-                whileHover={{
-                    color: hoverColor ?? colors.rellow,
-                }}
-            >
-                {action ? (
-                    <button onClick={action}>{children}</button>
-                ) : href ? (
-                    <Lonk title={title} href={href}>{children}</Lonk>
-                ) : (
-                    <span>{children}</span>
-                )}
-            </motion.span>
-            <br />
-        </GaramondWrapper>
-    );
-}
-
-function WikiLink({ children, href }) {
-
-    const {viewport} = useContext(ViewportContext);
-    const {toggleCard, entriesData} = useContext(WikiContext);
-
-    // https://emojipedia.org/
-    const cursors = [ '⛔', '🚫', '🚷', '🚳', '📵', '☣️', '☢️', '⚠️', '😡', '😬', '😲', ];
-    const [cursor, setCursor] = useState('🚫');
-
-    if (!href) href = children;
-    href = href.split('#')[0].toLowerCase().replaceAll(' ', '');
-
-    return viewport.width >= 600 && !href.includes('/') ? (
-        href in entriesData ? (
-            <UnderLonk action={() => toggleCard({id: href, add: true})}>{children}</UnderLonk>
-        ) : (
-            <motion.span 
-                title={'I\'m still workin\' on it!'} 
-                whileHover={{color: colors.errorRed}}
-                onMouseLeave={() => setCursor(cursors[Math.floor(Math.random() * cursors.length)])}
-                style={{
-                    color: colors.errorYellow, 
-                    // https://www.emojicursor.app/ custom cursor
-                    cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>${cursor}</text></svg>") 16 16,auto`,
-                }}
-            >
-                {children}
-            </motion.span>
-        )
-    
-        ) : <UnderLonk href={href}>{children}</UnderLonk>;
 }
