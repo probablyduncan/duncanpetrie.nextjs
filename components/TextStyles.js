@@ -116,16 +116,19 @@ export function Caption({ children, small, style, textAlign, color, ...props }) 
 }
 
 // when hover stops, onHover(null) is called
-export function UnderLonk({ href, action, noUnderline, color, thick, children, onHover, ...props }) {
+export function UnderLonk({ href, action, noUnderline, color, thick, children, onHover, enter, leave, ...props }) {
 
     const [hover, setHover] = useState(false);
 
     const duration = (children?.length ?? 8) * 15;
     color = color ?? colors.cornflowerBlue;
 
-    const hoverFunc = (on) => {
+    const hoverFunc = (e, on) => {
         setHover(on);
         if (onHover) onHover(on);
+
+        if (on && enter) enter(e);
+        else if (!on && leave) leave(e);
     }
 
     const style = Object.assign({
@@ -136,15 +139,15 @@ export function UnderLonk({ href, action, noUnderline, color, thick, children, o
         <UnderLine show={!noUnderline && hover} duration={duration} color={style.color} thickness={thick ? 2 : 1.5} >
             {action ? 
                 <button onClick={() => setTimeout(action, props?.delay ?? 0)} {...props} style={style}
-                    onMouseEnter={() => hoverFunc(true)} 
-                    onMouseLeave={() => hoverFunc(false)}
+                    onMouseEnter={(e) => hoverFunc(e, true)} 
+                    onMouseLeave={(e) => hoverFunc(e, false)}
                 >
                     {children}
                 </button>
             :
                 <Lonk href={href} {...props} style={style} 
-                    onMouseEnter={() => hoverFunc(true)} 
-                    onMouseLeave={() => hoverFunc(false)}
+                    onMouseEnter={(e) => hoverFunc(e, true)} 
+                    onMouseLeave={(e) => hoverFunc(e, false)}
                 >
                     {children}
                 </Lonk>

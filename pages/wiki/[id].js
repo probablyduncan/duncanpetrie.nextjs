@@ -8,7 +8,10 @@ import { addOpacity, colors } from "@/data/colors";
 import { getMDXComponent } from "mdx-bundler/client";
 import { AnimatePresence, motion } from "framer-motion";
 import { WikiContext, useHeadings } from "@/lib/wikiHooks";
-import { WikiHeading1, WikiHeading2, WikiHeading3, WikiImg, WikiLink, WikiList, WikiNavButton, WikiText } from "@/components/WikiComponents";
+import { Preview, WikiHeading1, WikiHeading2, WikiHeading3, WikiImg, WikiLink, WikiList, WikiNavButton, WikiText } from "@/components/WikiComponents";
+import Image from "next/image";
+import { getSrc } from "@/lib/imageHelper";
+import { imgData } from "@/data/images";
 
 export async function getStaticPaths() {
     const paths = await getWikiPaths();
@@ -39,10 +42,10 @@ export default function Wiki({ thisID, entriesData }) {
     const {viewport} = useContext(ViewportContext);
 
     const mainRef = useRef();
-    const inspirationRef = useRef();
+    const mapDialogRef = useRef();
     
     const {headings, currentHeading} = useHeadings(mainRef, thisID);
-    
+    const [preview, setPreview] = useState({});
     const [fullscreen, setFullscreen] = useState(null); // should be null, or id of fullscreen card
 
     const Content = useMemo(() => getMDXComponent(entriesData[thisID].code, {Img: WikiImg, ComicSans: ComicSansWrapper}), [entriesData, thisID]);
@@ -98,6 +101,10 @@ export default function Wiki({ thisID, entriesData }) {
     }, [headings, thisID]);
 
     //#endregion
+
+    const openMap = (id) => {
+        id ? mapDialogRef.current.showModal() : mapDialogRef.current.close();
+    }
 
     return (<>
         <HeadData title={'Wiki - '} />
@@ -161,7 +168,7 @@ export default function Wiki({ thisID, entriesData }) {
                                 minWidth: '120px',
                                 textAlign: 'right',
                             }}>
-                                <motion.button style={{color: colors.slate}} whileHover={{color: colors.rellow}}>fullscreen</motion.button>.
+                                <motion.button onClick={() => openMap(thisID)} style={{color: colors.slate}} whileHover={{color: colors.rellow}}>Where</motion.button>?
                             </GaramondWrapper>}
                         </header>
                         <main ref={mainRef}>
@@ -232,6 +239,11 @@ export default function Wiki({ thisID, entriesData }) {
                 </AnimatePresence>
 
             </motion.div>
+
+            <dialog ref={mapDialogRef} onClick={() => openMap(false)}>
+                <Image src={getSrc(imgData.bigmapnames)} alt="map" width={80} height={100}></Image>
+            </dialog>
+            
         </WikiContext.Provider>
     </>);
 }
