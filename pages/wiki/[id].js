@@ -4,7 +4,7 @@ import { goToRandom } from "@/lib/wikihelper";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { ViewportContext } from "../_app";
 import { Caption, ComicSansWrapper, GaramondWrapper, Paragraph, Title, UnderLonk, UnorderedList } from "@/components/TextStyles";
-import { addOpacity, colors } from "@/data/colors";
+import { addOpacity, colors, gradients } from "@/data/colors";
 import { getMDXComponent } from "mdx-bundler/client";
 import { AnimatePresence, motion } from "framer-motion";
 import { WikiContext, useHeadings } from "@/lib/wikiHooks";
@@ -45,8 +45,7 @@ export default function Wiki({ thisID, entriesData }) {
     const mapDialogRef = useRef();
     
     const {headings, currentHeading} = useHeadings(mainRef, thisID);
-    const [preview, setPreview] = useState({});
-    const [fullscreen, setFullscreen] = useState(null); // should be null, or id of fullscreen card
+    const [preview, setPreview] = useState();
 
     const Content = useMemo(() => getMDXComponent(entriesData[thisID].code, {Img: WikiImg, ComicSans: ComicSansWrapper}), [entriesData, thisID]);
 
@@ -54,15 +53,6 @@ export default function Wiki({ thisID, entriesData }) {
     const noHeaders = viewport.width < 1200;
     const noMenu = viewport.width < 1000;
     const mobile = viewport.width < 600;
-
-    // style
-
-    const panelStyle = {
-        boxShadow: `4px 4px 20px ${addOpacity(colors.black)}`,
-        padding: '40px 30px', marginTop: '40px',
-        backgroundColor: colors.white,
-        borderRadius: '20px',
-    }
 
     //#region arrow key listener for scrolling
 
@@ -92,6 +82,7 @@ export default function Wiki({ thisID, entriesData }) {
                         downTop = thisTop; return false;
                     })
                     window.scrollTo({top: downTop});
+                    history.pushState({}, '', window.location.href.split('#')[0] + (currentHeading ? `#${currentHeading}` : ''));
                     e.preventDefault();
                     break;
             }
@@ -101,10 +92,6 @@ export default function Wiki({ thisID, entriesData }) {
     }, [headings, thisID]);
 
     //#endregion
-
-    const openMap = (id) => {
-        id ? mapDialogRef.current.showModal() : mapDialogRef.current.close();
-    }
 
     return (<>
         <HeadData title={'Wiki - '} />
@@ -152,23 +139,25 @@ export default function Wiki({ thisID, entriesData }) {
                 <div style={{
                     width: !noMenu ? 680 : '100%',
                 }}>
-                    <section style={{
+                    <section style={!mobile ? {
                         boxShadow: `4px 4px 20px ${addOpacity(colors.black)}`,
                         padding: '40px', margin: `${noMenu ? 0 : 40}px 0 calc(50vh)`,
                         backgroundColor: colors.white,
                         borderRadius: '20px',
-                    }}>
+                    } : { padding: '20px 20px 120px' }}>
                         <header style={{
                             display: 'flex',
                             justifyContent: 'space-between',
                         }}>
-                            <Title>{entriesData[thisID].title}</Title>
+                            <WikiHeading1 noClass >{entriesData[thisID].title}</WikiHeading1>
                             {!mobile && <GaramondWrapper div style={{
                                 color: colors.slate,
                                 minWidth: '120px',
                                 textAlign: 'right',
+                                lineHeight: '100%',
                             }}>
-                                <motion.button onClick={() => openMap(thisID)} style={{color: colors.slate}} whileHover={{color: colors.rellow}}>Where</motion.button>?
+                                <motion.button onHoverStart={() => setPreview(true)} onHoverEnd={() => setPreview(false)} style={{color: colors.slate, lineHeight: 'inherit'}} whileHover={{color: colors.cornflowerBlue}}>Where</motion.button>?
+                                {preview && <Preview entryData={entriesData[thisID]} noText />}
                             </GaramondWrapper>}
                         </header>
                         <main ref={mainRef}>
@@ -189,7 +178,7 @@ export default function Wiki({ thisID, entriesData }) {
                         </main>
                     </section>
                     {/* <section style={{
-                        ...panelStyle
+                        
                     }}>
                         <footer>
                             <WikiHeading2>Related</WikiHeading2>
@@ -225,8 +214,10 @@ export default function Wiki({ thisID, entriesData }) {
                                     key={`${h.id}-headinglink`}
                                     color={h.id == currentHeading ? colors.rellow : colors.slate}
                                     hoverColor={colors.rellow}
-                                    // href={`#${h.id}`}
-                                    action={() => {scrollTo({top: h.id ? mainRef.current.querySelector(`#${h.id}`).offsetTop + mainRef.current.offsetTop : 0})}}
+                                    action={() => {
+                                        scrollTo({top: h.id ? mainRef.current.querySelector(`#${h.id}`).offsetTop + mainRef.current.offsetTop : 0});
+                                        history.pushState({}, '', window.location.href.split('#')[0] + (h.id ? `#${h.id}` : ''));
+                                    }}
                                 >
                                     {h.level > 2 && <>~&nbsp;&nbsp;</>}
                                     {h.title ?? entriesData[thisID].title}
@@ -239,10 +230,6 @@ export default function Wiki({ thisID, entriesData }) {
                 </AnimatePresence>
 
             </motion.div>
-
-            <dialog ref={mapDialogRef} onClick={() => openMap(false)}>
-                <Image src={getSrc(imgData.bigmapnames)} alt="map" width={80} height={100}></Image>
-            </dialog>
             
         </WikiContext.Provider>
     </>);
