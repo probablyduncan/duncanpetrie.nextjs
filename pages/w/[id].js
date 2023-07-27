@@ -1,9 +1,8 @@
 import { HeadData } from "@/components/Layout";
 import { getWikiDataAsObject, getWikiPaths } from "@/lib/dataParser";
-import { goToRandom } from "@/lib/wikihelper";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { ViewportContext } from "../_app";
-import { Caption, ComicSansWrapper, GaramondWrapper, LatoWrapper, UnderLonk } from "@/components/TextStyles";
+import { Caption, ComicSansWrapper, GaramondWrapper, UnderLonk } from "@/components/TextStyles";
 import { addOpacity, colors, gradients } from "@/data/colors";
 import { getMDXComponent } from "mdx-bundler/client";
 import { AnimatePresence, motion } from "framer-motion";
@@ -11,7 +10,6 @@ import { WikiContext, useHeadings } from "@/lib/wikiHooks";
 import { WikiHeading1, WikiHeading2, WikiHeading3, WikiImg, WikiLink, WikiList, WikiMenu, WikiMobileNav, WikiNavButton, WikiText } from "@/components/WikiComponents";
 import { getSrc } from "@/lib/imageHelper";
 import { imgData } from "@/data/images";
-import Lonk from "@/components/Lonk";
 
 export async function getStaticPaths() {
     const paths = await getWikiPaths();
@@ -44,6 +42,7 @@ export default function Wiki({ thisID, entriesData }) {
     const mainRef = useRef();
     
     const {headings, currentHeading} = useHeadings(mainRef, thisID);
+    const pushHeadingHistory = false;
 
     const mapContainerWidth = 680;
     const mapContainerHeight = 850;
@@ -65,29 +64,30 @@ export default function Wiki({ thisID, entriesData }) {
         const handleKeypress = (e) => {
             switch (e.code) {
                 case 'ArrowUp':
-                    let upTop = 0;
+                    let upTop = 0; let newUpID;
                     headings.map(h => h.id).splice(1).reverse().every(h => {
                         
                         const thisTop = mainRef.current.querySelector(`#${h}`).offsetTop + mainRef.current.offsetTop;
 
                         if (thisTop > window.scrollY - 20) return true;
-                        upTop = thisTop; return false;
+                        upTop = thisTop; newUpID = h; return false;
                     })
                     window.scrollTo({top: upTop});
                     e.preventDefault();
+                    if (pushHeadingHistory) history.pushState({}, '', window.location.href.split('#')[0] + (newUpID ? `#${newUpID}` : ''));
                     break;
                 case 'ArrowDown':
-                    let downTop = document.body.offsetHeight;
+                    let downTop = document.body.offsetHeight; let newDownID;
                     headings.map(h => h.id).splice(1).every(h => {
 
                         const thisTop = mainRef.current.querySelector(`#${h}`).offsetTop + mainRef.current.offsetTop;
 
                         if (thisTop < window.scrollY + 20) return true;
-                        downTop = thisTop; return false;
+                        downTop = thisTop; newDownID = h; return false;
                     })
                     window.scrollTo({top: downTop});
-                    history.pushState({}, '', window.location.href.split('#')[0] + (currentHeading ? `#${currentHeading}` : ''));
                     e.preventDefault();
+                    if (pushHeadingHistory && newDownID) history.pushState({}, '', window.location.href.split('#')[0] + (`#${newDownID}`));
                     break;
                 case 'KeyM':
                     if (entriesData[thisID].coords) {
@@ -115,7 +115,7 @@ export default function Wiki({ thisID, entriesData }) {
     //#endregion
 
     return (<>
-        <HeadData title={'Wiki - '} />
+        <HeadData title={`${entriesData[thisID].title} - Springtide - `} />
 
         {/* wrapper */}
         <WikiContext.Provider value={{ thisID, entriesData }}>
@@ -266,7 +266,7 @@ export default function Wiki({ thisID, entriesData }) {
                                     hoverColor={colors.rellow}
                                     action={() => {
                                         scrollTo({top: h.id ? mainRef.current.querySelector(`#${h.id}`).offsetTop + mainRef.current.offsetTop : 0});
-                                        history.pushState({}, '', window.location.href.split('#')[0] + (h.id ? `#${h.id}` : ''));
+                                        if (pushHeadingHistory) history.pushState({}, '', window.location.href.split('#')[0] + (h.id ? `#${h.id}` : ''));
                                     }}
                                 >
                                     {h.level > 2 && <>~&nbsp;&nbsp;</>}

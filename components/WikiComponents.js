@@ -465,6 +465,8 @@ export function WikiMobileNav({ mobileBreakpoint: mobile }) {
                     <MobileMenuLink href={'/w'}>Index.</MobileMenuLink>
                     <br />
                     <br />
+                    <br />
+                    <br />
                 </MerriweatherWrapper>
             </motion.nav>}
         </AnimatePresence>
