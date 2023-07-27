@@ -337,7 +337,7 @@ export function WikiMenu({ }) {
     return (
         <nav style={{
             position: 'sticky',
-            top: 80,
+            top: 80, marginTop: 80,
             width: 165,
             maxHeight: 'calc(100vh - 160px)',
             overflowY: 'scroll',
