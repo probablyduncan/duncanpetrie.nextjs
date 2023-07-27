@@ -428,8 +428,9 @@ export function WikiMenu({ thisID, entriesData }) {
         }}>
             <WikiNavButton href={'/'} title={'Back! to the front page.'}>Back to home.</WikiNavButton>
             <br />
-            <WikiNavButton href={'yon'}>About this world.</WikiNavButton>
-            <WikiNavButton href={'influences'}>Inspiration.</WikiNavButton>
+            <WikiNavButton href={'/w/yon'}>About Springtide.</WikiNavButton>
+            <WikiNavButton href={'/w?filter=best'}>My favorite cards.</WikiNavButton>
+            <WikiNavButton href={'/w/influences'}>Influences.</WikiNavButton>
             <WikiNavButton href={'/world'}>Map.</WikiNavButton>
             <br />
             <WikiNavButton href={'/w?filter=stories'}>Stories.</WikiNavButton>
