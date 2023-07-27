@@ -351,13 +351,13 @@ export function WikiMenu({ }) {
             <WikiNavButton href={'influences'}>Inspiration.</WikiNavButton>
             <WikiNavButton href={'/world'}>Map.</WikiNavButton>
             <br />
-            <WikiNavButton href={'/'}>Stories.</WikiNavButton>
-            <WikiNavButton href={'/'}>Cultures.</WikiNavButton>
-            <WikiNavButton href={'/'}>Regions.</WikiNavButton>
-            <WikiNavButton href={'/'}>Towns.</WikiNavButton>
+            <WikiNavButton href={'/w?filter=stories'}>Stories.</WikiNavButton>
+            <WikiNavButton href={'/w?filter=cultures'}>Cultures.</WikiNavButton>
+            <WikiNavButton href={'/w?filter=regions'}>Regions.</WikiNavButton>
+            <WikiNavButton href={'/w?filter=towns'}>Towns.</WikiNavButton>
             <br />
             <WikiNavButton action={() => goToRandom(thisID, entriesData)}>Random.</WikiNavButton>
-            <WikiNavButton href={'index'}>Index.</WikiNavButton>
+            <WikiNavButton href={'/w'}>Index.</WikiNavButton>
             <br />
         </nav>
     );
@@ -380,10 +380,9 @@ export function WikiMobileNav({ mobileBreakpoint: mobile }) {
 
         const style = {
             color: colors.slate,
-            display: 'inline-block',
+            display: 'inline',
             fontSize: '28px',
-            lineHeight: '120%',
-            marginBottom: '18px',
+            lineHeight: '200%',
         };
 
         return (
@@ -393,11 +392,14 @@ export function WikiMobileNav({ mobileBreakpoint: mobile }) {
                 strokeWidth={3}
                 color={color ?? colorOptions[Math.floor(rand * colorOptions.length)]}
                 animationDelay={400}
+                multiline={true}
             >
                 {href ? 
                     (<Lonk href={href} style={style}>{children}</Lonk>) 
                 : 
                     (<button onClick={action} style={style}>{children}</button>)}
+                <br />
+                <br />
             </RoughNotation>
         )
     }
@@ -430,9 +432,9 @@ export function WikiMobileNav({ mobileBreakpoint: mobile }) {
                 position: 'fixed',
                 top: 0, left: 0,
                 zIndex: 2,
-                width: `calc(100vw - 160px)`,
+                width: `calc(100vw - ${mobile ? 80 : 160}px)`,
                 height: `calc(100vh - 160px)`, overflowX: 'scroll',
-                padding: `80px`,
+                padding: `80px ${mobile ? 40 : 80}px`,
                 backgroundColor: colors.offWhite,
                 transition: {stiffness: 400},
             }} initial={{
@@ -448,28 +450,20 @@ export function WikiMobileNav({ mobileBreakpoint: mobile }) {
                     <MobileMenuLink color={colors.rellow} href={'/'}>Back to home.</MobileMenuLink>
                     <br />
                     <br />
-                    <br />
                     <MobileMenuLink href={'yon'}>About this world.</MobileMenuLink>
-                    <br />
                     <MobileMenuLink href={'influences'}>Inspiration.</MobileMenuLink>
-                    <br />
                     <MobileMenuLink href={'/world'}>Map.</MobileMenuLink>
                     <br />
                     <br />
-                    <br />
-                    <MobileMenuLink href={'/world'}>Stories.</MobileMenuLink>
-                    <br />
-                    <MobileMenuLink href={'/world'}>Cultures.</MobileMenuLink>
-                    <br />
-                    <MobileMenuLink href={'/world'}>Regions.</MobileMenuLink>
-                    <br />
-                    <MobileMenuLink href={'/world'}>Towns.</MobileMenuLink>
-                    <br />
+                    <MobileMenuLink href={'/w?filter=stories'}>Stories.</MobileMenuLink>
+                    <MobileMenuLink href={'/w?filter=cultures'}>Cultures.</MobileMenuLink>
+                    <MobileMenuLink href={'/w?filter=regions'}>Regions.</MobileMenuLink>
+                    <MobileMenuLink href={'/w?filter=towns'}>Towns.</MobileMenuLink>
                     <br />
                     <br />
                     <MobileMenuLink action={() => goToRandom(thisID, entriesData)}>Random.</MobileMenuLink>
+                    <MobileMenuLink href={'/w'}>Index.</MobileMenuLink>
                     <br />
-                    <MobileMenuLink href={'/world'}>Index.</MobileMenuLink>
                     <br />
                 </MerriweatherWrapper>
             </motion.nav>}
