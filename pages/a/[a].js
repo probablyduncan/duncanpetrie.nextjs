@@ -1,8 +1,8 @@
-import { getArticle, getArticleIDs } from "@/lib/dataParser";
+import { getArticle, getArticleIDs } from "@/lib/dataParser.js";
 import { createContext, useContext, useMemo } from "react";
 import { getMDXComponent } from "mdx-bundler/client"
-import { ViewportContext } from "@/pages/_app";
-import Layout from "@/components/Layout";
+import { ViewportContext } from "@/pages/_app.js";
+import Layout from "@/components/Layout.js";
 import { UnderLonk } from "@/components/TextStyles";
 import { motion } from "framer-motion";
 import { getColors } from "@/lib/articleHelper";

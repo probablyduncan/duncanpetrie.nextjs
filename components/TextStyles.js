@@ -5,6 +5,7 @@ import Lonk from "./Lonk";
 import { animate, motion } from "framer-motion";
 import { ViewportContext } from "@/pages/_app";
 import { colors } from "@/data/colors";
+import { sanitizeElementID } from "@/lib/wikihelper";
 
 /**
  * font wrappers
@@ -115,16 +116,19 @@ export function Caption({ children, small, style, textAlign, color, ...props }) 
 }
 
 // when hover stops, onHover(null) is called
-export function UnderLonk({ href, action, noUnderline, color, thick, children, onHover, ...props }) {
+export function UnderLonk({ href, action, noUnderline, color, thick, children, onHover, enter, leave, ...props }) {
 
     const [hover, setHover] = useState(false);
 
     const duration = (children?.length ?? 8) * 15;
     color = color ?? colors.cornflowerBlue;
 
-    const hoverFunc = (on) => {
+    const hoverFunc = (e, on) => {
         setHover(on);
         if (onHover) onHover(on);
+
+        if (on && enter) enter(e);
+        else if (!on && leave) leave(e);
     }
 
     const style = Object.assign({
@@ -135,15 +139,15 @@ export function UnderLonk({ href, action, noUnderline, color, thick, children, o
         <UnderLine show={!noUnderline && hover} duration={duration} color={style.color} thickness={thick ? 2 : 1.5} >
             {action ? 
                 <button onClick={() => setTimeout(action, props?.delay ?? 0)} {...props} style={style}
-                    onMouseEnter={() => hoverFunc(true)} 
-                    onMouseLeave={() => hoverFunc(false)}
+                    onMouseEnter={(e) => hoverFunc(e, true)} 
+                    onMouseLeave={(e) => hoverFunc(e, false)}
                 >
                     {children}
                 </button>
             :
                 <Lonk href={href} {...props} style={style} 
-                    onMouseEnter={() => hoverFunc(true)} 
-                    onMouseLeave={() => hoverFunc(false)}
+                    onMouseEnter={(e) => hoverFunc(e, true)} 
+                    onMouseLeave={(e) => hoverFunc(e, false)}
                 >
                     {children}
                 </Lonk>
@@ -191,9 +195,9 @@ export function LightboxButton({ action, hoverColor, children }) {
     </motion.button>);
 }
 
-export const Heading1 = ( props ) => (<Title className={'heading1'} alt={props.children} {...props} />);
-export const Heading2 = ( props ) => (<><br /><Title className={'heading2'} alt={props.children} small style={{margin: '0 4px 25px'}} {...props} /></>);
-export const Heading3 = ( props ) => (<Paragraph className={'heading3'} alt={props.children} style={{margin: `0 4px 15px`, fontWeight: 'bold'}} {...props} />);
+export const Heading1 = ( props ) => (<Title className={'heading1'} alt={props.children} id={sanitizeElementID(props.children)} {...props} />);
+export const Heading2 = ( props ) => (<><br /><Title className={'heading2'} alt={props.children} id={sanitizeElementID(props.children)} small style={{margin: '0 4px 25px'}} {...props} /></>);
+export const Heading3 = ( props ) => (<Paragraph className={'heading3'} alt={props.children} id={sanitizeElementID(props.children)} style={{margin: `0 4px 15px`, fontWeight: 'bold'}} {...props} />);
 export const LinkHeading1 = ( props ) => (<Title className={'heading1'} alt={props.children} ><LinkHeadingTemplate {...props} /></Title>);
 export const LinkHeading2 = ( props ) => (<><br /><Title className={'heading2'} alt={props.children} small style={{margin: '0 4px 25px'}}><LinkHeadingTemplate {...props} /></Title></>);
 export const LinkHeading3 = ( props ) => (<Paragraph className={'heading3'} alt={props.children} style={{margin: `0 4px 15px`}}><LinkHeadingTemplate {...props} /></Paragraph>);

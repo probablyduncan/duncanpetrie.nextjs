@@ -50,7 +50,7 @@ export default function World({ worldCards }) {
         // for testing
         // coords = [0.425,0.425,1.2]
 
-        const size = 25 * (coords[2] ?? 1);
+        const size = 40000 / (coords[2] ?? 1200);
 
         setHoverCoords([
             size - height * coords[0], 

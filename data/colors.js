@@ -49,6 +49,14 @@ export const gradients = {
     mapGreen: [colors.mapGreen, colors.mapLightGreen],
 }
 
+export const pastels = [
+    colors.highlight,
+    colors.mapGreen,
+    colors.mapLightGreen,
+    ...gradients.pinkPurple,
+    ...gradients.purpleRed,
+]
+
 export const worldGradients = [
     gradients.redYellow, gradients.greenYellow, gradients.pinkPurple, gradients.purpleGreen, gradients.yellowGreen, gradients.purpleRed, gradients.mapGreen
 ]
