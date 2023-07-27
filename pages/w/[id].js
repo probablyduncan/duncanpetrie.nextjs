@@ -3,16 +3,14 @@ import { getWikiDataAsObject, getWikiPaths } from "@/lib/dataParser";
 import { goToRandom } from "@/lib/wikihelper";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { ViewportContext } from "../_app";
-import { Caption, ComicSansWrapper, GaramondWrapper, LatoWrapper, MerriweatherWrapper, Paragraph, Title, UnderLonk, UnorderedList } from "@/components/TextStyles";
+import { Caption, ComicSansWrapper, GaramondWrapper, LatoWrapper, UnderLonk } from "@/components/TextStyles";
 import { addOpacity, colors, gradients } from "@/data/colors";
 import { getMDXComponent } from "mdx-bundler/client";
 import { AnimatePresence, motion } from "framer-motion";
 import { WikiContext, useHeadings } from "@/lib/wikiHooks";
-import { Preview, WikiHeading1, WikiHeading2, WikiHeading3, WikiImg, WikiLink, WikiList, WikiNavButton, WikiText } from "@/components/WikiComponents";
-import Image from "next/image";
+import { WikiHeading1, WikiHeading2, WikiHeading3, WikiImg, WikiLink, WikiList, WikiMenu, WikiMobileNav, WikiNavButton, WikiText } from "@/components/WikiComponents";
 import { getSrc } from "@/lib/imageHelper";
 import { imgData } from "@/data/images";
-import { RoughNotation } from "react-rough-notation";
 import Lonk from "@/components/Lonk";
 
 export async function getStaticPaths() {
@@ -46,7 +44,12 @@ export default function Wiki({ thisID, entriesData }) {
     const mainRef = useRef();
     
     const {headings, currentHeading} = useHeadings(mainRef, thisID);
+
+    const mapContainerWidth = 680;
+    const mapContainerHeight = 850;
+    const mapZoomedWidth = 2000;
     const [map, toggleMap] = useState();
+    const [mapZoomed, setMapZoomed] = useState(true);
 
     const Content = useMemo(() => getMDXComponent(entriesData[thisID].code, {Img: WikiImg, ComicSans: ComicSansWrapper}), [entriesData, thisID]);
 
@@ -87,21 +90,29 @@ export default function Wiki({ thisID, entriesData }) {
                     e.preventDefault();
                     break;
                 case 'KeyM':
-                    toggleMap(!map);
+                    if (entriesData[thisID].coords) {
+                        window.scrollTo({top: map ? (window.scrollY - mapContainerHeight - 40) : 0, behavior: 'smooth'});
+                        toggleMap(!map);
+                    }
+                    break;
                 case 'Escape':
-                    if (map) toggleMap(!map);
+                    if (entriesData[thisID].coords && map) {
+                        window.scrollTo({top: window.scrollY - mapContainerHeight - 40});
+                        toggleMap(!map);
+                    }
+                    break;
             }
         }
 
         window.addEventListener('keydown', handleKeypress);
         return () => window.removeEventListener('keydown', handleKeypress);
-    }, [headings, thisID, currentHeading, map]);
+    }, [headings, thisID, currentHeading, map, entriesData]);
+
+    useEffect(() => {
+        toggleMap();
+    }, [thisID])
 
     //#endregion
-
-    const mapWidth = 680;
-    const mapHeight = 420;
-    const mapSize = 1600;
 
     return (<>
         <HeadData title={'Wiki - '} />
@@ -110,27 +121,7 @@ export default function Wiki({ thisID, entriesData }) {
         <WikiContext.Provider value={{ thisID, entriesData }}>
 
             {/* mobile nav */}
-            {noMenu && <motion.div style={{
-                position: 'fixed',
-                zIndex: 2,
-                bottom: mobile ? 20 : 40,
-                left: 0,
-                marginLeft: mobile ? 20 : 40,
-                padding: mobile ? '20px' : '20px 40px',
-                backgroundColor: colors.white,
-                width: mobile ? 'calc(100vw - 80px)' :'calc(100vw - 160px)',
-                borderRadius: '20px',
-                boxShadow: `4px 4px 20px ${addOpacity(colors.black)}`,
-                display: 'flex',
-                justifyContent: 'space-between',
-            }}>
-                <Lonk href={'/'}><LatoWrapper style={{
-                    color: colors.black,
-                }}>DUNCANPETRIE.COM</LatoWrapper></Lonk>
-                <Lonk href={'/world'}><GaramondWrapper style={{
-                    color: colors.slate,
-                }}>Back! to the map.</GaramondWrapper></Lonk>
-            </motion.div>}
+            {noMenu && <WikiMobileNav mobileBreakpoint={mobile} />}
 
             <motion.div style={{ 
                 width: !noMenu ? 'calc(100vw - 160px)' : !mobile ? 'calc(100vw - 120px)' : 'calc(100vw - 40px)',
@@ -140,64 +131,40 @@ export default function Wiki({ thisID, entriesData }) {
             }} exit={{y: -1000}}>
 
                 {/* left nav container */}
-                <div>
-                    {!noMenu && <nav style={{
-                        position: 'sticky',
-                        top: 80,
-                        width: 165,
-                        maxHeight: 'calc(100vh - 160px)',
-                        overflowY: 'scroll',
-                        fontSize: '16px',
-                        color: colors.slate,
-                        userSelect: 'none',
-                    }}>
-                        <WikiNavButton href={'/'} title={'Back! to the front page.'}>Back to home.</WikiNavButton>
-                        <br />
-                        <WikiNavButton href={'yon'}>About this world.</WikiNavButton>
-                        <WikiNavButton href={'influences'}>Inspiration.</WikiNavButton>
-                        <WikiNavButton href={'/world'}>Map.</WikiNavButton>
-                        <br />
-                        <WikiNavButton href={'/'}>Stories.</WikiNavButton>
-                        <WikiNavButton href={'/'}>Cultures.</WikiNavButton>
-                        <WikiNavButton href={'/'}>Regions.</WikiNavButton>
-                        <WikiNavButton href={'/'}>Towns.</WikiNavButton>
-                        <br />
-                        <WikiNavButton action={() => goToRandom(thisID, entriesData)}>Random.</WikiNavButton>
-                        <WikiNavButton href={'index'}>Index.</WikiNavButton>
-                        <br />
-                    </nav>}
-                </div>
+                {!noMenu && <WikiMenu />}
 
 
                 {/* text container */}
                 <div style={{
                     width: !noMenu ? 680 : '100%',
-                    marginTop: !noMenu ? 40 : 0,
+                    marginTop: 40,
                 }}>
                     <AnimatePresence>
                         {entriesData[thisID].coords && map && !noMenu && <motion.div 
+                            onClick={() => setMapZoomed(!mapZoomed)}
                             key={'map'} 
                             style={{
+                                cursor: mapZoomed ? 'zoom-out' : 'zoom-in',
                                 width: '100%',
                                 borderRadius: '20px',
                                 boxSizing: 'border-box',
                                 boxShadow: `4px 4px 20px ${addOpacity(colors.black)}`,
                                 backgroundImage: `url(${getSrc(imgData.bigmapnames)})`,
-                                backgroundSize: mapSize,
+                                backgroundSize: mapZoomed ? mapZoomedWidth : mapContainerWidth,
                                 backgroundPosition: `${
                                     Math.min(
                                         0,          // value must be less than 0
                                         Math.max(
-                                            mapWidth - mapSize,   // value must be greater than container size - background size
-                                            mapWidth/2 - (mapSize * entriesData[thisID].coords[1])    // 1/2 container size - percentage of background size
+                                            mapContainerWidth - (mapZoomed ? mapZoomedWidth : mapContainerWidth),   // value must be greater than container size - background size
+                                            mapContainerWidth/2 - ((mapZoomed ? mapZoomedWidth : mapContainerWidth) * entriesData[thisID].coords[1])    // 1/2 container size - percentage of background size
                                         )
                                     )
                                 }px ${
                                     Math.min(
                                         0,          // value must be less than 0
                                         Math.max(
-                                            mapHeight - (mapSize * 5/4),  // value must be greater than container size - background size
-                                            mapHeight/2 - (mapSize * 5/4 * entriesData[thisID].coords[0])    // 1/2 container size - percentage of background size
+                                            mapContainerHeight - ((mapZoomed ? mapZoomedWidth : mapContainerWidth) * 5/4),  // value must be greater than container size - background size
+                                            mapContainerHeight/2 - ((mapZoomed ? mapZoomedWidth : mapContainerWidth) * 5/4 * entriesData[thisID].coords[0])    // 1/2 container size - percentage of background size
                                         )
                                     )
                                 }px`,
@@ -205,17 +172,17 @@ export default function Wiki({ thisID, entriesData }) {
                             initial={{
                                 marginBottom: -8,
                                 height: 0,
-                                border: `4px solid ${colors.clear}`,
+                                border: `4px solid ${colors.white}`,
                             }}
                             animate={{
                                 marginBottom: mobile ? 20 : 40,
-                                height: mapHeight,
+                                height: mapContainerHeight,
                                 border: `4px solid ${colors.slate}`,
                             }}
                             exit={{
                                 marginBottom: -8,
                                 height: 0,
-                                border: `4px solid ${colors.clear}`,
+                                border: `4px solid ${colors.white}`,
                             }}
                         ></motion.div>}
                     </AnimatePresence>
@@ -225,13 +192,13 @@ export default function Wiki({ thisID, entriesData }) {
                         padding: '40px', margin: `0 0 calc(50vh)`,
                         backgroundColor: colors.white,
                         borderRadius: '20px',
-                    } : { padding: '20px 20px 120px' }}>
+                    } : { padding: '20px 0px 120px' }}>
                         <header style={{
                             display: 'flex',
                             justifyContent: 'space-between',
                         }}>
                             <WikiHeading1 noClass >{entriesData[thisID].title}</WikiHeading1>
-                            {!noMenu && <GaramondWrapper div style={{
+                            {entriesData[thisID].coords && !noMenu && <GaramondWrapper div style={{
                                 color: colors.slate,
                                 minWidth: '120px',
                                 textAlign: 'right',

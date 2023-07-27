@@ -34,7 +34,7 @@ export function CardGroup({ groupName, cards, selectedCard, onHover, delayAction
             // map each card
             <div key={c.id}>
                 <Title small >
-                    <UnderLonk noUnderline={exiting} href={`/w/${c.id}`} delayAction={delayAction} color={colors.black} thick onHover={(on) => onHover(on, c.coords)}>
+                    <UnderLonk noUnderline={exiting} href={`/world/${c.id}`} delayAction={delayAction} color={colors.black} thick onHover={(on) => onHover(on, c.coords)}>
                         {c.title}
                     </UnderLonk>
                 </Title>
