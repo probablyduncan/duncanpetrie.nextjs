@@ -7,7 +7,7 @@ import { addOpacity, colors, gradients } from "@/data/colors";
 import { getMDXComponent } from "mdx-bundler/client";
 import { AnimatePresence, motion } from "framer-motion";
 import { WikiContext, useHeadings } from "@/lib/wikiHooks";
-import { WikiHeading1, WikiHeading2, WikiHeading3, WikiImg, WikiLink, WikiList, WikiMenu, WikiMobileNav, WikiNavButton, WikiText } from "@/components/WikiComponents";
+import { WikiCardHeader, WikiHeading1, WikiHeading2, WikiHeading3, WikiImg, WikiLink, WikiList, WikiMenu, WikiMobileNav, WikiNavButton, WikiText } from "@/components/WikiComponents";
 import { getSrc } from "@/lib/imageHelper";
 import { imgData } from "@/data/images";
 
@@ -15,7 +15,7 @@ export async function getStaticPaths() {
     const paths = await getWikiPaths();
     return {
         paths,
-        fallback: false
+        fallback: false,
     };
 }
 
@@ -121,7 +121,7 @@ export default function Wiki({ thisID, entriesData }) {
         <WikiContext.Provider value={{ thisID, entriesData }}>
 
             {/* mobile nav */}
-            {noMenu && <WikiMobileNav mobileBreakpoint={mobile} />}
+            {noMenu && <WikiMobileNav mobileBreakpoint={mobile} thisID={thisID} entriesData={entriesData} />}
 
             <motion.div style={{ 
                 width: !noMenu ? 'calc(100vw - 160px)' : !mobile ? 'calc(100vw - 120px)' : 'calc(100vw - 40px)',
@@ -131,7 +131,7 @@ export default function Wiki({ thisID, entriesData }) {
             }} exit={{y: -1000}}>
 
                 {/* left nav container */}
-                {!noMenu && <WikiMenu />}
+                {!noMenu && <WikiMenu thisID={thisID} entriesData={entriesData} />}
 
 
                 {/* text container */}
@@ -193,23 +193,17 @@ export default function Wiki({ thisID, entriesData }) {
                         backgroundColor: colors.white,
                         borderRadius: '20px',
                     } : { padding: '20px 0px 120px' }}>
-                        <header style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                        }}>
-                            <WikiHeading1 noClass >{entriesData[thisID].title}</WikiHeading1>
-                            {entriesData[thisID].coords && !noMenu && <GaramondWrapper div style={{
-                                color: colors.slate,
-                                minWidth: '120px',
-                                textAlign: 'right',
-                                lineHeight: '100%',
-                            }}>
-                                <motion.button onClick={() => {toggleMap(!map); if (map) window.scrollTo({top: 0})}} style={{color: colors.slate, lineHeight: 'inherit'}} whileHover={{color: colors.rellow}}>
-                                    {map ? 'Close' : 'Where'}
-                                </motion.button>
-                                {map ? '.' : '?'}
-                            </GaramondWrapper>}
-                        </header>
+
+                        {/* header */}
+                        <WikiCardHeader 
+                            title={entriesData[thisID].title}
+                            showSideLink={entriesData[thisID].coords && !noMenu}
+                            sideLinkText={map ? 'Close' : 'Where'} 
+                            sideLinkAction={() => {toggleMap(!map); if (map) window.scrollTo({top: 0})}}
+                            sideLinkPunctuation={map ? '.' : '?'} 
+                        />
+
+                        {/* content */}
                         <main ref={mainRef}>
                             <Content components={{h1: WikiHeading1, h2: WikiHeading2, h3: WikiHeading3, h4: Caption, p: WikiText, ul: WikiList, a: WikiLink}} />
                             {entriesData[thisID].inspiration && <>
@@ -226,6 +220,7 @@ export default function Wiki({ thisID, entriesData }) {
                                 </WikiList>
                             </>}
                         </main>
+
                     </section>
                     {/* <section style={{
                         

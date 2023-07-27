@@ -1,9 +1,9 @@
 import { WikiContext } from "@/lib/wikiHooks";
 import { ViewportContext } from "@/pages/_app";
-import { useContext, useRef, useState } from "react";
+import { useContext, useMemo, useRef, useState } from "react";
 import { GaramondWrapper, LatoWrapper, MerriweatherWrapper, UnderLonk } from "./TextStyles";
 import { AnimatePresence, color, motion } from "framer-motion";
-import { addOpacity, colors, getGradientTextCSS, gradients } from "@/data/colors";
+import { addOpacity, colors, getGradientTextCSS, gradients, pastels } from "@/data/colors";
 import Lonk from "./Lonk";
 import { goToRandom, processWorldLinkHref, sanitizeElementID } from "@/lib/wikihelper";
 import Img from "./Img";
@@ -27,7 +27,7 @@ export function WikiLink({ children, ...props }) {
     const cursors = [ '⛔', '🚫', '🚷', '🚳', '📵', '☣️', '☢️', '⚠️', '😡', '😬', '😲', ];
     const [cursor, setCursor] = useState('🚫');
 
-    const [hoverPos, setHoverPos] = useState(false)
+    const [hoverPos, setHoverPos] = useState(false);
 
     const href = processWorldLinkHref({text: children, href: props.href, thisID});
     const page = href.split('#')[0];
@@ -71,6 +71,44 @@ export function WikiLink({ children, ...props }) {
             {children}
         </motion.span>
     ) : (<>{children}</>))
+}
+
+export function WikiIndexLink({ data }) {
+
+    const {viewport} = useContext(ViewportContext);
+
+    const linkRef = useRef();
+    const [hoverPos, setHoverPos] = useState(false);
+
+    const rand = useRand();
+
+    return (<>
+        <Lonk
+            // title={`${page in entriesData ? entriesData[page].title : (page.charAt(0).toUpperCase() + page.slice(1))} ➯`}
+            href={`/w/${data.id}`}
+            onMouseEnter={() => setHoverPos({x: linkRef.current.offsetLeft, y: linkRef.current.offsetTop})}
+            onMouseLeave={() => setHoverPos(false)}
+        >
+            <RoughNotation 
+                show={hoverPos}
+                padding={-1.5}
+                strokeWidth={2}
+                color={pastels[Math.floor(rand * pastels.length)]}
+                iterations={1}
+                animationDuration={120}
+                multiline
+            >
+                <span ref={linkRef} style={{
+                    color: colors.slate,
+                    fontSize: '24px',
+                    lineHeight: '72px',
+                }}>{data.title}</span>
+            </RoughNotation>
+        </Lonk>
+        <AnimatePresence>
+            {(data && viewport.width >= 600 && hoverPos) && <Preview key={'preview'} entryData={data} pos={{x: linkRef.current.offsetLeft, y: linkRef.current.offsetTop}} delay={.2} />}
+        </AnimatePresence>
+    </>);
 }
 
 export function Preview({ entryData, path, noText, pos = {}, delay }) {
@@ -216,6 +254,51 @@ export function WikiNavButton({ children, action, href, title, color, hoverColor
     );
 }
 
+export function WikiCardHeader({ title, showSideLink, sideLinkText, sideLinkPunctuation, sideLinkHref, sideLinkAction, sideLinkHoverColor }) {
+
+    const style = {color: colors.slate, lineHeight: 'inherit'};
+
+    return (
+        <header style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+        }}>
+            <WikiHeading1 noClass >{title}</WikiHeading1>
+            {showSideLink && <GaramondWrapper div style={{
+                color: colors.slate,
+                minWidth: '120px',
+                textAlign: 'right',
+                lineHeight: '100%',
+            }}>
+                {sideLinkAction ? (
+                    <motion.button 
+                        onClick={sideLinkAction} 
+                        style={style} 
+                        whileHover={{color: sideLinkHoverColor ?? colors.rellow}}
+                    >
+                        {sideLinkText}
+                    </motion.button>
+                ) : sideLinkHref ? (
+                    <Lonk href={sideLinkHref}>
+                        <motion.span
+                            style={style} 
+                            whileHover={{color: sideLinkHoverColor ?? colors.rellow}}
+                        >
+                            {sideLinkText}
+                        </motion.span>
+                    </Lonk>
+                ) : (
+                    <span style={style}>
+                        {sideLinkText}
+                    </span>
+                )}
+                
+                {sideLinkPunctuation}
+            </GaramondWrapper>}
+        </header>
+    );
+}
+
 //#region other mdx components
 
 export const WikiHeading1 = ({ children, noClass }) => (
@@ -330,9 +413,7 @@ export function WikiImg({ imgKey, src, caption }) {
 
 //#region layout components
 
-export function WikiMenu({ }) {
-
-    const {entriesData, thisID} = useContext(WikiContext);
+export function WikiMenu({ thisID, entriesData }) {
 
     return (
         <nav style={{
@@ -363,20 +444,13 @@ export function WikiMenu({ }) {
     );
 }
 
-export function WikiMobileNav({ mobileBreakpoint: mobile }) {
+export function WikiMobileNav({ mobileBreakpoint: mobile, thisID, entriesData }) {
 
-    const {entriesData, thisID} = useContext(WikiContext);
     const [menu, toggleMenu] = useState(false);
     
     const MobileMenuLink = ({ href, action, children, color }) => {
 
         const rand = useRand();
-
-        const colorOptions = [
-            ...gradients.pinkPurple,
-            ...gradients.purpleRed,
-            colors.mapLightGreen,
-        ]
 
         const style = {
             color: colors.slate,
@@ -390,7 +464,7 @@ export function WikiMobileNav({ mobileBreakpoint: mobile }) {
                 show={true}
                 iterations={1}
                 strokeWidth={3}
-                color={color ?? colorOptions[Math.floor(rand * colorOptions.length)]}
+                color={color ?? pastels[Math.floor(rand * pastels.length)]}
                 animationDelay={400}
                 multiline={true}
             >
