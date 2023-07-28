@@ -10,13 +10,13 @@ import { useRand } from "@/lib/rand";
 import { useRouter } from "next/router";
 
 
-export function CardList({ cardData, selected, filter, onHover = () => {}, delayAction, exiting }) {
+export function CardList({ cardData, selected, filter, onHover = () => {}, delayAction, exiting, noClear }) {
 
     const router = useRouter();
 
     return (<>
         {assembleCardGroups(cardData, router.query.filter, '{f}').map(([groupName, cards], i) => (<CardGroup key={groupName} i={i} groupName={groupName} cards={cards} selectedCard={selected} onHover={onHover} delayAction={delayAction} exiting={exiting} />))}
-        {router.query.filter && <Lonk href={`/w/${router.query.w}`}><Dept small><motion.span style={{color: colors.black}} whileHover={{color: colors.mapGreen}}>CLEAR</motion.span></Dept></Lonk>}
+        {!noClear && router.query.filter && <Lonk href={`/w/${router.query.w}`}><Dept small><motion.span style={{color: colors.black}} whileHover={{color: colors.mapGreen}}>CLEAR</motion.span></Dept></Lonk>}
     </>);
 
 }
@@ -82,7 +82,7 @@ export function WorldMenu({ cardData, left, mapPage }) {
             <Lonk title={'Back! to the front page.'} href={'/'}><motion.span {...linkProps} >Back home</motion.span></Lonk>.
             <br />
             <br />
-            <Lonk title={'Huh? What is this place?'} href={'/w/yon'}><motion.span {...linkProps} >Start here</motion.span></Lonk>.
+            <Lonk title={'Huh? What is this place?'} href={'/w/about'}><motion.span {...linkProps} >Start here</motion.span></Lonk>.
             <br />
             <Lonk title={'Where\'d this all come from?'} href={'/w/influences'}><motion.span {...linkProps} >Influences</motion.span></Lonk>.
             {/* <br />
