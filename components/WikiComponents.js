@@ -263,7 +263,7 @@ export function WikiCardHeader({ title, showSideLink, sideLinkText, sideLinkPunc
             display: 'flex',
             justifyContent: 'space-between',
         }}>
-            <WikiHeading1 noClass >{title.split('//').map(l => <>{l}<br /></>)}</WikiHeading1>
+            <WikiHeading1 noClass >{title.split('//').map((l, i) => <span key={`title-${i}`}>{l}<br /></span>)}</WikiHeading1>
             {showSideLink && <GaramondWrapper div style={{
                 color: colors.slate,
                 minWidth: '120px',
