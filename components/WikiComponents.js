@@ -102,7 +102,7 @@ export function WikiIndexLink({ data }) {
                     color: colors.slate,
                     fontSize: '24px',
                     lineHeight: '72px',
-                }}>{data.title}</span>
+                }}>{data.title.replace('//', ' ')}</span>
             </RoughNotation>
         </Lonk>
         <AnimatePresence>
@@ -268,7 +268,7 @@ export function WikiCardHeader({ title, showSideLink, sideLinkText, sideLinkPunc
                 color: colors.slate,
                 minWidth: '120px',
                 textAlign: 'right',
-                lineHeight: '100%',
+                lineHeight: '30px',
             }}>
                 {sideLinkAction ? (
                     <motion.button 
@@ -311,9 +311,9 @@ export const WikiHeading1 = ({ children, noClass }) => (
                 color: colors.black,
                 fontSize: '35px',
                 fontWeight: 'bold',
-                lineHeight: '40px',
-                margin: '-30px 0 35px',
-                paddingTop: '30px',
+                lineHeight: '50px',
+                margin: '-40px 0 30px',
+                paddingTop: '40px',
             }}
         >
             {children}
