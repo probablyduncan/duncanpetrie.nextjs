@@ -102,7 +102,7 @@ export function WikiIndexLink({ data }) {
                     color: colors.slate,
                     fontSize: '24px',
                     lineHeight: '72px',
-                }}>{data.title}</span>
+                }}>{data.title.replace('//', ' ')}</span>
             </RoughNotation>
         </Lonk>
         <AnimatePresence>
@@ -117,7 +117,7 @@ export function Preview({ entryData, path, noText, pos = {}, delay }) {
     const coords = entryData.coords ?? [0.5, 0.5, 160];
     const img = entryData.coords ? imgData.bigmapnames : imgData.bigmap;
 
-    const x = coords.length > 2 ? coords[2] : 1200;
+    const x = coords.length > 2 ? Math.max(coords[2], 160) : 1200;
     const y = x * 5/4;
 
     return (
@@ -263,12 +263,12 @@ export function WikiCardHeader({ title, showSideLink, sideLinkText, sideLinkPunc
             display: 'flex',
             justifyContent: 'space-between',
         }}>
-            <WikiHeading1 noClass >{title}</WikiHeading1>
+            <WikiHeading1 noClass >{title.split('//').map((l, i) => <span key={`title-${i}`}>{l}<br /></span>)}</WikiHeading1>
             {showSideLink && <GaramondWrapper div style={{
                 color: colors.slate,
                 minWidth: '120px',
                 textAlign: 'right',
-                lineHeight: '100%',
+                lineHeight: '30px',
             }}>
                 {sideLinkAction ? (
                     <motion.button 
@@ -306,14 +306,14 @@ export const WikiHeading1 = ({ children, noClass }) => (
         <h1
             className={noClass ? '' : 'heading1'}
             alt={children}
-            id={sanitizeElementID(children)}
+            id={noClass ? '' : sanitizeElementID(children)}
             style={{
                 color: colors.black,
                 fontSize: '35px',
                 fontWeight: 'bold',
-                lineHeight: '40px',
-                margin: '-30px 0 35px',
-                paddingTop: '30px',
+                lineHeight: '50px',
+                margin: '-40px 0 30px',
+                paddingTop: '40px',
             }}
         >
             {children}
@@ -428,7 +428,7 @@ export function WikiMenu({ thisID, entriesData }) {
         }}>
             <WikiNavButton href={'/'} title={'Back! to the front page.'}>Back to home.</WikiNavButton>
             <br />
-            <WikiNavButton href={'/w/yon'}>About Springtide.</WikiNavButton>
+            <WikiNavButton href={'/w/about'}>About Springtide.</WikiNavButton>
             <WikiNavButton href={'/w?filter=best'}>My favorite cards.</WikiNavButton>
             <WikiNavButton href={'/w/influences'}>Influences.</WikiNavButton>
             <WikiNavButton href={'/world'}>Map.</WikiNavButton>
@@ -525,7 +525,7 @@ export function WikiMobileNav({ mobileBreakpoint: mobile, thisID, entriesData })
                     <MobileMenuLink color={colors.rellow} href={'/'}>Back to home.</MobileMenuLink>
                     <br />
                     <br />
-                    <MobileMenuLink href={'yon'}>About this world.</MobileMenuLink>
+                    <MobileMenuLink href={'about'}>About this world.</MobileMenuLink>
                     <MobileMenuLink href={'influences'}>Inspiration.</MobileMenuLink>
                     <MobileMenuLink href={'/world'}>Map.</MobileMenuLink>
                     <br />

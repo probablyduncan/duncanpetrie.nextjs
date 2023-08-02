@@ -8,6 +8,7 @@ import { getSortedIDsForIndex, getWikiDataAsObject } from "@/lib/dataParser";
 import { useRouter } from "next/router";
 import Lonk from "@/components/Lonk";
 import { GaramondWrapper } from "@/components/TextStyles";
+import { CardList } from "@/components/WorldComponents";
 
 export async function getStaticProps({ }) {
     const entriesData = await getWikiDataAsObject();
@@ -67,6 +68,10 @@ export default function Index({ entriesData, sortedIDs }) {
                         marginTop: '40px'
                     }}>
                         {/* content goes here */}
+                        {/* <CardList 
+                            cardData={Object.entries(entriesData).map(([id, data]) => data)}
+                            noClear
+                        /> */}
                         <GaramondWrapper>
                         {sortedIDs.map(id => {
 

@@ -47,8 +47,13 @@ export default function Wiki({ thisID, entriesData }) {
     const mapContainerWidth = 680;
     const mapContainerHeight = 850;
     const mapZoomedWidth = 2000;
-    const [map, toggleMap] = useState();
-    const [mapZoomed, setMapZoomed] = useState(true);
+    const [map, toggleMap] = useState(false);
+    const [mapZoomed, setMapZoomed] = useState();
+    
+    useEffect(() => {
+        toggleMap(false);
+        setMapZoomed(entriesData[thisID].coords && entriesData[thisID].coords[2] != -1);
+    }, [entriesData, thisID])
 
     const Content = useMemo(() => getMDXComponent(entriesData[thisID].code, {Img: WikiImg, ComicSans: ComicSansWrapper}), [entriesData, thisID]);
 
