@@ -120,7 +120,7 @@ export default function Wiki({ thisID, entriesData }) {
     //#endregion
 
     return (<>
-        <HeadData title={`${entriesData[thisID].title} - Springtide - `} />
+        <HeadData title={`${entriesData[thisID].title.replace('//', ' ')} - Springtide - `} />
 
         {/* wrapper */}
         <WikiContext.Provider value={{ thisID, entriesData }}>
@@ -242,7 +242,7 @@ export default function Wiki({ thisID, entriesData }) {
                     {!noHeaders && headings.length > 0 && <motion.nav 
                         key='table-of-contents'
                         role="complementary" 
-                        aria-label={`Table of Contents for ${entriesData[thisID].title}`} 
+                        aria-label={`Table of Contents for ${entriesData[thisID].title.replace('//', ' ')}`} 
                         style={{
                             width: 165,
                             position: 'sticky',
@@ -270,7 +270,7 @@ export default function Wiki({ thisID, entriesData }) {
                                     }}
                                 >
                                     {h.level > 2 && <>~&nbsp;&nbsp;</>}
-                                    {h.title ?? entriesData[thisID].title}
+                                    {h.title ?? entriesData[thisID].title.replace('//', ' ')}
                                     {h.level == 0 && <><br /></>}
                                 </WikiNavButton>
                             ))}
