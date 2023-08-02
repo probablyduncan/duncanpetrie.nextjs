@@ -1033,14 +1033,17 @@ export const imgData = {
     neon1: {
         src: 'neon1.jpg',
         ratio: 3/2,
+        color: '#f02b42'
     },
     neon2: {
         src: 'neon2.jpg',
         ratio: 3/2,
+        color: '#66a997'
     },
     neon3: {
         src: '47.jpg',
         ratio: 3/2,
+        color: '#f1ab0a'
     },
 
 
