@@ -469,7 +469,7 @@ export function WikiMobileNav({ mobileBreakpoint: mobile, thisID, entriesData })
                 animationDelay={400}
                 multiline={true}
             >
-                <span onClick={() => toggleMenu(false)}>
+                <span onClick={() => setTimeout(() => toggleMenu(false), 200)}>
                     {href ? 
                         (<Lonk href={href} style={style}>{children}</Lonk>) 
                     : 
