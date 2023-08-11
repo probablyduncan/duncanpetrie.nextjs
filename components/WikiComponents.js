@@ -469,12 +469,14 @@ export function WikiMobileNav({ mobileBreakpoint: mobile, thisID, entriesData })
                 animationDelay={400}
                 multiline={true}
             >
-                {href ? 
-                    (<Lonk href={href} style={style}>{children}</Lonk>) 
-                : 
-                    (<button onClick={action} style={style}>{children}</button>)}
-                <br />
-                <br />
+                <span onClick={() => toggleMenu(false)}>
+                    {href ? 
+                        (<Lonk href={href} style={style}>{children}</Lonk>) 
+                    : 
+                        (<button onClick={action} style={style}>{children}</button>)}
+                    <br />
+                    <br />
+                </span>
             </RoughNotation>
         )
     }
@@ -525,8 +527,8 @@ export function WikiMobileNav({ mobileBreakpoint: mobile, thisID, entriesData })
                     <MobileMenuLink color={colors.rellow} href={'/'}>Back to home.</MobileMenuLink>
                     <br />
                     <br />
-                    <MobileMenuLink href={'about'}>About this world.</MobileMenuLink>
-                    <MobileMenuLink href={'influences'}>Inspiration.</MobileMenuLink>
+                    <MobileMenuLink href={'/w/about'}>About this world.</MobileMenuLink>
+                    <MobileMenuLink href={'/w/influences'}>Inspiration.</MobileMenuLink>
                     <MobileMenuLink href={'/world'}>Map.</MobileMenuLink>
                     <br />
                     <br />

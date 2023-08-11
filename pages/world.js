@@ -15,6 +15,7 @@ import { colors, getGradientTextCSS, gradients } from "@/data/colors";
 import { processWorldCardGroups } from "@/lib/worldHelper";
 import { MobileNav } from "@/components/Navbar";
 import { CardList, WorldDialogs, WorldMenu } from "@/components/WorldComponents";
+import { WikiMobileNav } from "@/components/WikiComponents";
 
 export async function getStaticProps() {
     
@@ -271,7 +272,10 @@ export default function World({ worldCards }) {
                         />
                     </div>
 
-                    <MobileNav pageName="world" color={colors.mapGreen} fullWidth />
+                    <WikiMobileNav 
+                        mobileBreakpoint={viewport.width < 500} 
+                        entriesData={ worldCards.reduce( (newObject, w) => ({ ...newObject, [w.id]: w}), {} ) } 
+                    />
                 </div>
             )
         )}
