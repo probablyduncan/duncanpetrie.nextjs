@@ -32,7 +32,7 @@ export default function Index({ entriesData, sortedIDs }) {
     const {query: {filter}} = useRouter();
 
     return (<>
-        <HeadData title={`Page Index - Springtide - `} />
+        <HeadData title={`Springtide - DuncanPetrie.com`} description={'An index of the world of Springtide.'} ogUseMap />
 
         {noMenu && <WikiMobileNav mobileBreakpoint={mobile} entriesData={entriesData} />}
 

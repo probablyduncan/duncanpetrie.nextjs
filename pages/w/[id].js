@@ -120,7 +120,7 @@ export default function Wiki({ thisID, entriesData }) {
     //#endregion
 
     return (<>
-        <HeadData title={`${entriesData[thisID].title.replace('//', ' ')} - Springtide - `} />
+        <HeadData title={`${entriesData[thisID].title.replace('//', ' ')} - Springtide - DuncanPetrie.com`} description={entriesData[thisID].intro ? entriesData[thisID].intro.replaceAll(/[\[\]\/]/g, '') : 'A window into the world of Springtide'} ogUseMap />
 
         {/* wrapper */}
         <WikiContext.Provider value={{ thisID, entriesData }}>

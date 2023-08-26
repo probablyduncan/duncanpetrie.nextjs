@@ -116,7 +116,7 @@ export default function World({ worldCards }) {
     const menuWidth = 170;
 
     return <>
-        <HeadData title={'Springtide - '} />
+        <HeadData title={'Springtide - DuncanPetrie.com'} description={"A map of the world of Springtide."} ogUseMap />
 
         {square ? (
             
