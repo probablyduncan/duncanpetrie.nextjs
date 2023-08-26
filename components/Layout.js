@@ -55,11 +55,12 @@ export function HeadData({ title }) {
         <meta name="keywords" content="Duncan, Petrie, Photography, Writing, Abstract, Impressionist, Street, Lingermyth, Yearn, Yearning, Wildlife, Wisconsin, Milwaukee, Falmouth, Lake Michigan, water, blur, icm, intentional, camera, movement, probablyduncan, ProbablyDuncan, Worldbuilding, Map Making, Software, Development, Origami, Design, Web" />
 
         {/* open graph stuff - https://ogp.me/ */}
-        <meta property="og:title" content={title} />
+        <meta property="og:title" content={`${title}DuncanPetrie.com`} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={`https://duncanpetrie.com${router.asPath}`} />
         <meta property="og:description" content="Photographer, Writer, Developer | On the hunt for plants and birds and rocks and things." />
         <meta property="og:image" content="https://duncanpetrie.com/images/29.jpg" />
+        <meta property="og:image:type" content="image/jpeg" />
         <meta property="og:image:width" content="1000" />
         <meta property="og:image:height" content="667" />
 
