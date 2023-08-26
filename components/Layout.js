@@ -3,6 +3,9 @@ import { useContext } from "react";
 import { ViewportContext } from "@/pages/_app";
 import {NewsNav, MobileNav, SimpleNav} from "./Navbar";
 import { colors } from "@/data/colors";
+import { useRouter } from "next/router";
+import { getSrc } from "@/lib/imageHelper";
+import { imgData } from "@/data/images";
 
 export default function Layout({ title, children, newsNav, color, pageName, menuName, menuLink, galleryAction, galleryName, galleryColor }) {
 
@@ -42,12 +45,23 @@ function Menu({ bottom, show }) {
 }
 
 export function HeadData({ title }) {
+
+    const router = useRouter();
     
     return (<Head>
         <title>{`${title}DuncanPetrie.com`}</title>
         <meta name="author" content="Duncan Petrie" />
-        <meta name="description" content="Abstract/Impressionist Photography | On the hunt for plants and birds and rocks and things" />
-        <meta name="keywords" content="Duncan, Petrie, Photography, Abstract, Impressionist, Impressionism, Wildlife, Wisconsin, Milwaukee, Falmouth, Lake Michigan, water, blur, icm, intentional, camera, movement, probablyduncan" />
+        <meta name="description" content="Photographer, Writer, Developer | On the hunt for plants and birds and rocks and things." />
+        <meta name="keywords" content="Duncan, Petrie, Photography, Writing, Abstract, Impressionist, Street, Lingermyth, Yearn, Yearning, Wildlife, Wisconsin, Milwaukee, Falmouth, Lake Michigan, water, blur, icm, intentional, camera, movement, probablyduncan, ProbablyDuncan, Worldbuilding, Map Making, Software, Development, Origami, Design, Web" />
+
+        {/* open graph stuff - https://ogp.me/ */}
+        <meta property="og:title" content={title} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`https://duncanpetrie.com${router.asPath}`} />
+        <meta property="og:description" content="Photographer, Writer, Developer | On the hunt for plants and birds and rocks and things." />
+        <meta property="og:image" content="https://duncanpetrie.com/images/29.jpg" />
+        <meta property="og:image:width" content="1000" />
+        <meta property="og:image:height" content="667" />
 
         <link rel="icon" href="/favicon-32.png" sizes="32x32" />
         <link rel="icon" href="/favicon-128.png" sizes="128x128" />
