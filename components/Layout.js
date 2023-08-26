@@ -63,7 +63,7 @@ export function HeadData({ title, ogUseMap, description }) {
         <meta property="og:type" content="website" />
         <meta property="og:url" content={`https://duncanpetrie.com${router.asPath}`} />
         <meta property="og:description" content={description ?? "Photographer, Writer, Developer | On the hunt for plants and birds and rocks and things."} />
-        <meta property="og:image" content={`https://duncanpetrie.com${getSrc(ogUseMap ? imgData.bigmap : imgData.jubilee)}`} />
+        <meta property="og:image" content={`https://duncanpetrie.com${getSrc(ogUseMap ? imgData.bigmapnames : imgData.jubilee)}`} />
         <meta property="og:image:type" content="image/jpeg" />
         <meta property="og:image:width" content="1000" />
         <meta property="og:image:height" content="667" />
