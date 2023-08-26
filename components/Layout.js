@@ -48,8 +48,8 @@ export function HeadData({ title, ogUseMap, description }) {
 
     const router = useRouter();
 
-    if (description && description.length > 55) {
-        description = description.substring(0, 52) + '...';
+    if (description && description.length > 100) {
+        description = description.substring(0, 97) + '...';
     }
     
     return (<Head>
