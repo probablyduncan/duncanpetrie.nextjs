@@ -32,6 +32,8 @@ export function WikiLink({ children, ...props }) {
     const href = processWorldLinkHref({text: children, href: props.href, thisID});
     const page = href.split('#')[0];
 
+    const pageData = entriesData[page];
+
     return href.includes('/') || Object.keys(entriesData).includes(page)  ? (<>
         <Lonk
             // title={`${page in entriesData ? entriesData[page].title : (page.charAt(0).toUpperCase() + page.slice(1))} ➯`}
@@ -54,7 +56,7 @@ export function WikiLink({ children, ...props }) {
             </RoughNotation>
         </Lonk>
         <AnimatePresence>
-            {(entriesData[page] && viewport.width >= 600 && hoverPos) && <Preview key={'preview'} entryData={entriesData[page]} pos={{x: linkRef.current.offsetLeft, y: linkRef.current.offsetTop}} delay={.2} />}
+            {(pageData && viewport.width >= 600 && hoverPos) && <Preview key={'preview'} entryData={entriesData[page]} pos={{x: linkRef.current.offsetLeft, y: linkRef.current.offsetTop}} delay={.2} />}
         </AnimatePresence>
     </>) : (viewport.width >= 600 ? (
         // under construction
@@ -120,7 +122,7 @@ export function Preview({ entryData, path, noText, pos = {}, delay }) {
     const x = coords.length > 2 ? Math.max(coords[2], 160) : 1200;
     const y = x * 5/4;
 
-    return (
+    return ((text || entryData.coords) &&   // only show preview if there is an intro or there are custom coords
         <motion.span style={{
             position: 'absolute',
             left: pos.x, top: pos.y,
@@ -364,7 +366,7 @@ export const WikiHeading3 = ({ children, noClass }) => (
 const textStyle = {
     color: colors.slate,
     fontSize: '18px',
-    lineHeight: '48px',
+    lineHeight: '45px',
     margin: '0 0 25px',
     fontSize: '20px',
     textAlign: 'left',

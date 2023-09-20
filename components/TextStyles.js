@@ -41,7 +41,7 @@ export function Title({ children, small, style, ...props }) {
         color: colors.black,
         fontSize: small ? '23px' : '36px',
         lineHeight: small ? '32px' : '40px',
-        margin: small ? '0 0 6px 0' : '0 4px 35px'
+        margin: small ? '0 0 5px 0' : '0 4px 35px'
     }, style);
 
     return (<h1 style={style} {...props}><MerriweatherWrapper>{children}</MerriweatherWrapper></h1>);
@@ -75,7 +75,7 @@ export function Paragraph({ children, small, style, ...props }) {
     style = Object.assign({
         color: colors.slate,
         fontSize: small ? '16px' : '20px',
-        lineHeight: small ? '30px' : '48px',
+        lineHeight: small ? '29px' : '45px',
         textAlign: small ? 'justify' : 'left',
         margin: small ? '0 10px 15px 0' : '0 4px 25px',
         hyphens: small ? 'auto' : 'none',
