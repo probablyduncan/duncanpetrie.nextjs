@@ -62,7 +62,7 @@ const extraLinks = [
         dept: 'springtide',
         link: '/w/zigglewomping',
         tags: ['writing', 'world'],
-        colors: [colors.surrogateRed],
+        cover: {images: 'heartland7'},
     },
     {
         id: 'baron',
@@ -70,7 +70,15 @@ const extraLinks = [
         dept: 'springtide',
         link: '/w/baron',
         tags: ['writing', 'world'],
-        colors: [colors.lightBlue],
+        cover: {images: 'aboutcv'},
+    },
+    {
+        id: 'wander',
+        title: 'Something about Wandering',
+        dept: 'springtide',
+        link: '/w/wander',
+        tags: ['writing', 'world'],
+        cover: {images: 'heartland26'},
     }
 ]
 

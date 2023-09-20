@@ -716,7 +716,7 @@ export const imgData = {
     aboutcv: {
         src: 'aboutcv.jpg',
         ratio: 3/2,
-        color: '#ffff22',
+        color: '#d3c700',
         caption: 'Wow! What a metaphorical explosion of experience',
         year: 2019,
         tags: ['landscape'],
