@@ -56,14 +56,14 @@ const extraLinks = [
         tags: ['writing','world'],
         cover: {images: 'heartland6'},
     },
-    {
-        id: 'zigglewomping',
-        title: 'Zigglewomping',
-        dept: 'springtide',
-        link: '/w/zigglewomping',
-        tags: ['writing', 'world'],
-        cover: {images: 'heartland7'},
-    },
+    // {
+    //     id: 'zigglewomping',
+    //     title: 'Zigglewomping',
+    //     dept: 'springtide',
+    //     link: '/w/zigglewomping',
+    //     tags: ['writing', 'world'],
+    //     cover: {images: 'heartland7'},
+    // },
     {
         id: 'baron',
         title: 'The Baron of Inselberg',
