@@ -74,7 +74,7 @@ const extraLinks = [
     },
     {
         id: 'wander',
-        title: 'Something about Wandering',
+        title: 'A Wandering',
         dept: 'springtide',
         link: '/w/wander',
         tags: ['writing', 'world'],
