@@ -48,7 +48,7 @@ export async function getStaticProps( {params} ) {
  * 
  * text: {
  *     centered: true,      // defaults to true
- *     slideIn: false,      // defaults to true, only works if centered=true
+ *     slideIn: false,      // defaults to false, only works if centered=true
  * }
  * 
  * lightbox: {
@@ -84,7 +84,7 @@ export default function ArticleLayout({ article }) {
     const slideOnScroll = !mobile && article.frontmatter.cover?.slideOnScroll;
     const stickyCover = !mobile && (article.frontmatter.cover?.sticky || slideOnScroll);
     const textCentered = !mobile && !stickyCover && (article.frontmatter.text?.centered ?? true);
-    const slideIn = !mobile && (article.frontmatter.text?.slideIn ?? true);
+    const slideIn = !mobile && (article.frontmatter.text?.slideIn ?? false);
 
     const galleryAction = article.frontmatter.lightbox?.link ? () => toggleLightbox(0) : null;
 
