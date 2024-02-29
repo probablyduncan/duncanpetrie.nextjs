@@ -73,6 +73,14 @@ const extraLinks = [
         cover: {images: 'aboutcv'},
     },
     {
+        id: 'saltish',
+        title: 'Saltish and the Sea-beast',
+        dept: 'springtide',
+        link: '/w/saltish',
+        tags: ['writing', 'world'],
+        cover: {images: 'coastpath6'},
+    },
+    {
         id: 'wander',
         title: 'A Wandering',
         dept: 'springtide',
