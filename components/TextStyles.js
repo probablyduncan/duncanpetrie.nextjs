@@ -1,4 +1,4 @@
-import { Lato, Merriweather, EB_Garamond, Cinzel_Decorative } from "@next/font/google";
+import { Lato, Merriweather, EB_Garamond, Cinzel_Decorative } from "next/font/google";
 import { useContext, useRef, useState } from "react";
 import { RoughNotation } from "react-rough-notation";
 import Lonk from "./Lonk";
