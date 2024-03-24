@@ -28,8 +28,13 @@ enum MapCursor {
     Grabbing = 'grabbing',
 }
 
-const MAP_SIZE = Vec2.From(1200, 1500);
-const MAP_ZOOM_FACTOR = 1.5;
+// determines scale of container. 
+// larger is better so we don't have to use scale > 1 too much.
+const MAP_SIZE = Vec2.From(4800, 6000);
+
+// svg viewport, determines coordinates of regions
+const SVG_SCALE = Vec2.From(1200, 1500);
+
 const MAP_ZOOM_LEVELS = 8;
 
 interface MapTransform {
@@ -115,19 +120,30 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
     }, [mapWindowSize]);
 
     /**
+     * zooms the map in or out by a fixed amount
+     * @param direction 'in' or 'out'
+     * @param mousePos probably not necessary
+     * @param mouseContainerOffset probably not necessary
+     */
+    const zoomAndTranslateDir = (direction: ZoomDirection, mousePos?: Vec2, mouseContainerOffset?: Vec2): void => zoomAndTranslate(direction == 'in' ? 300 : -300, mousePos, mouseContainerOffset);
+
+    /**
      * Handle zooming in or out, on mouse position if given, otherwise on center of map. Handles translation as well.
      * This is just a wrapper of setTransform().
-     * @param direction "in" or "out"
+     * @param scrollAmount from wheelEvent, will be 200-300 ish on mouse wheel and 1-4 ish on trackpad scroll
      * @param mousePos WheelEvent's clientX and clientY of mouse position - i.e. mouse position in viewport
      * @param mouseContainerOffset WheelEvent's offsetX and offsetY of mouse position - i.e. mouse position on map, in map coords
      */
-    const zoomAndTranslate = (direction: ZoomDirection, mousePos?: Vec2, mouseContainerOffset?: Vec2) => setTransform(prev => {
+    const zoomAndTranslate = (scrollAmount: number, mousePos?: Vec2, mouseContainerOffset?: Vec2): void => setTransform(prev => {
 
         // ---
         // calculate new scale
         // ---
 
-        var zoomFactor = direction === 'in' ? MAP_ZOOM_FACTOR : 1/MAP_ZOOM_FACTOR;
+        var zoomFactor = 1 - Math.abs(scrollAmount / 1000);
+        if (scrollAmount < 0) {
+            zoomFactor = 1/zoomFactor;
+        }
 
         const newScale = prev.scale * zoomFactor;
         const clampedNewScale = clampScale(newScale);
@@ -226,9 +242,23 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
         return mapElement;
     }
 
+    // prevent default gesture events for map container
+    useEffect(() => {
+        const handler = (e: Event) => e.preventDefault()
+        document.addEventListener('gesturestart', handler)
+        document.addEventListener('gesturechange', handler)
+        document.addEventListener('gestureend', handler)
+        return () => {
+          document.removeEventListener('gesturestart', handler)
+          document.removeEventListener('gesturechange', handler)
+          document.removeEventListener('gestureend', handler)
+        }
+      }, [])
+
     // map container gestures
     useGesture({
         onDrag: ({ pinching, cancel, offset: [x, y] }) => {
+
             if (pinching) {
                 return cancel();
             }
@@ -237,37 +267,59 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
 
             setTransform(prev => ({translate: Vec2.From(x, y), scale: prev.scale}));
         },
-        onWheel: ({event, offset: [, scroll], delta: [, dy], direction: [, dir], last, ...rest}) => {
-            if (last) {
+        onWheel: ({ event, delta: [, dy], direction: [, dir], last, pinching, dragging, ctrlKey }) => {
+
+            // don't think this is necessary?
+            // if (last) {
+            //     return;
+            // }
+
+            if (dir) {
+                // ctrlKey is true when mimicking pinch on touchpad. It's pretty slow so inflate it here
+                zoomAndTranslate(dy * (ctrlKey ? 4 : 1), Vec2.From(event.clientX, event.clientY), Vec2.From(event.offsetX, event.offsetY));
+            }
+        },
+        onPinch: ({ origin: [ox, oy], first, movement: [ms], offset: [s, a], memo, wheeling, dragging, canceled, ctrlKey }) => {
+
+            if (dragging || wheeling || ctrlKey || canceled) {
                 return;
             }
 
-            if (dir) {
-                zoomAndTranslate(dir > 0 ? 'out' : 'in', Vec2.From(event.clientX, event.clientY), Vec2.From(event.offsetX, event.offsetY));
-            }
-        },
-        onPinch: ({ origin: [ox, oy], first, movement: [ms], offset: [s, a], memo }) => {
             if (first) {
-                const { width, height, x, y } = mapContainerRef.current!.getBoundingClientRect()
-                const initX = ox - (x + width / 2)
-                const initY = oy - (y + height / 2)
-                memo = [x, y, initX, initY]
+                const { width, height, x: translateX, y: translateY } = mapContainerRef.current!.getBoundingClientRect()
+                const initX = ox - (translateX + width / 2)
+                const initY = oy - (translateY + height / 2)
+                console.log('init', initX, initY);
+                console.log('conatiner', translateX, translateY);
+                memo = [translateX, translateY, initX, initY]
             }
-    
+
             const x = memo[0] - (ms - 1) * memo[2]
             const y = memo[1] - (ms - 1) * memo[3]
-            setTransform(prev => ({scale: s, translate: Vec2.From(x, y)}));
+
+            console.log('o', ox, oy);
+            console.log('ms', ms);
+            console.log('s', s);
+            console.log('a', a);
+
+            zoomAndTranslate(s, Vec2.From(ox, oy), Vec2.From(ox, ox));
+
+            setTransform(prev => ({scale: clampScale(s), translate: clampTranslate(Vec2.From(x, y))}));
             return memo;
         },
-        onClick: ({event: {clientX, clientY, offsetX, offsetY}}) => {
+        onClick: ({ event: {clientX, clientY, offsetX, offsetY} }) => {
             setSelected(getMapElementsAtPoint(Vec2.From(clientX, clientY)));
             // setTransform(prev => ({scale: prev.scale, translate: coordsToTranslationPixels(Vec2.From(offsetX, offsetY))}));
         },
-        onMouseUp: () => {setCursor(MapCursor.Auto)},
+        onMouseUp: () => {
+            setCursor(MapCursor.Auto);
+        },
         onMouseMove: ({event: {clientX, clientY}}) => {
             // setHoveringOver(getMapElementsAtPoint(Vec2.From(clientX, clientY)).map(e => e.title));
         },
-        onMouseLeave: () => {setHoveringOver([])}
+        onMouseLeave: () => {
+            // setHoveringOver([]);
+        }
     }, {
         target: mapContainerRef,
         drag: {
@@ -276,6 +328,13 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
             filterTaps: true,
             bounds: { top: -mapBounds.y, bottom: mapBounds.y, left: -mapBounds.x, right: mapBounds.x, },
         },
+        pinch: {
+            // scaleBounds: { min: minScale, max: minScale * MAP_ZOOM_LEVELS},
+            preventDefault: true,
+        },
+        wheel: {
+            preventDefault: true,
+        }
     });
 
     useKeyPress(["Escape"], "keydown", () => setSelected([]));
@@ -291,7 +350,7 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
             cursor: cursor,
             fontWeight: 'bold',
         }}>
-            {useMobileLayout ? <>
+            {(false && useMobileLayout) ? <>
                 mobile!
             </> : <div style={{
                 display: 'flex', flexFlow: 'row',
@@ -324,12 +383,13 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
                                 display: 'flex', justifyContent: 'center', alignItems: 'center',
                                 color: theme.text, backgroundColor: theme.muted + '99',
                                 boxShadow: `0 0 4px ${theme.background}40`,
-                                fontSize: '20px', fontWeight: 600, userSelect: 'none',
+                                fontSize: '20px', fontWeight: 600, 
+                                userSelect: 'none', WebkitUserSelect: 'none',
                                 cursor: 'pointer',
                                 pointerEvents: 'auto',
                                 backdropFilter: 'blur(4px)',
                             }} onClick={
-                                () => zoomAndTranslate('in')
+                                () => zoomAndTranslateDir('in')
                             } whileHover={{
                                 backgroundColor: theme.muted + 'bb'
                             }} transition={{
@@ -342,12 +402,13 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
                                 display: 'flex', justifyContent: 'center', alignItems: 'center',
                                 color: theme.text, backgroundColor: theme.muted + '99',
                                 boxShadow: `0 0 4px ${theme.background}40`,
-                                fontSize: '20px', fontWeight: 600, userSelect: 'none',
+                                fontSize: '20px', fontWeight: 600, 
+                                userSelect: 'none', WebkitUserSelect: 'none',
                                 cursor: 'pointer',
                                 pointerEvents: 'auto',
                                 backdropFilter: 'blur(4px)',
                             }} onClick={
-                                () => zoomAndTranslate('out')
+                                () => zoomAndTranslateDir('out')
                             } whileHover={{
                                 backgroundColor: theme.muted + 'bb'
                             }} transition={{
@@ -364,7 +425,8 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
                             padding: '4px 10px 5px',
                             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                             color: theme.text, backgroundColor: theme.muted + '99',
-                            fontSize: '18px', fontWeight: 600, userSelect: 'none',
+                            fontSize: '18px', fontWeight: 600, 
+                            userSelect: 'none', WebkitUserSelect: 'none',
                             boxShadow: `0 0 4px ${theme.background}40`,
                             backdropFilter: 'blur(4px)',
                             pointerEvents: 'auto',
@@ -382,7 +444,7 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
                     {/* map container */}
                     <motion.div id="map-container" ref={mapContainerRef} style={{
                         width: MAP_SIZE.x, height: MAP_SIZE.y,
-                        touchAction: 'manipulation',
+                        touchAction: 'none',
                     }} initial={{
                         scaleX: transform.scale,
                         scaleY: transform.scale,
@@ -405,7 +467,7 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
                             width: MAP_SIZE.x, height: MAP_SIZE.y,
                             display: 'block',
                             imageRendering: 'pixelated',
-                            userSelect: 'none',
+                            userSelect: 'none', WebkitUserSelect: 'none',
                             boxShadow: 'none',
                         }} />
 
@@ -437,7 +499,7 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
                     {isSidebarOpen && <motion.div key="sidebar" id="sidebar" style={{
                         backgroundColor: theme.background,
                         color: theme.text,
-                        overflow: 'scroll',
+                        overflowY: 'scroll',
                         paddingBottom: vh/2 - 80 + 'px',
                         borderLeft: '10px solid ' + theme.muted,
                         // hyphens: 'auto',
@@ -484,7 +546,7 @@ const SVGLayers = memo(function SVGLayers({ locationData }: { locationData: Spri
         xmlns="http://www.w3.org/2000/svg"
         version="1.1"
         width="100%" height="100%"
-        viewBox={`0 0 ${MAP_SIZE.x} ${MAP_SIZE.y}`}
+        viewBox={`0 0 ${SVG_SCALE.x} ${SVG_SCALE.y}`}
         style={{
             position: 'absolute',
             top: 0, left: 0,
@@ -578,7 +640,7 @@ function SpringtideHeaderBar({ children }) {
         width: 'calc(100% - 60px)',
         color: theme.background, backgroundColor: theme.text,
         fontSize: '20px', fontWeight: '800',
-        userSelect: 'none',
+        userSelect: 'none', WebkitUserSelect: 'none',
         padding: '6px 30px',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         position: 'sticky', top: 0,
