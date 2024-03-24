@@ -472,7 +472,7 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
 
 }
 
-const SVGLayers = memo(({ locationData }: { locationData: SpringtideLocation[] }) => {
+const SVGLayers = memo(function SVGLayers({ locationData }: { locationData: SpringtideLocation[] }) {
 
     // const getSvgElements = useCallback(() => {
     //     return () => <>{locationData.map((e: SpringtideLocation) => <MapElement key={e.id} id={e.id} title={e.title} d={e.d} cx={e.x} cy={e.y} rx={e.rx} ry={e.ry} r={e.r} />)}</>;
