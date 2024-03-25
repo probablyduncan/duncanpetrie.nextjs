@@ -160,9 +160,9 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
         // calculate translate bounds for new scale, so we can clamp translate
         const newBounds = MAP_SIZE.multiply(clampedNewScale).subtract(mapWindowSize).divide(2);
 
-        // if no mouse position, modify the transform by the clamped zoom factor to go along with the zoom
         if (!mousePos || !mouseContainerOffset) {
 
+            // if no mouse position, modify the transform by the clamped zoom factor to go along with the zoom
             return {
                 scale: clampedNewScale,
                 translate: clampTranslate(prev.translate.multiply(clampedNewScale / prev.scale), newBounds),
@@ -285,26 +285,9 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
                 return;
             }
 
-            if (first) {
-                const { width, height, x: translateX, y: translateY } = mapContainerRef.current!.getBoundingClientRect()
-                const initX = ox - (translateX + width / 2)
-                const initY = oy - (translateY + height / 2)
-                console.log('init', initX, initY);
-                console.log('conatiner', translateX, translateY);
-                memo = [translateX, translateY, initX, initY]
-            }
+            const zoom = clamp(memo[0] * ms, 0.6, 1.5);
+            zoomAndTranslate(zoom, Vec2.From(ox, oy), null);
 
-            const x = memo[0] - (ms - 1) * memo[2]
-            const y = memo[1] - (ms - 1) * memo[3]
-
-            console.log('o', ox, oy);
-            console.log('ms', ms);
-            console.log('s', s);
-            console.log('a', a);
-
-            zoomAndTranslate(s, Vec2.From(ox, oy), Vec2.From(ox, ox));
-
-            setTransform(prev => ({scale: clampScale(s), translate: clampTranslate(Vec2.From(x, y))}));
             return memo;
         },
         onClick: ({ event: {clientX, clientY, offsetX, offsetY} }) => {
