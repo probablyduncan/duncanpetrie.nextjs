@@ -132,9 +132,9 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
      * This is just a wrapper of setTransform().
      * @param scrollAmount from wheelEvent, will be 200-300 ish on mouse wheel and 1-4 ish on trackpad scroll
      * @param mousePos WheelEvent's clientX and clientY of mouse position - i.e. mouse position in viewport
-     * @param mouseContainerOffset WheelEvent's offsetX and offsetY of mouse position - i.e. mouse position on map, in map coords
+     * @param mapPos WheelEvent's offsetX and offsetY of mouse position - i.e. mouse position on map, in map coords
      */
-    const zoomAndTranslate = (scrollAmount: number, mousePos?: Vec2, mouseContainerOffset?: Vec2): void => setTransform(prev => {
+    const zoomAndTranslate = (scrollAmount: number, mousePos?: Vec2, mapPos?: Vec2): void => setTransform(prev => {
 
         // ---
         // calculate new scale
@@ -160,7 +160,7 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
         // calculate translate bounds for new scale, so we can clamp translate
         const newBounds = MAP_SIZE.multiply(clampedNewScale).subtract(mapWindowSize).divide(2);
 
-        if (!mousePos || !mouseContainerOffset) {
+        if (!mousePos || !mapPos) {
 
             // if no mouse position, modify the transform by the clamped zoom factor to go along with the zoom
             return {
@@ -176,7 +176,7 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
                 .unlerp(Vec2.Zero, mapWindowSize);
     
             // get lerp factor for mouse position in map container
-            const mouseContainerLerp = mouseContainerOffset.unlerp(Vec2.Zero, MAP_SIZE);
+            const mouseContainerLerp = mapPos.unlerp(Vec2.Zero, MAP_SIZE);
     
             // get distance between mouse pos and center of map window
             const mouseToWindowCenter = mouseWindowLerp.subtract(0.5).negate().multiply(mapWindowSize);
@@ -279,14 +279,32 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
                 zoomAndTranslate(dy * (ctrlKey ? 4 : 1), Vec2.From(event.clientX, event.clientY), Vec2.From(event.offsetX, event.offsetY));
             }
         },
-        onPinch: ({ origin: [ox, oy], first, movement: [ms], offset: [s, a], memo, wheeling, dragging, canceled, ctrlKey }) => {
+        onPinch: ({ origin: [clientX, clientY], first, movement: [zoomFactor], offset: [scale, a], memo, wheeling, dragging, canceled, ctrlKey, event }) => {
 
             if (dragging || wheeling || ctrlKey || canceled) {
                 return;
             }
 
-            const zoom = clamp(memo[0] * ms, 0.6, 1.5);
-            zoomAndTranslate(zoom, Vec2.From(ox, oy), null);
+            event.preventDefault();
+
+            if (first) {
+                const {width, height, x: containerOffsetX, y: containerOffsetY} = mapContainerRef.current.getBoundingClientRect();
+                
+                // this is relative to container origin I believe
+                const pinchPos = Vec2.From(
+                    clientX - (containerOffsetX + width / 2),
+                    clientY - (containerOffsetY + height / 2),
+                );
+
+                memo = [transform.translate, pinchPos];
+            }
+
+            const translate = clampTranslate(memo[0].subtract(memo[1].multiply(zoomFactor - 1)))
+
+            setTransform({
+                scale,
+                translate,
+            });
 
             return memo;
         },
@@ -312,7 +330,7 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
             bounds: { top: -mapBounds.y, bottom: mapBounds.y, left: -mapBounds.x, right: mapBounds.x, },
         },
         pinch: {
-            // scaleBounds: { min: minScale, max: minScale * MAP_ZOOM_LEVELS},
+            scaleBounds: { min: minScale, max: minScale * MAP_ZOOM_LEVELS},
             preventDefault: true,
         },
         wheel: {
@@ -427,7 +445,7 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
                     {/* map container */}
                     <motion.div id="map-container" ref={mapContainerRef} style={{
                         width: MAP_SIZE.x, height: MAP_SIZE.y,
-                        touchAction: 'none',
+                        touchAction: 'manipulation',
                     }} initial={{
                         scaleX: transform.scale,
                         scaleY: transform.scale,
