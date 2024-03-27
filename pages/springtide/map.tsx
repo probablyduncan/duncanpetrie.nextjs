@@ -14,6 +14,7 @@ import { useKeyPress } from "@/lib/useKeyPress";
 import { SpringtideLocation, getSpringtideFrontmatter } from "@/lib/springtide/contentManager";
 import useSWR from "swr";
 import { getMDXComponent } from "mdx-bundler/client";
+import Head from "next/head";
 
 enum SidebarState {
     Selected,
@@ -125,7 +126,7 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
      * @param mousePos probably not necessary
      * @param mouseContainerOffset probably not necessary
      */
-    const zoomAndTranslateDir = (direction: ZoomDirection, mousePos?: Vec2, mouseContainerOffset?: Vec2): void => zoomAndTranslate(direction == 'in' ? 300 : -300, mousePos, mouseContainerOffset);
+    const zoomAndTranslateDir = (direction: ZoomDirection, mousePos?: Vec2, mouseContainerOffset?: Vec2): void => zoomAndTranslate(direction == 'in' ? -300 : 300, mousePos, mouseContainerOffset);
 
     /**
      * Handle zooming in or out, on mouse position if given, otherwise on center of map. Handles translation as well.
@@ -344,8 +345,17 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
 
     return (<SpringtideContext.Provider value={{ theme: theme }}>
         
-            <div className={style.page + ' ' + GeistMono.className} style={{
-            width: '100vw', height: '100vh', 
+        <Head>
+            <style>{`
+                html, body {
+                    overflow: hidden;
+                    background-color: #dde6f5;
+                }
+            `}</style>
+        </Head>
+
+        <div className={style.page + ' ' + GeistMono.className} style={{
+            width: vw + 'px', height: vh + 'px',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             overflow: 'hidden',
             cursor: cursor,
@@ -398,7 +408,7 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
                             }}>
                                 +
                             </motion.div>
-                            <motion.div id="map-zoom-in" style={{
+                            <motion.div id="map-zoom-out" style={{
                                 width: 30, height: 30,
                                 display: 'flex', justifyContent: 'center', alignItems: 'center',
                                 color: theme.text, backgroundColor: theme.muted + '99',
@@ -472,26 +482,11 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
                             boxShadow: 'none',
                         }} />
 
-                        {/* svg layers */}
-                        {/* <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            version="1.1"
-                            width="100%" height="100%"
-                            viewBox={`0 0 ${MAP_SIZE.x} ${MAP_SIZE.y}`}
-                            style={{
-                                position: 'absolute',
-                                top: 0, left: 0,
-                                width: '100%', height: '100%',
-                            }}
-                        > */}
-
                         <SVGLayers locationData={locationData} />
-
-                        {/* </svg> */}
-                        {/* end svg layers */}
                         
                     </motion.div>
                     {/* end map container */}
+
                 </div>
                 {/* end map window */}
 
