@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { useKeyPress } from "@/lib/useKeyPress";
 import { GeistMono } from "geist/font/mono";
 import useMapTransform from "@/lib/springtide/useMapTransform";
-import style from '@/components/springtide/springtide.module.css';
 
 interface MapTransform {
     scale: number,
@@ -20,7 +19,7 @@ export default function Test({ }) {
     useKeyPress(["ArrowUp"], 'keydown', () => zoom("in"), [zoom]);
     useKeyPress(["ArrowDown"], 'keydown', () => zoom("out"), [zoom]);
 
-    return (<div className={GeistMono.className + " " + style.page} style={{
+    return (<div className={GeistMono.className} style={{
         width: '100vw', height: '100vh',
         display: 'flex', flexFlow: 'row-reverse',
         overflow: 'hidden',
