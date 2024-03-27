@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import useSpringtideTheme, { ThemeData, SpringtideTheme } from "@/lib/springtide/useSpringtideTheme";
-import style from '@/components/springtide/springtide.module.css';
 import { createContext, memo, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { ViewportContext } from "../_app";
 import { useLocalStoredState } from "@/lib/localStorageHooks";
@@ -374,14 +373,24 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
         
         <Head>
             <style>{`
+
                 html, body {
                     overflow: hidden;
                     background-color: #dde6f5;
                 }
+
+                html ::selection, html ::-moz-selection{
+                    text-decoration: none;
+                    background-color: ${theme.muted};
+                    -webkit-text-stroke-color: ${theme.linkAccent};
+                    -webkit-text-fill-color: ${theme.menuAccent};
+                    -webkit-text-stroke-width: auto;
+                }
+
             `}</style>
         </Head>
 
-        <div className={style.page + ' ' + GeistMono.className} style={{
+        <div className={GeistMono.className} style={{
             width: vw + 'px', height: vh + 'px',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             overflow: 'hidden',
