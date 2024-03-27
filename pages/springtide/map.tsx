@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import useSpringtideTheme, { ThemeData, SpringtideTheme } from "@/lib/springtide/useSpringtideTheme";
 import style from '@/components/springtide/springtide.module.css';
-import { FunctionComponent, createContext, memo, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { createContext, memo, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { ViewportContext } from "../_app";
 import { useLocalStoredState } from "@/lib/localStorageHooks";
 import { useGesture } from "@use-gesture/react";
@@ -15,6 +15,7 @@ import { SpringtideLocation, getSpringtideFrontmatter } from "@/lib/springtide/c
 import useSWR from "swr";
 import { getMDXComponent } from "mdx-bundler/client";
 import Head from "next/head";
+import { a, useSpring } from "@react-spring/web";
 
 enum SidebarState {
     Selected,
@@ -65,12 +66,15 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
     const parseQueryCoord = (n: string|string[]): number => typeof n === 'string' ? parseFloat(n) : parseFloat(n[0]);
     useEffect(() => {
         if (x && y) {
-            setTransform(prev => ({scale: prev.scale, translate: coordsToTranslationPixels(Vec2.From(parseQueryCoord(x), parseQueryCoord(y)))}));
+            transformApi.set({
+                scale: transform.scale.get(),
+                ...coordsToTranslationPixels(Vec2.From(parseQueryCoord(x), parseQueryCoord(y))),
+            });
         }
     }, [x, y]);
 
     const { viewport: {width: vw, height: vh} } = useContext(ViewportContext);
-    const useMobileLayout = useMemo(() => vw < 600 && vw <= vh, [vw, vh]);
+    const isMobileLayout = useMemo(() => vw < 600 && vw <= vh, [vw, vh]);
     
     const { theme, setTheme } = useSpringtideTheme();
     
@@ -97,27 +101,35 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
     }, [mapWindowSize]);
 
     // this is important
-    const [transform, setTransform] = useState<MapTransform>({
+    // const [transform, setTransform] = useState<MapTransform>({
+    //     scale: minScale,
+    //     translate: Vec2.Zero,
+    // });
+
+    const [transform, transformApi] = useSpring(() => ({
         scale: minScale,
-        translate: Vec2.Zero,
-    });
+        x: 0,
+        y: 0,
+    }));
 
     // this is scalar value of the maximum map translation. Any more than mapBounds or any less than -mapBounds and there is a gap in the window
-    const mapBounds: Vec2 = useMemo(() => MAP_SIZE.multiply(transform.scale).subtract(mapWindowSize).divide(2).abs(), [mapWindowSize, transform.scale]);
+    const mapBounds: Vec2 = useMemo(() => MAP_SIZE.multiply(transform.scale.get()).subtract(mapWindowSize).divide(2).abs(), [mapWindowSize, transform.scale]);
 
     // this is the distance from the center of the window to the edge of the window in map units
-    const centerBounds: Vec2 = useMemo(() => mapWindowSize.divide(transform.scale * 2), [mapWindowSize, transform.scale]);
+    const centerBounds: Vec2 = useMemo(() => mapWindowSize.divide(transform.scale.get() * 2), [mapWindowSize, transform.scale]);
 
     // used to ensure scale is never too extreme and translation is never out of bounds
     const clampScale = (scale: number) => clamp(scale, minScale, minScale * MAP_ZOOM_LEVELS);
     const clampTranslate = (prev: Vec2, bounds?: Vec2) => prev.clamp((bounds ?? mapBounds).negate(), bounds ?? mapBounds);
 
+    const clampTranslateCallback = useCallback((prev: Vec2, bounds?: Vec2) => prev.clamp((bounds ?? mapBounds).negate(), bounds ?? mapBounds), [mapBounds]);
+
     // ensure the map never reveals the background when changing window size
     useEffect(() => {
-        setTransform(prev => ({
-            scale: clampScale(prev.scale),
-            translate: clampTranslate(prev.translate)
-        }));
+        transformApi.start({
+            scale: clampScale(transform.scale.get()),
+            ...clampTranslate(Vec2.From(transform.x.get(), transform.y.get())),
+        });
     }, [mapWindowSize]);
 
     /**
@@ -135,7 +147,10 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
      * @param mousePos WheelEvent's clientX and clientY of mouse position - i.e. mouse position in viewport
      * @param mapPos WheelEvent's offsetX and offsetY of mouse position - i.e. mouse position on map, in map coords
      */
-    const zoomAndTranslate = (scrollAmount: number, mousePos?: Vec2, mapPos?: Vec2): void => setTransform(prev => {
+    const zoomAndTranslate = (scrollAmount: number, mousePos?: Vec2, mapPos?: Vec2): void => {
+
+        const prevScale = transform.scale.get();
+        const prevTranslate = Vec2.From(transform.x.get(), transform.y.get());
 
         // ---
         // calculate new scale
@@ -146,12 +161,12 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
             zoomFactor = 1/zoomFactor;
         }
 
-        const newScale = prev.scale * zoomFactor;
+        const newScale = prevScale * zoomFactor;
         const clampedNewScale = clampScale(newScale);
 
         // if no change, no need to continue
-        if (clampedNewScale === prev.scale) {
-            return prev;
+        if (clampedNewScale === prevScale) {
+            return;
         }
 
         // ---
@@ -164,10 +179,10 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
         if (!mousePos || !mapPos) {
 
             // if no mouse position, modify the transform by the clamped zoom factor to go along with the zoom
-            return {
+            transformApi.start({
                 scale: clampedNewScale,
-                translate: clampTranslate(prev.translate.multiply(clampedNewScale / prev.scale), newBounds),
-            };
+                ...clampTranslate(prevTranslate.multiply(clampedNewScale / prevScale), newBounds),
+            });
         }
         else {
 
@@ -197,12 +212,12 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
             // get translate clamped by new bounds
             const clampedTranslate = clampTranslate(newTranslate, newBounds);
 
-            return {
+            transformApi.start({
                 scale: clampedNewScale,
-                translate: clampedTranslate,
-            }
+                ...clampedTranslate,
+            });
         }
-    });
+    };
 
     const coordsToTranslationPixels = (coords: Vec2): Vec2 => {
 
@@ -266,7 +281,11 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
 
             setCursor(MapCursor.Move);
 
-            setTransform(prev => ({translate: Vec2.From(x, y), scale: prev.scale}));
+            const bounds = MAP_SIZE.multiply(transform.scale.get()).subtract(mapWindowSize).divide(2).abs();
+
+            transformApi.start({
+                ...clampTranslateCallback(Vec2.From(x, y), bounds),
+            });
         },
         onWheel: ({ event, delta: [, dy], direction: [, dir], last, pinching, dragging, ctrlKey }) => {
 
@@ -277,19 +296,21 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
 
             if (dir) {
                 // ctrlKey is true when mimicking pinch on touchpad. It's pretty slow so inflate it here
-                zoomAndTranslate(dy * (ctrlKey ? 4 : 1), Vec2.From(event.clientX, event.clientY), Vec2.From(event.offsetX, event.offsetY));
+                zoomAndTranslate(dy * (ctrlKey ? 20 : 10), Vec2.From(event.clientX, event.clientY), Vec2.From(event.offsetX, event.offsetY));
             }
         },
         onPinch: ({ origin: [clientX, clientY], first, movement: [zoomFactor], offset: [scale, a], memo, wheeling, dragging, canceled, ctrlKey, event }) => {
 
-            if (dragging || wheeling || ctrlKey || canceled) {
-                return;
+            if (dragging || wheeling || ctrlKey) {
+                return [Vec2.Zero, Vec2.Zero];
             }
 
             event.preventDefault();
 
             if (first) {
                 const {width, height, x: containerOffsetX, y: containerOffsetY} = mapContainerRef.current.getBoundingClientRect();
+
+                console.log(containerOffsetX, containerOffsetY)
                 
                 // this is relative to container origin I believe
                 const pinchPos = Vec2.From(
@@ -297,14 +318,20 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
                     clientY - (containerOffsetY + height / 2),
                 );
 
-                memo = [transform.translate, pinchPos];
+                const currentTranslate = Vec2.From(
+                    transform.x.get(),
+                    transform.y.get(),
+                );
+
+                memo = [currentTranslate, pinchPos];
             }
 
-            const translate = clampTranslate(memo[0].subtract(memo[1].multiply(zoomFactor - 1)))
+            const newBounds = MAP_SIZE.multiply(scale).subtract(mapWindowSize).divide(2).abs()
+            const translate = clampTranslate(memo[0].subtract(memo[1].multiply(zoomFactor - 1)), newBounds)
 
-            setTransform({
+            transformApi.start({
+                ...translate,
                 scale,
-                translate,
             });
 
             return memo;
@@ -325,10 +352,10 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
     }, {
         target: mapContainerRef,
         drag: {
-            from: () => [transform.translate.x, transform.translate.y],
+            from: () => [transform.x.get(), transform.y.get()],
             preventScroll: true,
             filterTaps: true,
-            bounds: { top: -mapBounds.y, bottom: mapBounds.y, left: -mapBounds.x, right: mapBounds.x, },
+            // bounds: { top: -mapBounds.y, bottom: mapBounds.y, left: -mapBounds.x, right: mapBounds.x, },
         },
         pinch: {
             scaleBounds: { min: minScale, max: minScale * MAP_ZOOM_LEVELS},
@@ -361,7 +388,7 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
             cursor: cursor,
             fontWeight: 'bold',
         }}>
-            {(false && useMobileLayout) ? <>
+            {(false && isMobileLayout) ? <>
                 mobile!
             </> : <div style={{
                 display: 'flex', flexFlow: 'row',
@@ -453,25 +480,10 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
                     {/* end overlays */}
 
                     {/* map container */}
-                    <motion.div id="map-container" ref={mapContainerRef} style={{
+                    <a.div id="map-container" ref={mapContainerRef} style={{
                         width: MAP_SIZE.x, height: MAP_SIZE.y,
                         touchAction: 'manipulation',
-                    }} initial={{
-                        scaleX: transform.scale,
-                        scaleY: transform.scale,
-                        scaleZ: transform.scale,
-                        x: transform.translate.x,
-                        y: transform.translate.y,
-                    }} animate={{
-                        scaleX: transform.scale,
-                        scaleY: transform.scale,
-                        scaleZ: transform.scale,
-                        x: transform.translate.x,
-                        y: transform.translate.y,
-                    }} transition={{
-                        ease: 'easeOut',
-                        duration: '0.05',
-                        bounce: '100',
+                        ...transform,
                     }}>
 
                         <img src="/images/bigmapW4.jpg" draggable="false" style={{
@@ -484,7 +496,7 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
 
                         <SVGLayers locationData={locationData} />
                         
-                    </motion.div>
+                    </a.div>
                     {/* end map container */}
 
                 </div>
