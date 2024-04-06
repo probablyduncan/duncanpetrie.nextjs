@@ -295,7 +295,7 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
 
             if (dir) {
                 // ctrlKey is true when mimicking pinch on touchpad. It's pretty slow so inflate it here
-                zoomAndTranslate(dy * (ctrlKey ? 20 : 10), Vec2.From(event.clientX, event.clientY), Vec2.From(event.offsetX, event.offsetY));
+                zoomAndTranslate(dy * (ctrlKey ? 20 : 5), Vec2.From(event.clientX, event.clientY), Vec2.From(event.offsetX, event.offsetY));
             }
         },
         onPinch: ({ origin: [clientX, clientY], first, movement: [zoomFactor], offset: [scale, a], memo, wheeling, dragging, canceled, ctrlKey, event }) => {
@@ -308,8 +308,6 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
 
             if (first) {
                 const {width, height, x: containerOffsetX, y: containerOffsetY} = mapContainerRef.current.getBoundingClientRect();
-
-                console.log(containerOffsetX, containerOffsetY)
                 
                 // this is relative to container origin I believe
                 const pinchPos = Vec2.From(
@@ -336,7 +334,15 @@ export default function SpringtideMap({locationData}: {locationData: SpringtideL
             return memo;
         },
         onClick: ({ event: {clientX, clientY, offsetX, offsetY} }) => {
-            setSelected(getMapElementsAtPoint(Vec2.From(clientX, clientY)));
+            setSelected(prev => {
+
+                // reset sidebar scroll if necessary
+                if (prev && prev.length > 0) {
+                    window.document.getElementById('sidebar').scroll({top: 0});
+                }
+                
+                return getMapElementsAtPoint(Vec2.From(clientX, clientY))
+            });
             // setTransform(prev => ({scale: prev.scale, translate: coordsToTranslationPixels(Vec2.From(offsetX, offsetY))}));
         },
         onMouseUp: () => {
