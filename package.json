@@ -29,6 +29,7 @@
     "react-dom": "18.2.0",
     "react-error-overlay": "^6.0.9",
     "react-rough-notation": "^1.0.3",
+    "react-zoom-pan-pinch": "^3.4.4",
     "roughjs": "^4.5.2",
     "swr": "^2.2.0"
   }
