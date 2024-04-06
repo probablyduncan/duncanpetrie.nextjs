@@ -48,15 +48,16 @@ export default function World({ worldCards }) {
         const height = mapRef.current.clientHeight;
         const width = mapRef.current.clientWidth;
 
-        // for testing
-        // coords = [0.425,0.425,1.2]
+        // for testing (daybreak coords)
+        // coords = [0.5,0.74]
 
         const size = 40000 / (coords[2] ?? 1200);
 
+        // the 20 thing is a temporary offset because I shifted the map
         setHoverCoords([
-            size - height * coords[0], 
+            size - height * coords[0] + 20, 
             size - width * (1 - coords[1]), 
-            size - height * (1 - coords[0]), 
+            size - height * (1 - coords[0]) - 20, 
             size - width * coords[1],
         ]);
     }
