@@ -53,7 +53,7 @@ export function HeadData({ title, ogUseMap, description }) {
     }
     
     return (<Head>
-        <title>{title}</title>
+        <title>(v5, c.2023) {title}</title>
         <meta name="author" content="Duncan Petrie" />
         <meta name="description" content={description ?? "Photographer, Writer, Developer | On the hunt for plants and birds and rocks and things."} />
         <meta name="keywords" content="Duncan, Petrie, Photography, Writing, Abstract, Impressionist, Street, Lingermyth, Yearn, Yearning, Wildlife, Wisconsin, Milwaukee, Falmouth, Lake Michigan, water, blur, icm, intentional, camera, movement, probablyduncan, ProbablyDuncan, Worldbuilding, Map Making, Software, Development, Origami, Design, Web, Springtide, Martlet" />
